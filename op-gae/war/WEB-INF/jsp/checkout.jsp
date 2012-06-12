@@ -36,7 +36,7 @@ limitations under the License.
 		<c:choose>
 			<c:when test="${empty it.basket.items}">
 			    <h1>Basket is empty</h1>
-			    <p><a href="/#page-upload" data-ajax="false">upload something</a></p>
+			    <p><a href="/edit" data-ajax="false">upload something</a></p>
 			</c:when>
 			<c:otherwise>
 				<h1>Checkout</h1>
@@ -73,7 +73,7 @@ limitations under the License.
 			  		</tbody>
 		  		</table>
 		  		<p>
-    		  		<a href="/#page-upload" data-ajax="false" data-role="button" data-theme="b" data-icon="plus" data-inline="true" data-mini="true">Upload more</a>
+    		  		<a href="/edit" data-ajax="false" data-role="button" data-theme="b" data-icon="plus" data-inline="true" data-mini="true">Upload more</a>
                 </p>
 		  		
 		        <div>
