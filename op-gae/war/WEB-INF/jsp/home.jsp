@@ -365,7 +365,8 @@ function download() {
 
 function downloadImpl() {
     var jpegData = renderFull();
-    window.location = jpegData;
+    $.mobile.hidePageLoadingMsg();
+    window.open(jpegData, "_newtab");
 }
 
 function calculate(dpi) {
