@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/asm-3.3.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-11.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/scf-google-checkout.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-core-1.12.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-client-1.12.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-multipart-1.12.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-server-1.12.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-servlet-1.12.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/pwinty-java-sdk-1.1.jar" sourcepath="/pwinty-java-sdk"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jsoup-1.6.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/mimepull-1.6.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

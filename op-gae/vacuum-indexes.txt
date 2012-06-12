@@ -1,0 +1,1 @@
+"\Program Files\eclipse\plugins\com.google.appengine.eclipse.sdkbundle_1.6.5\appengine-java-sdk-1.6.5\bin\appcfg.cmd" vacuum_indexes \Dropbox\code\OddPrints\op-gae\war
