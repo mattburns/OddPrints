@@ -18,6 +18,10 @@ html {
     width: 67px;
 }
 
+input.quantity-input {
+    width: 50px;
+}
+
 .checkout-subtotal, .checkout-total {
 }
 
