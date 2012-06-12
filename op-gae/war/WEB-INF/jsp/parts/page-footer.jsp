@@ -5,6 +5,7 @@
         <a href="/privacy">privacy</a> |
         <a href="/contact">contact</a> |
         <a href="/help">help</a>
+        <div class="fb-like" data-href="http://www.oddprints.com" data-send="false" data-layout="button_count" data-width="45" data-show-faces="true"></div>
     </div>
 </div>
 

@@ -9,9 +9,9 @@
     <meta property="og:image" content="http://www.oddprints.com/images/icon128.png"/>
     <meta property="og:site_name" content="OddPrints"/>
     <meta property="fb:admins" content="565140267, 565740296"/>
-    <meta property="og:description" content="Print photos for odd frames."/>
+    <meta property="og:description" content="Easy printing for tricky frames."/>
           
-    <meta name="Description" content="Print photos for odd frames" />
+    <meta name="Description" content="Easy printing for tricky frames." />
           
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="stylesheet" href="/css/jquery.mobile-1.1.0.min.css" />

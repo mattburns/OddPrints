@@ -32,7 +32,7 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h1>Easy photo printing of odd sizes.</h1>
+        <h1>Easy printing for tricky frames.</h1>
         <p>OddPrints is the simple way to print your photos at non-standard sizes for your unusual picture frames.</p>
         <h2>Step 1: Upload a photo</h2>
         <p>Picking your favourite is the hard part.</p>

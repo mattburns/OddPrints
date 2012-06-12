@@ -32,8 +32,25 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>Help</h2>
-        <p>Need help? Just leave a comment below and we will get back to you.</p>
+        <h2>How is OddPrints so fast?</h2>
+        <p>When you select an image, it is manipulated entirely within your web browser using javascript.
+        You barely need an internet connection at all. Of course, if you choose to order prints with us, then the images
+        have to be sent to our servers so that we can print them.</p>
+        
+        <h2>Is it free?</h2>
+        <p>Yes! This service is totally free. Even the 
+        <a data-ajax="false" href="https://github.com/mattburns/OddPrints">source code</a>
+        for this site is free. How awesome is that?</p>
+        
+        <h2>Can I order prints from you?</h2>
+        <p>Sure thing. Instead of downloading your image, just click the link below the 
+        download button to order prints from us.</p>
+
+        <h2>Are prints ordered from OddPrints pre-cut?</h2>
+        <p>Yes, but it's really easy and helps keep the price low.</p>
+        
+        <h2>Further help</h2>
+        <p>Still need help? Just leave a comment below and we will get back to you.</p>
         
         <div id="disqus_thread"></div>
         <script type="text/javascript">
