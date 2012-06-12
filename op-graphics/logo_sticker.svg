@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="400"
+   height="200"
+   id="svg3098"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="logo_sticker.svg"
+   inkscape:export-filename="C:\Dropbox\code\OddPrints\op-graphics\sticker.png"
+   inkscape:export-xdpi="149.85001"
+   inkscape:export-ydpi="149.85001">
+  <defs
+     id="defs3100" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2"
+     inkscape:cx="239.27778"
+     inkscape:cy="38.802871"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1560"
+     inkscape:window-height="1031"
+     inkscape:window-x="116"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3103">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="bg"
+     style="display:none"
+     transform="translate(0,100)">
+    <rect
+       style="fill:#1a1a1a;fill-opacity:1"
+       id="rect3000"
+       width="500.95099"
+       height="100.84975"
+       x="-0.051172227"
+       y="0.49915126" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-852.36218)">
+    <text
+       xml:space="preserve"
+       style="font-size:80.73460388px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:-1.7410115px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Adelle Basic;-inkscape-font-specification:Adelle Basic Bold"
+       x="16.89422"
+       y="983.3078"
+       id="text19345"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="36.803627"
+       inkscape:export-ydpi="36.803627"
+       inkscape:export-filename="C:\svnrepos\oddsizephoto\logo-170x30.png"><tspan
+         sodipodi:role="line"
+         id="tspan19347"
+         x="16.89422"
+         y="983.3078"
+         style="letter-spacing:-4.35252857px;fill:#00aa88;fill-opacity:1"
+         dx="0"><tspan
+           style="letter-spacing:-4.35252857px;fill:#5f9cc5;fill-opacity:1"
+           id="tspan3798">Odd</tspan><tspan
+           style="letter-spacing:-4.35252857px;fill:#396b9e;fill-opacity:1"
+           id="tspan3800">Prints</tspan></tspan></text>
+    <rect
+       style="fill:none"
+       id="rect3806"
+       width="199.40411"
+       height="197.9899"
+       x="-60.104076"
+       y="66.058876"
+       transform="translate(0,952.36218)" />
+  </g>
+</svg>
