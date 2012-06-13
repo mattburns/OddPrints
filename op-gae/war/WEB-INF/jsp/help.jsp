@@ -48,7 +48,7 @@ limitations under the License.
         regardless of order size. Simple.</p>
 
         <h2>Are prints ordered from OddPrints pre-cut?</h2>
-        <p>Yes, but it's really easy and helps keep the price low.</p>
+        <p>No, but it's really easy and helps keep the price low.</p>
         
         <h2>Further help</h2>
         <p>Still need help? Just leave a comment below and we will get back to you.</p>
