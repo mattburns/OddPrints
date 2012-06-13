@@ -44,7 +44,8 @@ limitations under the License.
         
         <h2>Can I order prints from you?</h2>
         <p>Sure thing. Instead of downloading your image, just click the link below the 
-        download button to order prints from us.</p>
+        download button to order prints from us. A 4"x6" print costs just £0.50 plus worldwide shipping at £2.99
+        regardless of order size. Simple.</p>
 
         <h2>Are prints ordered from OddPrints pre-cut?</h2>
         <p>Yes, but it's really easy and helps keep the price low.</p>
