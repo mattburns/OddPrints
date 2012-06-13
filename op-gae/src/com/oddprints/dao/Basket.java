@@ -42,7 +42,7 @@ import com.google.checkout.sdk.domain.OrderSummary;
 import com.google.common.collect.Lists;
 import com.oddprints.Environment;
 import com.oddprints.PrintSize;
-import com.oddprints.Util;
+import com.oddprints.util.StringUtils;
 import com.sun.jersey.api.client.ClientHandlerException;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -223,7 +223,7 @@ public class Basket {
     }
 
     public String getPrintPriceString() {
-        return Util.formatMoney(getPrintPrice());
+        return StringUtils.formatMoney(getPrintPrice());
     }
 
     private int getPrintPrice() {
@@ -236,13 +236,13 @@ public class Basket {
     }
 
     public String getShippingPriceString() {
-        return Util.formatMoney(shipping);
+        return StringUtils.formatMoney(shipping);
     }
 
     public String getTotalPriceString() {
         int totalPricePence = getPrintPrice() + shipping;
 
-        return Util.formatMoney(totalPricePence);
+        return StringUtils.formatMoney(totalPricePence);
     }
 
     public static Basket getBasketByKeyString(String basketKeyString,

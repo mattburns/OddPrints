@@ -37,8 +37,8 @@ import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.Transform;
 import com.oddprints.PrintSize;
-import com.oddprints.Util;
 import com.oddprints.dao.Basket.State;
+import com.oddprints.util.StringUtils;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class BasketItem {
@@ -155,7 +155,7 @@ public class BasketItem {
     }
 
     public String getPriceString() {
-        return Util.formatMoney(printSize.getPrice() * quantity);
+        return StringUtils.formatMoney(printSize.getPrice() * quantity);
     }
 
     public void setQuantity(int quantity) {
@@ -205,7 +205,7 @@ public class BasketItem {
     public String toString() {
         return printSize + " print for " + frameSize + " frame. (" + quantity
                 + " " + (quantity != 1 ? "copies" : "copy") + " @ "
-                + Util.formatMoney(printSize.getPrice()) + " each)";
+                + StringUtils.formatMoney(printSize.getPrice()) + " each)";
     }
 
 }

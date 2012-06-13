@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package com.oddprints;
+package com.oddprints.util;
 
-public class Util {
+public class StringUtils {
 
     public static String formatMoney(int pennies) {
-        return "£" + String.format("%10.2f", ((double) pennies / 100));
+        return "£" + String.format("%.2f", ((double) pennies / 100));
     }
 }
