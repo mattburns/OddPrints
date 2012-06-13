@@ -47,8 +47,6 @@ limitations under the License.
 					      <th></th>
 					      <th></th>
 					      <th class="quantity-input-column">Quantity</th>
-					      <th>Frame</th>
-					      <th>Print</th>
 					      <th>Price</th>
 					  </tr>
 					</thead>
@@ -56,20 +54,15 @@ limitations under the License.
 				        <c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">
 				            <tr>
 					    		<td class="text-align-left">
-						    		<a href="/image/basket/${basketItemNumber.index}" data-ajax="false" title="Preview">
-	    					    		<img class="checkout-thumb" style="background:url(/image/basket/thumb/${basketItemNumber.index}) no-repeat center;" src="/images/mag.png" alt="" />
-						    		</a>
-                                    <a href="/checkout/delete/${basketItemNumber.index}" data-mini="true" data-inline="true" data-ajax="false">remove</a>
+						    		<a href="/image/basket/${basketItemNumber.index}" data-ajax="false" title="Preview"><img class="checkout-thumb" style="background:url(/image/basket/thumb/${basketItemNumber.index}) no-repeat center;" src="/images/mag.png" alt="" /></a>
 					    		</td>
 					    		<td>
-                                    
+                                    ${basketItem.printSize.displayString} print / ${basketItem.frameSize} frame
+                                    (<a href="/checkout/delete/${basketItemNumber.index}" data-mini="true" data-inline="true" data-ajax="false">remove</a>)
                                 </td>
 					    		<td>
 					    		<input type="number" name="quantity" class="quantity-input" id="quantity-${basketItemNumber.index}" data-mini="true" pattern="[0-9]*" min="1" value="${basketItem.quantity}">
 					    		</td>
-					    		
-	                            <td>${basketItem.frameSize}</td>
-					    		<td>${basketItem.printSize.displayString}</td>
 					    		<td>${basketItem.priceString}</td>
 				    		</tr>
 				  		</c:forEach>
