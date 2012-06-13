@@ -39,7 +39,7 @@ limitations under the License.
                 <input type="file" id="files" name="files[]" />
                 <output id="list"></output>
             </div>
-            <p>Or just play with the <a id="sample-photo-link" href="/edit" >sample photo</a>.</p>
+            <p>Or just play with the <a id="sample-photo-link" href="/edit">sample photo</a>.</p>
         </div>
  
         <div id="file-chosen">
@@ -50,28 +50,28 @@ limitations under the License.
             </c:if>
     
             <form action="#" method="get">
-                <div data-role="fieldcontain" >                
+                <div data-role="fieldcontain" title="Width of picture frame">                
                     <h2 id="frame-size-text"></h2>
                     <label for="frame-width">Width:</label>
                     <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="10" data-highlight="true"/></span>
                 </div>
-                <div data-role="fieldcontain" >
+                <div data-role="fieldcontain" title="Height of picture frame">
                     <label for="frame-height">Height:</label>
                     <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="8" data-highlight="true"/></span>
                 </div>
                 
                 <div data-role="collapsible" data-collapsed="true"  data-content-theme="c" >
-                    <h3>Extra options</h3>
+                    <h3 title="Advanced control of the generated image">Extra options</h3>
                     
                     <div data-role="fieldcontain" >    
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Units:</legend>                    
     
                             <input type="radio" name="radio-frame-units" id="radio-inches" value="inches" checked="checked" />
-                            <label for="radio-inches">Inches</label>
+                            <label for="radio-inches" title="Frame is measured in inches">Inches</label>
     
                             <input type="radio" name="radio-frame-units" id="radio-cm" value="cm" />
-                            <label for="radio-cm">Centimetres</label>
+                            <label for="radio-cm" title="Frame is measured in centimetres">Centimetres</label>
                         </fieldset>
                     </div>
                         
@@ -79,14 +79,20 @@ limitations under the License.
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Zooming:</legend>
                             
-                            <input type="radio" name="radio-crop-fit" id="radio-fill" value="fit" checked="checked" />
-                            <label for="radio-fill">Fill</label>
+                            <input type="radio" name="radio-crop-fit" id="radio-fill" value="fit" checked="checked"/>
+                            <label for="radio-fill" title="Ensure the picture fills the frame, however, some of the picture may not fit in the frame">
+                                Fill
+                            </label>
     
                             <input type="radio" name="radio-crop-fit" id="radio-fit" value="fit" />
-                            <label for="radio-fit">Fit</label>
+                            <label for="radio-fit" title="Ensure the picture fits in the frame, however, some margin may be visible in the frame">
+                                Fit
+                            </label>
                                                     
                             <input type="radio" name="radio-crop-fit" id="radio-crop" value="crop" />
-                            <label for="radio-crop">Crop</label>
+                            <label for="radio-crop" title="Crop parts of the image that are outside the frame">
+                                Crop
+                            </label>
                         </fieldset>
                     </div>
                     
@@ -95,13 +101,19 @@ limitations under the License.
                             <legend>Show guidelines:</legend>
                             
                             <input type="radio" name="radio-guides" id="radio-guides-on-top" value="guides-on-top" checked="checked" />
-                            <label for="radio-guides-on-top">Top</label>
+                            <label for="radio-guides-on-top" title="Guidelines are drawn on top of the image">
+                                Top
+                            </label>
     
                             <input type="radio" name="radio-guides" id="radio-guides-on-bottom" value="guides-on-bottom"  />
-                            <label for="radio-guides-on-bottom">Bottom</label>
+                            <label for="radio-guides-on-bottom" title="Guidelines are drawn underneath the image">
+                                Bottom
+                            </label>
                             
                             <input type="radio" name="radio-guides" id="radio-guides-off" value="guides-off"  />
-                            <label for="radio-guides-off">Off</label>
+                            <label for="radio-guides-off" title="No guidelines are drawn">
+                                Off
+                            </label>
                         </fieldset>
                     </div>
                     
@@ -110,7 +122,9 @@ limitations under the License.
                             <legend>Print orientation:</legend>
                             
                             <input type="radio" name="radio-orient" id="radio-orient-auto" value="auto" checked="checked" />
-                            <label for="radio-orient-auto">Auto</label>
+                            <label for="radio-orient-auto" title="Match the orientation of the frame">
+                                Auto
+                            </label>
     
                             <input type="radio" name="radio-orient" id="radio-orient-portrait" value="portrait" />
                             <label for="radio-orient-portrait">Portrait</label>

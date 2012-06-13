@@ -11,6 +11,18 @@
 
 <script type="text/javascript">
 
+$('[title]').qtip({
+    content: {
+        attr: 'title'
+    },
+    position: {
+        my: 'top center', 
+        at: 'bottom center'
+    },
+    style: {
+        classes: 'ui-tooltip-tipsy'
+    }
+})
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-32205253-1']);
   _gaq.push(['_setDomainName', 'oddprints.com']);

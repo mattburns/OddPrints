@@ -56,12 +56,13 @@ limitations under the License.
 				        <c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">
 				            <tr>
 					    		<td class="text-align-left">
-						    		<a href="/image/basket/${basketItemNumber.index}" data-ajax="false">
+						    		<a href="/image/basket/${basketItemNumber.index}" data-ajax="false" title="Preview">
 	    					    		<img class="checkout-thumb" style="background:url(/image/basket/thumb/${basketItemNumber.index}) no-repeat center;" src="/images/mag.png" alt="" />
 						    		</a>
-					    		</td>
-					    		<td class="text-align-left">
                                     <a href="/checkout/delete/${basketItemNumber.index}" data-mini="true" data-inline="true" data-ajax="false">remove</a>
+					    		</td>
+					    		<td>
+                                    
                                 </td>
 					    		<td>
 					    		<input type="number" name="quantity" class="quantity-input" id="quantity-${basketItemNumber.index}" data-mini="true" pattern="[0-9]*" min="1" value="${basketItem.quantity}">
