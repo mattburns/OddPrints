@@ -139,15 +139,14 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
 			settings.sourceHeight = imageHeight;
 			break;
 		case ('crop') :
-		
 			if (frameHasWiderRatioThanImage) {
 				settings.sourceWidth = imageWidth;
-				settings.sourceHeight = Math.floor(imageWidth * (frameHeightPx/frameWidthPx));
+				settings.sourceHeight = Math.floor((imageWidth * frameHeightPx) / frameWidthPx);
 				settings.sourceX = 0;
 				settings.sourceY = Math.floor((imageHeight - settings.sourceHeight) / 2);
 			} else {
 				settings.sourceHeight = imageHeight;
-				settings.sourceWidth = Math.floor(imageHeight * (frameWidthPx/frameHeightPx));
+				settings.sourceWidth = Math.floor((imageHeight * frameWidthPx) / frameHeightPx);
 				settings.sourceX = Math.floor((imageWidth - settings.sourceWidth) / 2);
 				settings.sourceY = 0;
 			}
