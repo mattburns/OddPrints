@@ -59,4 +59,12 @@ public enum PrintSize {
     public Photo.Type toPwintyType() {
         return pwintyType;
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }
