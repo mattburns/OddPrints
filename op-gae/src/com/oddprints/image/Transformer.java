@@ -1,11 +1,32 @@
 package com.oddprints.image;
 
+import com.google.appengine.api.images.Image;
 import com.oddprints.PrintSize;
 import com.oddprints.image.TransformSettings.Builder;
 import com.oddprints.image.TransformSettings.Orientation;
 import com.oddprints.image.TransformSettings.Zooming;
 
 public class Transformer {
+
+    public static int DEFAULT_DPI = 300;
+
+    public TransformSettings calculateSettings(Image image,
+            double frameWidthInInches, double frameHeightInInches,
+            Zooming zooming, Orientation orientation) {
+        TransformSettings settings = calculatePrintSize(frameWidthInInches,
+                frameHeightInInches, orientation);
+        settings = calculateCanvasSize(settings.getPrintWidth(),
+                settings.getPrintHeight(), DEFAULT_DPI);
+        settings = calculateFramePixelSize(frameWidthInInches,
+                frameHeightInInches, DEFAULT_DPI);
+        settings = calculateFrameXY(settings.getCanvasWidth(),
+                settings.getCanvasHeight(), settings.getFrameWidthPx(),
+                settings.getFrameHeightPx());
+        settings = calculateDestination(zooming, settings.getFrameWidthPx(),
+                settings.getFrameHeightPx(), settings.getFrameX(),
+                settings.getFrameY(), image.getWidth(), image.getHeight());
+        return settings;
+    }
 
     TransformSettings calculatePrintSize(double frameWidthInInches,
             double frameHeightInInches) {
@@ -79,8 +100,8 @@ public class Transformer {
                 .canvasHeight(canvasHeight).build();
     }
 
-    TransformSettings calculateFramePixelSize(int frameWidthInInches,
-            int frameHeightInInches, int dpi) {
+    TransformSettings calculateFramePixelSize(double frameWidthInInches,
+            double frameHeightInInches, int dpi) {
         int frameWidthPx = (int) Math.floor(frameWidthInInches * dpi);
         int frameHeightPx = (int) Math.floor(frameHeightInInches * dpi);
 

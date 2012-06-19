@@ -498,11 +498,18 @@ function uploadImageImpl() {
          frameSize: frameSizeString(),
          printWidth: settings.printWidth,
          printHeight: settings.printHeight
-       },
-       function(data) {
-           window.location.href = "/checkout";
        }
-    );
+    )
+    .success(
+            function() { 
+            	window.location.href = "/checkout";
+            }
+    )
+    .error(
+    		function() { 
+    			window.location.href = "/error?message=Failed+to+upload+image.";
+		    }
+	);
     
 }
 

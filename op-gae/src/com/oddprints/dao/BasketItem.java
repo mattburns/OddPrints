@@ -25,8 +25,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -38,6 +36,7 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.Transform;
 import com.oddprints.PrintSize;
 import com.oddprints.dao.Basket.State;
+import com.oddprints.util.ImageBlobStore;
 import com.oddprints.util.StringUtils;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -98,30 +97,8 @@ public class BasketItem {
         blobStoreService.delete(blobImage);
     }
 
-    private byte[] getImageData() {
-        BlobstoreService blobStoreService = BlobstoreServiceFactory
-                .getBlobstoreService();
-        byte[] allTheBytes = new byte[0];
-        long amountLeftToRead = blobSize;
-        long startIndex = 0;
-        while (amountLeftToRead > 0) {
-            long amountToReadNow = Math.min(
-                    BlobstoreService.MAX_BLOB_FETCH_SIZE, amountLeftToRead);
-
-            byte[] chunkOfBytes = blobStoreService.fetchData(getBlobImage(),
-                    startIndex, amountToReadNow);
-
-            allTheBytes = ArrayUtils.addAll(allTheBytes, chunkOfBytes);
-
-            amountLeftToRead -= amountToReadNow;
-            startIndex += amountToReadNow;
-        }
-
-        return allTheBytes;
-    }
-
     public Image getImage() {
-        return ImagesServiceFactory.makeImage(getImageData());
+        return ImageBlobStore.INSTANCE.getImage(getBlobImage(), blobSize);
     }
 
     public Image getThumbImage() {

@@ -27,10 +27,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.BasketItem;
+import com.oddprints.util.ImageBlobStore;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
 @Path("/image")
@@ -52,6 +54,18 @@ public class Image {
         }
 
         return Response.ok(item.getImage().getImageData()).build();
+    }
+
+    @GET
+    @Path("/original/{blobKeyString}/{blobSize}")
+    @Produces("image/jpeg")
+    public Response getOriginalImage(
+            @PathParam("blobKeyString") String blobKeyString,
+            @PathParam("blobSize") long blobSize) throws IOException {
+
+        byte[] bytes = ImageBlobStore.INSTANCE.readImageData(new BlobKey(
+                blobKeyString), blobSize);
+        return Response.ok(bytes).build();
     }
 
     @GET

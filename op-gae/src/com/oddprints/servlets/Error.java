@@ -13,11 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package com.oddprints.util;
+package com.oddprints.servlets;
 
-public class StringUtils {
+import java.util.Map;
 
-    public static String formatMoney(int pennies) {
-        return "&pound;" + String.format("%.2f", ((double) pennies / 100));
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import com.google.common.collect.Maps;
+import com.oddprints.util.EmailSender;
+import com.sun.jersey.api.view.Viewable;
+
+@Path("/error")
+public class Error {
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Viewable get(@QueryParam("message") String message) {
+        Map<String, Object> it = Maps.newHashMap();
+        it.put("message", message);
+
+        String email = "OddPrints Error - " + message;
+        EmailSender.INSTANCE.sendToAdmin(email, email);
+
+        return new Viewable("/error", it);
     }
 }

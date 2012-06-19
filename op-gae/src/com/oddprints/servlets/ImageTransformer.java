@@ -16,85 +16,65 @@
 package com.oddprints.servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.jdo.PersistenceManager;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.images.Composite;
+import com.google.appengine.api.images.Composite.Anchor;
+import com.google.appengine.api.images.Image;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.common.collect.Lists;
 import com.oddprints.PMF;
-import com.oddprints.dao.Basket;
 import com.oddprints.dao.BasketItem;
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-@Path("/imageTransformer")
+@Path("/transformer")
 public class ImageTransformer {
 
-    @GET  
+    @GET
     @Path("/{secret}/{key}")
     @Produces("image/jpeg")
     public Response getFullImage(@PathParam("secret") String secret,
-            @PathParam("key") String key, @QueryParam("x") int x, @Context HttpServletResponse response)
-            throws IOException {
-
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        BasketItem item = pm.getObjectById(BasketItem.class,
-                KeyFactory.stringToKey(key));
-
-        if (!secret.equalsIgnoreCase(item.getSecret())) {
-            return Response.status(Status.UNAUTHORIZED).build();
-        }
-
-        return Response.ok(item.getImage().getImageData()).build();
-    }
-
-    @GET
-    @Path("/thumb/{secret}/{key}")
-    @Produces("image/jpeg")
-    public Response getThumbImage(@PathParam("secret") String secret,
-            @PathParam("key") String key) {
-
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        BasketItem item = pm.getObjectById(BasketItem.class,
-                KeyFactory.stringToKey(key));
-
-        if (!secret.equalsIgnoreCase(item.getSecret())) {
-            return Response.status(Status.UNAUTHORIZED).build();
-        }
-
-        return Response.ok(item.getThumbImage().getImageData()).build();
-    }
-
-    @GET
-    @Path("/basket/{index}")
-    @Produces("image/jpeg")
-    public Response getBasketImage(@PathParam("index") int index,
-            @Context HttpServletRequest req,
+            @PathParam("key") String key,
+            // @QueryParam("frameWidthInInches") int frameWidthInInches,
+            // @QueryParam("frameHeightInInches") int frameHeightInInches,
             @Context HttpServletResponse response) throws IOException {
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
-        Basket basket = Basket.fromSession(req, pm);
+        BasketItem item = pm.getObjectById(BasketItem.class,
+                KeyFactory.stringToKey(key));
 
-        BasketItem item = basket.getItems().get(index);
-        return Response.ok(item.getImage().getImageData()).build();
+        if (!secret.equalsIgnoreCase(item.getSecret())) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
 
-    }
+        com.google.appengine.api.images.Image image = item.getThumbImage();
 
-    @GET
-    @Path("/basket/thumb/{index}")
-    @Produces("image/jpeg")
-    public Response getBasketThumbImage(@PathParam("index") int index,
-            @Context HttpServletRequest req) {
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        Basket basket = Basket.fromSession(req, pm);
-        BasketItem item = basket.getItems().get(index);
-        return Response.ok(item.getThumbImage().getImageData()).build();
+        // Transformer t = new Transformer();
+        // TransformSettings settings = t.calculateSettings(image,
+        // frameWidthInInches, frameHeightInInches, Zooming.FILL,
+        // Orientation.AUTO);
+
+        ImagesService is = ImagesServiceFactory.getImagesService();
+
+        Composite composite = ImagesServiceFactory.makeComposite(image, 0, 0,
+                1f, Anchor.TOP_LEFT);
+
+        List<Composite> composites = Lists.newArrayList(composite);
+
+        Image blah = is.composite(composites, image.getWidth() + 20,
+                image.getHeight() + 20, 0xff00ff00L);
+
+        return Response.ok(blah.getImageData()).build();
     }
 }

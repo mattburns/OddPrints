@@ -16,43 +16,56 @@
 package com.oddprints.servlets;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
+
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.FileWriteChannel;
 import com.oddprints.Environment;
 import com.oddprints.PMF;
 import com.oddprints.PrintSize;
 import com.oddprints.dao.Basket;
+import com.oddprints.util.ImageBlobStore;
+import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.core.util.Base64;
 
 @Path("/upload")
 public class Upload {
 
     @POST
-    public Response view(@FormParam("imageData") String imageData,
+    public Response post(@FormParam("imageData") String imageData,
             @FormParam("frameSize") String frameSize,
             @FormParam("printWidth") int printWidth,
             @FormParam("printHeight") int printHeight,
-            @Context HttpServletRequest req) throws IOException {
+            @Context HttpServletRequest req) throws IOException,
+            URISyntaxException {
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
         Basket basket = Basket.fromSession(req, pm);
         if (basket == null) {
-            basket = new Basket(Environment.getDefault());
+            Environment env = null;
+            try {
+                env = Environment.getDefault();
+            } catch (NullPointerException npe) {
+                return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+            }
+            basket = new Basket(env);
             pm.makePersistent(basket);
             String basketKeyString = KeyFactory.keyToString(basket.getId());
             req.getSession().setAttribute("basketKeyString", basketKeyString);
@@ -61,30 +74,36 @@ public class Upload {
         String rawImageData = imageData.replaceFirst("data:image/jpeg;base64,",
                 "");
 
-        byte[] image = Base64.decode(rawImageData);
-        BlobKey blobKey = writeToBlobstore(image);
+        byte[] bytes = Base64.decode(rawImageData);
+        BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
         PrintSize printSize = PrintSize.toPrintSize(printWidth, printHeight);
-        basket.addItem(blobKey, image.length, frameSize, printSize);// ,
+        basket.addItem(blobKey, bytes.length, frameSize, printSize);// ,
 
         pm.makePersistent(basket);
         pm.close();
         return Response.ok().build();
     }
 
-    private BlobKey writeToBlobstore(byte[] bytes) throws IOException {
-        FileService fileService = FileServiceFactory.getFileService();
+    @POST
+    @Path("/original")
+    @Produces("image/jpeg")
+    public Response doPost(@Context HttpServletRequest req)
+            throws FileUploadException, IOException {
+        // Get the image representation
+        ServletFileUpload upload = new ServletFileUpload();
+        FileItemIterator iter = upload.getItemIterator(req);
+        FileItemStream imageItem = iter.next();
+        InputStream imgStream = imageItem.openStream();
 
-        AppEngineFile file = fileService.createNewBlobFile("image/jpeg");
-        // This time lock because we intend to finalize
-        boolean lock = true;
-        FileWriteChannel writeChannel = fileService
-                .openWriteChannel(file, lock);
+        byte[] bytes = IOUtils.toByteArray(imgStream);
+        BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
 
-        writeChannel.write(ByteBuffer.wrap(bytes));
+        System.out.println("image should be at: /image/original/"
+                + blobKey.getKeyString() + "/" + bytes.length);
 
-        // Now finalize
-        writeChannel.closeFinally();
+        req.getSession().setAttribute("blobKeyString", blobKey.getKeyString());
 
-        return fileService.getBlobKey(file);
+        return Response.ok(bytes).build();
     }
+
 }
