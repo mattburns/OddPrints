@@ -36,9 +36,9 @@ limitations under the License.
         <div id="choose-a-file">
             <h2>Upload a photo</h2>
             
-            <form action="/upload/original" data-ajax="false" method="POST" enctype="multipart/form-data">
+            <form action="/edit/basic" data-ajax="false" method="POST" enctype="multipart/form-data">
                 <input type="file" name="myFile" >
-                <input type="submit" value="Submit">
+                <input type="submit" value="Upload">
             </form>
         </div>
     </div>

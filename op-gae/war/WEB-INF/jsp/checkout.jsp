@@ -69,7 +69,7 @@ limitations under the License.
 			  		</tbody>
 		  		</table>
 		  		<p>
-    		  		<a href="/edit" data-ajax="false" data-role="button" data-theme="b" data-icon="plus" data-inline="true" data-mini="true">Upload more</a>
+    		  		<a href="${it.editurl}" data-ajax="false" data-role="button" data-theme="b" data-icon="plus" data-inline="true" data-mini="true">Upload more</a>
                 </p>
 		  		
 		        <div>

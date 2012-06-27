@@ -8,17 +8,15 @@ import com.oddprints.image.TransformSettings.Zooming;
 
 public class Transformer {
 
-    public static int DEFAULT_DPI = 300;
-
-    public TransformSettings calculateSettings(Image image,
+    public TransformSettings calculateSettings(Image image, int dpi,
             double frameWidthInInches, double frameHeightInInches,
             Zooming zooming, Orientation orientation) {
         TransformSettings settings = calculatePrintSize(frameWidthInInches,
                 frameHeightInInches, orientation);
         settings = calculateCanvasSize(settings.getPrintWidth(),
-                settings.getPrintHeight(), DEFAULT_DPI, settings);
+                settings.getPrintHeight(), dpi, settings);
         settings = calculateFramePixelSize(frameWidthInInches,
-                frameHeightInInches, DEFAULT_DPI, settings);
+                frameHeightInInches, dpi, settings);
         settings = calculateFrameXY(settings.getCanvasWidth(),
                 settings.getCanvasHeight(), settings.getFrameWidthPx(),
                 settings.getFrameHeightPx(), settings);

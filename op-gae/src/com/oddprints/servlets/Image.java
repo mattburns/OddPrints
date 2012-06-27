@@ -16,6 +16,7 @@
 package com.oddprints.servlets;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
@@ -57,11 +58,18 @@ public class Image {
     }
 
     @GET
-    @Path("/original/{blobKeyString}/{blobSize}")
+    @Path("/original")
     @Produces("image/jpeg")
-    public Response getOriginalImage(
-            @PathParam("blobKeyString") String blobKeyString,
-            @PathParam("blobSize") long blobSize) throws IOException {
+    public Response getOriginalImage(@Context HttpServletRequest req)
+            throws IOException, URISyntaxException {
+        String blobKeyString = (String) req.getSession().getAttribute(
+                "blobKeyString");
+        String blobSizeString = (String) req.getSession().getAttribute(
+                "blobSize");
+        if (blobKeyString == null || blobSizeString == null) {
+            return Response.serverError().build();
+        }
+        long blobSize = Long.parseLong(blobSizeString);
 
         byte[] bytes = ImageBlobStore.INSTANCE.readImageData(new BlobKey(
                 blobKeyString), blobSize);

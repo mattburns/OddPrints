@@ -18,12 +18,11 @@ package com.oddprints.servlets;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
@@ -34,7 +33,10 @@ import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesService.OutputEncoding;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.OutputSettings;
 import com.google.appengine.api.images.Transform;
+import com.google.appengine.api.utils.SystemProperty;
+import com.google.appengine.api.utils.SystemProperty.Environment.Value;
 import com.google.common.collect.Lists;
 import com.oddprints.image.TransformSettings;
 import com.oddprints.image.TransformSettings.Orientation;
@@ -46,16 +48,40 @@ import com.oddprints.util.ImageBlobStore;
 public class ImageTransformer {
 
     @GET
-    @Path("/{blobKeyString}/{blobSize}")
+    @Path("/{dpi}/{frameWidthInInches}/{frameHeightInInches}/{zooming}/{orientation}/{outputEncoding}/{quality}")
     @Produces("image/jpeg")
-    public Response get(@PathParam("blobKeyString") String blobKeyString,
-            @PathParam("blobSize") long blobSize,
-            @QueryParam("frameWidthInInches") double frameWidthInInches,
-            @QueryParam("frameHeightInInches") double frameHeightInInches,
-            @QueryParam("zooming") Zooming zooming,
-            @QueryParam("orientation") Orientation orientation,
-            @QueryParam("outputEncoding") OutputEncoding outputEncoding,
-            @Context HttpServletResponse response) throws IOException {
+    public Response get(@PathParam("dpi") int dpi,
+            @PathParam("frameWidthInInches") double frameWidthInInches,
+            @PathParam("frameHeightInInches") double frameHeightInInches,
+            @PathParam("zooming") Zooming zooming,
+            @PathParam("orientation") Orientation orientation,
+            @PathParam("outputEncoding") OutputEncoding outputEncoding,
+            @PathParam("quality") int quality, @Context HttpServletRequest req)
+            throws IOException {
+
+        String blobKeyString = (String) req.getSession().getAttribute(
+                "blobKeyString");
+        String blobSizeString = (String) req.getSession().getAttribute(
+                "blobSize");
+        if (blobKeyString == null || blobSizeString == null) {
+            return Response.serverError().build();
+        }
+        long blobSize = Long.parseLong(blobSizeString);
+
+        Image finalImage = generateOddPrint(blobKeyString, blobSize, dpi,
+                frameWidthInInches, frameHeightInInches, zooming, orientation,
+                outputEncoding, quality);
+        return Response.ok(finalImage.getImageData()).build();
+    }
+
+    Image generateOddPrint(String blobKeyString, long blobSize, int dpi,
+            double frameWidthInInches, double frameHeightInInches,
+            Zooming zooming, Orientation orientation,
+            OutputEncoding outputEncoding, int quality) {
+
+        if (SystemProperty.environment.value() == Value.Development) {
+            outputEncoding = OutputEncoding.PNG;
+        }
 
         Image image = ImageBlobStore.INSTANCE.getImage(new BlobKey(
                 blobKeyString), blobSize);
@@ -63,7 +89,7 @@ public class ImageTransformer {
         ImagesService is = ImagesServiceFactory.getImagesService();
 
         Transformer t = new Transformer();
-        TransformSettings settings = t.calculateSettings(image,
+        TransformSettings settings = t.calculateSettings(image, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation);
 
         if (zooming == Zooming.CROP) {
@@ -85,13 +111,10 @@ public class ImageTransformer {
 
         List<Composite> composites = Lists.newArrayList(composite);
 
-        // OutputSettings outputSettings = new
-        // OutputSettings(OutputEncoding.JPEG);
-        // OutputSettings outputSettings = new OutputSettings();
-        // outputSettings.setQuality(99);
+        OutputSettings outputSettings = new OutputSettings(outputEncoding);
+        outputSettings.setQuality(quality);
         Image finalImage = is.composite(composites, settings.getCanvasWidth(),
-                settings.getCanvasHeight(), 0xffddddddL, outputEncoding);
-
-        return Response.ok(finalImage.getImageData()).build();
+                settings.getCanvasHeight(), 0xffddddddL, outputSettings);
+        return finalImage;
     }
 }

@@ -16,32 +16,31 @@
 package com.oddprints.servlets;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
-
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.images.Image;
+import com.google.appengine.api.images.ImagesService.OutputEncoding;
 import com.oddprints.Environment;
 import com.oddprints.PMF;
 import com.oddprints.PrintSize;
 import com.oddprints.dao.Basket;
+import com.oddprints.image.TransformSettings.Orientation;
+import com.oddprints.image.TransformSettings.Zooming;
 import com.oddprints.util.ImageBlobStore;
 import com.sun.jersey.api.client.ClientResponse.Status;
+import com.sun.jersey.api.view.Viewable;
 import com.sun.jersey.core.util.Base64;
 
 @Path("/upload")
@@ -55,6 +54,19 @@ public class Upload {
             @Context HttpServletRequest req) throws IOException,
             URISyntaxException {
 
+        String rawImageData = imageData.replaceFirst("data:image/jpeg;base64,",
+                "");
+
+        byte[] bytes = Base64.decode(rawImageData);
+        BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
+
+        return addToBasket(frameSize, printWidth, printHeight, req, blobKey,
+                bytes.length);
+    }
+
+    private Response addToBasket(String frameSize, int printWidth,
+            int printHeight, HttpServletRequest req, BlobKey blobKey,
+            long blobSize) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
         Basket basket = Basket.fromSession(req, pm);
@@ -71,36 +83,48 @@ public class Upload {
             req.getSession().setAttribute("basketKeyString", basketKeyString);
         }
 
-        String rawImageData = imageData.replaceFirst("data:image/jpeg;base64,",
-                "");
-
-        byte[] bytes = Base64.decode(rawImageData);
-        BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
         PrintSize printSize = PrintSize.toPrintSize(printWidth, printHeight);
-        basket.addItem(blobKey, bytes.length, frameSize, printSize);// ,
+        basket.addItem(blobKey, blobSize, frameSize, printSize);// ,
 
         pm.makePersistent(basket);
         pm.close();
         return Response.ok().build();
     }
 
-    @POST
-    @Path("/original")
-    @Produces("text/html")
-    public Response doPost(@Context HttpServletRequest req)
-            throws FileUploadException, IOException {
-        // Get the image representation
-        ServletFileUpload upload = new ServletFileUpload();
-        FileItemIterator iter = upload.getItemIterator(req);
-        FileItemStream imageItem = iter.next();
-        InputStream imgStream = imageItem.openStream();
-
-        byte[] bytes = IOUtils.toByteArray(imgStream);
-        BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
-
-        return Response.ok(
-                "image should be at: /image/original/" + blobKey.getKeyString()
-                        + "/" + bytes.length).build();
+    @GET
+    @Path("/basic")
+    public Viewable viewBasic(@Context HttpServletRequest req) {
+        return new Viewable("/upload-basic");
     }
 
+    @POST
+    @Path("/basic")
+    public Response postBasic(@FormParam("dpi") int dpi,
+            @FormParam("frameWidthInInches") double frameWidthInInches,
+            @FormParam("frameHeightInInches") double frameHeightInInches,
+            @FormParam("zooming") Zooming zooming,
+            @FormParam("orientation") Orientation orientation,
+            @FormParam("outputEncoding") OutputEncoding outputEncoding,
+            @FormParam("quality") int quality,
+            @FormParam("frameSize") String frameSize,
+            @FormParam("printWidth") int printWidth,
+            @FormParam("printHeight") int printHeight,
+            @Context HttpServletRequest req,
+            @Context HttpServletResponse response) throws IOException {
+
+        String blobKeyString = (String) req.getSession().getAttribute(
+                "blobKeyString");
+        long blobSize = Long.parseLong((String) req.getSession().getAttribute(
+                "blobSize"));
+        ImageTransformer it = new ImageTransformer();
+        Image image = it.generateOddPrint(blobKeyString, blobSize, dpi,
+                frameWidthInInches, frameHeightInInches, zooming, orientation,
+                outputEncoding, quality);
+
+        byte[] bytes = image.getImageData();
+        BlobKey oddPrintBlobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
+
+        return addToBasket(frameSize, printWidth, printHeight, req,
+                oddPrintBlobKey, bytes.length);
+    }
 }

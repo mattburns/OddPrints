@@ -41,12 +41,25 @@ public class Checkout {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Viewable view(@Context HttpServletRequest req) {
+        return viewCheckout(false, req);
+    }
+
+    @GET
+    @Path("/basic")
+    @Produces(MediaType.TEXT_HTML)
+    public Viewable viewBasic(@Context HttpServletRequest req) {
+        return viewCheckout(true, req);
+    }
+
+    private Viewable viewCheckout(boolean isBasic, HttpServletRequest req) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
         Basket basket = Basket.fromSession(req, pm);
 
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);
+        it.put("editurl", "/edit" + (isBasic ? "/basic" : ""));
+
         if (basket != null) {
             it.put("merchantId", basket.getEnvironment()
                     .getCheckoutAPIContext().getMerchantId());
