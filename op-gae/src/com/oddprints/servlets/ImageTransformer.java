@@ -18,63 +18,80 @@ package com.oddprints.servlets;
 import java.io.IOException;
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.images.Composite;
 import com.google.appengine.api.images.Composite.Anchor;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesService.OutputEncoding;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.Transform;
 import com.google.common.collect.Lists;
-import com.oddprints.PMF;
-import com.oddprints.dao.BasketItem;
-import com.sun.jersey.api.client.ClientResponse.Status;
+import com.oddprints.image.TransformSettings;
+import com.oddprints.image.TransformSettings.Orientation;
+import com.oddprints.image.TransformSettings.Zooming;
+import com.oddprints.image.Transformer;
+import com.oddprints.util.ImageBlobStore;
 
 @Path("/transformer")
 public class ImageTransformer {
 
     @GET
-    @Path("/{secret}/{key}")
+    @Path("/{blobKeyString}/{blobSize}")
     @Produces("image/jpeg")
-    public Response getFullImage(@PathParam("secret") String secret,
-            @PathParam("key") String key,
-            // @QueryParam("frameWidthInInches") int frameWidthInInches,
-            // @QueryParam("frameHeightInInches") int frameHeightInInches,
+    public Response get(@PathParam("blobKeyString") String blobKeyString,
+            @PathParam("blobSize") long blobSize,
+            @QueryParam("frameWidthInInches") double frameWidthInInches,
+            @QueryParam("frameHeightInInches") double frameHeightInInches,
+            @QueryParam("zooming") Zooming zooming,
+            @QueryParam("orientation") Orientation orientation,
+            @QueryParam("outputEncoding") OutputEncoding outputEncoding,
             @Context HttpServletResponse response) throws IOException {
 
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        BasketItem item = pm.getObjectById(BasketItem.class,
-                KeyFactory.stringToKey(key));
-
-        if (!secret.equalsIgnoreCase(item.getSecret())) {
-            return Response.status(Status.UNAUTHORIZED).build();
-        }
-
-        com.google.appengine.api.images.Image image = item.getThumbImage();
-
-        // Transformer t = new Transformer();
-        // TransformSettings settings = t.calculateSettings(image,
-        // frameWidthInInches, frameHeightInInches, Zooming.FILL,
-        // Orientation.AUTO);
+        Image image = ImageBlobStore.INSTANCE.getImage(new BlobKey(
+                blobKeyString), blobSize);
 
         ImagesService is = ImagesServiceFactory.getImagesService();
 
-        Composite composite = ImagesServiceFactory.makeComposite(image, 0, 0,
-                1f, Anchor.TOP_LEFT);
+        Transformer t = new Transformer();
+        TransformSettings settings = t.calculateSettings(image,
+                frameWidthInInches, frameHeightInInches, zooming, orientation);
+
+        if (zooming == Zooming.CROP) {
+            double xTrim = (double) settings.getSourceX() / image.getWidth();
+            double yTrim = (double) settings.getSourceY() / image.getHeight();
+            Transform crop = ImagesServiceFactory.makeCrop(xTrim, yTrim,
+                    1 - xTrim, 1 - yTrim);
+            image = is.applyTransform(crop, image);
+        }
+
+        Transform resize = ImagesServiceFactory
+                .makeResize(settings.getDestinationWidth(),
+                        settings.getDestinationHeight());
+        Image shrunkImage = is.applyTransform(resize, image);
+
+        Composite composite = ImagesServiceFactory.makeComposite(shrunkImage,
+                settings.getDestinationX(), settings.getDestinationY(), 1f,
+                Anchor.TOP_LEFT);
 
         List<Composite> composites = Lists.newArrayList(composite);
 
-        Image blah = is.composite(composites, image.getWidth() + 20,
-                image.getHeight() + 20, 0xff00ff00L);
+        // OutputSettings outputSettings = new
+        // OutputSettings(OutputEncoding.JPEG);
+        // OutputSettings outputSettings = new OutputSettings();
+        // outputSettings.setQuality(99);
+        Image finalImage = is.composite(composites, settings.getCanvasWidth(),
+                settings.getCanvasHeight(), 0xffddddddL, outputEncoding);
 
-        return Response.ok(blah.getImageData()).build();
+        return Response.ok(finalImage.getImageData()).build();
     }
 }

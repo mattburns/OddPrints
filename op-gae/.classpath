@@ -19,6 +19,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-server-1.12.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-servlet-1.12.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mimepull-1.6.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/mockito-all-1.9.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>

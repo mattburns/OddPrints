@@ -86,7 +86,7 @@ public class Upload {
 
     @POST
     @Path("/original")
-    @Produces("image/jpeg")
+    @Produces("text/html")
     public Response doPost(@Context HttpServletRequest req)
             throws FileUploadException, IOException {
         // Get the image representation
@@ -98,12 +98,9 @@ public class Upload {
         byte[] bytes = IOUtils.toByteArray(imgStream);
         BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
 
-        System.out.println("image should be at: /image/original/"
-                + blobKey.getKeyString() + "/" + bytes.length);
-
-        req.getSession().setAttribute("blobKeyString", blobKey.getKeyString());
-
-        return Response.ok(bytes).build();
+        return Response.ok(
+                "image should be at: /image/original/" + blobKey.getKeyString()
+                        + "/" + bytes.length).build();
     }
 
 }

@@ -16,15 +16,16 @@ public class Transformer {
         TransformSettings settings = calculatePrintSize(frameWidthInInches,
                 frameHeightInInches, orientation);
         settings = calculateCanvasSize(settings.getPrintWidth(),
-                settings.getPrintHeight(), DEFAULT_DPI);
+                settings.getPrintHeight(), DEFAULT_DPI, settings);
         settings = calculateFramePixelSize(frameWidthInInches,
-                frameHeightInInches, DEFAULT_DPI);
+                frameHeightInInches, DEFAULT_DPI, settings);
         settings = calculateFrameXY(settings.getCanvasWidth(),
                 settings.getCanvasHeight(), settings.getFrameWidthPx(),
-                settings.getFrameHeightPx());
+                settings.getFrameHeightPx(), settings);
         settings = calculateDestination(zooming, settings.getFrameWidthPx(),
                 settings.getFrameHeightPx(), settings.getFrameX(),
-                settings.getFrameY(), image.getWidth(), image.getHeight());
+                settings.getFrameY(), image.getWidth(), image.getHeight(),
+                settings);
         return settings;
     }
 
@@ -92,36 +93,36 @@ public class Transformer {
     }
 
     TransformSettings calculateCanvasSize(int printWidth, int printHeight,
-            int dpi) {
+            int dpi, TransformSettings settings) {
         int canvasWidth = printWidth * dpi;
         int canvasHeight = printHeight * dpi;
 
-        return new Builder().canvasWidth(canvasWidth)
+        return new Builder(settings).canvasWidth(canvasWidth)
                 .canvasHeight(canvasHeight).build();
     }
 
     TransformSettings calculateFramePixelSize(double frameWidthInInches,
-            double frameHeightInInches, int dpi) {
+            double frameHeightInInches, int dpi, TransformSettings settings) {
         int frameWidthPx = (int) Math.floor(frameWidthInInches * dpi);
         int frameHeightPx = (int) Math.floor(frameHeightInInches * dpi);
 
-        return new Builder().frameWidthPx(frameWidthPx)
+        return new Builder(settings).frameWidthPx(frameWidthPx)
                 .frameHeightPx(frameHeightPx).build();
     }
 
     TransformSettings calculateFrameXY(int canvasWidth, int canvasHeight,
-            int frameWidthPx, int frameHeightPx) {
+            int frameWidthPx, int frameHeightPx, TransformSettings settings) {
         int frameX = (int) Math.floor((canvasWidth - frameWidthPx) / 2);
         int frameY = (int) Math.floor((canvasHeight - frameHeightPx) / 2);
 
-        return new Builder().frameX(frameX).frameY(frameY).build();
+        return new Builder(settings).frameX(frameX).frameY(frameY).build();
     }
 
     TransformSettings forceNewWidth(int width, int imageWidth, int imageHeight) {
 
         int destinationWidth = width;
-        int destinationHeight = (int) Math.floor(imageHeight
-                / (imageWidth / width));
+        int destinationHeight = (int) Math.floor((double) imageHeight
+                / ((double) imageWidth / (double) width));
 
         return new Builder().destinationHeight(destinationHeight)
                 .destinationWidth(destinationWidth).build();
@@ -130,8 +131,8 @@ public class Transformer {
     TransformSettings forceNewHeight(int height, int imageWidth, int imageHeight) {
 
         int destinationHeight = height;
-        int destinationWidth = (int) Math.floor(imageWidth
-                / (imageHeight / height));
+        int destinationWidth = (int) Math.floor((double) imageWidth
+                / ((double) imageHeight / (double) height));
 
         return new Builder().destinationHeight(destinationHeight)
                 .destinationWidth(destinationWidth).build();
@@ -139,7 +140,7 @@ public class Transformer {
 
     TransformSettings calculateDestination(Zooming zooming, int frameWidthPx,
             int frameHeightPx, int frameX, int frameY, int imageWidth,
-            int imageHeight) {
+            int imageHeight, TransformSettings settings) {
 
         boolean frameHasWiderRatioThanImage = (imageWidth / imageHeight) < (frameWidthPx / frameHeightPx);
 
@@ -221,7 +222,12 @@ public class Transformer {
             break;
         }
 
-        return new Builder().sourceX(sourceX).sourceY(sourceY)
+        // prevent negative values
+        // TODO: probably better prevented in the first place...
+        sourceX = Math.max(sourceX, 0);
+        sourceY = Math.max(sourceY, 0);
+
+        return new Builder(settings).sourceX(sourceX).sourceY(sourceY)
                 .sourceWidth(sourceWidth).sourceHeight(sourceHeight)
                 .destinationX(destinationX).destinationY(destinationY)
                 .destinationWidth(destinationWidth)

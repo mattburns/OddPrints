@@ -149,6 +149,28 @@ public class TransformSettings {
         private int sourceX;
         private int sourceY;
 
+        public Builder() {
+        }
+
+        public Builder(TransformSettings settings) {
+            this.printSize = settings.printSize;
+            this.orientation = settings.orientation;
+            this.canvasWidth = settings.canvasWidth;
+            this.canvasHeight = settings.canvasHeight;
+            this.frameWidthPx = settings.frameWidthPx;
+            this.frameHeightPx = settings.frameHeightPx;
+            this.frameX = settings.frameX;
+            this.frameY = settings.frameY;
+            this.destinationWidth = settings.destinationWidth;
+            this.destinationHeight = settings.destinationHeight;
+            this.destinationX = settings.destinationX;
+            this.destinationY = settings.destinationY;
+            this.sourceWidth = settings.sourceWidth;
+            this.sourceHeight = settings.sourceHeight;
+            this.sourceX = settings.sourceX;
+            this.sourceY = settings.sourceY;
+        }
+
         public Builder printSize(PrintSize printSize) {
             this.printSize = printSize;
             return this;
