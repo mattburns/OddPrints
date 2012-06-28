@@ -36,7 +36,7 @@ limitations under the License.
 		<c:choose>
 			<c:when test="${empty it.basket.items}">
 			    <h1>Basket is empty</h1>
-			    <p><a href="/edit" data-ajax="false">upload something</a></p>
+			    <p><a href="${it.editurl}" data-ajax="false">upload something</a></p>
 			</c:when>
 			<c:otherwise>
 				<h1>Checkout</h1>
