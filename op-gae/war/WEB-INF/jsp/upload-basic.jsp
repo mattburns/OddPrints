@@ -38,7 +38,7 @@ limitations under the License.
             
             <form action="/edit/basic" data-ajax="false" method="POST" enctype="multipart/form-data">
                 <input type="file" name="myFile" >
-                <input type="submit" value="Upload">
+                <input type="submit" value="Upload" id="submit-button">
             </form>
         </div>
     </div>
@@ -46,5 +46,12 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
 </div>
 
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#submit-button").click(function() {
+        $.mobile.showPageLoadingMsg();
+    });
+});
+</script>
 </body>
 </html>

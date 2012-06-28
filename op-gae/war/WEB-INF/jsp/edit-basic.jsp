@@ -149,6 +149,7 @@ $(document).ready(function() {
 });
 
 function renderPreview() {
+    $.mobile.showPageLoadingMsg();
     updateTextAndControls();
 
     var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95";
@@ -160,6 +161,9 @@ function renderPreview() {
     var img = new Image();
     img.src = previewImageUrl;
     img.onload = function(){
+        $.mobile.hidePageLoadingMsg();
+    };
+    img.onerror = function(){
         $.mobile.hidePageLoadingMsg();
     };
 }
