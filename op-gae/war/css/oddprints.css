@@ -95,3 +95,9 @@ dt {
 .order-details dd {
 
 }
+
+[data-role=footer] {
+    bottom:0;
+    position:absolute;
+    width:100%;
+} 
