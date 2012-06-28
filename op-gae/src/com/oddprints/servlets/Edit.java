@@ -55,6 +55,7 @@ public class Edit {
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);
 
+        req.getSession().setAttribute("basicMode", Boolean.FALSE);
         return new Viewable("/edit", it);
     }
 
@@ -75,6 +76,7 @@ public class Edit {
             return new Error().get("No image found");
         }
 
+        req.getSession().setAttribute("basicMode", Boolean.TRUE);
         return new Viewable("/edit-basic", it);
     }
 
@@ -94,6 +96,7 @@ public class Edit {
 
         req.getSession().setAttribute("blobKeyString", blobKey.getKeyString());
         req.getSession().setAttribute("blobSize", bytes.length + "");
+        req.getSession().setAttribute("basicMode", Boolean.TRUE);
 
         return viewBasic(req);
     }

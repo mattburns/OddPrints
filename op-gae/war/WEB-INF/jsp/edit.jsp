@@ -60,6 +60,11 @@ limitations under the License.
                     <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="8" data-highlight="true"/></span>
                 </div>
                 
+                <img id="img-preview" src="" />
+                <div class="text-align-right">
+                    <a id="change-picture-link" href="/edit">change picture</a>
+                </div>
+
                 <div data-role="collapsible" data-collapsed="true"  data-content-theme="c" >
                     <h3 title="Advanced control of the generated image">Extra options</h3>
                     
@@ -79,17 +84,17 @@ limitations under the License.
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Zooming:</legend>
                             
-                            <input type="radio" name="radio-crop-fit" id="radio-fill" value="fit" checked="checked"/>
+                            <input type="radio" name="radio-crop-fit" id="radio-fill" value="FILL" checked="checked"/>
                             <label for="radio-fill" title="Ensure the picture fills the frame, however, some of the picture may not fit in the frame">
                                 Fill
                             </label>
     
-                            <input type="radio" name="radio-crop-fit" id="radio-fit" value="fit" />
+                            <input type="radio" name="radio-crop-fit" id="radio-fit" value="FIT" />
                             <label for="radio-fit" title="Ensure the picture fits in the frame, however, some margin may be visible in the frame">
                                 Fit
                             </label>
                                                     
-                            <input type="radio" name="radio-crop-fit" id="radio-crop" value="crop" />
+                            <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP" />
                             <label for="radio-crop" title="Crop parts of the image that are outside the frame">
                                 Crop
                             </label>
@@ -121,23 +126,18 @@ limitations under the License.
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Print orientation:</legend>
                             
-                            <input type="radio" name="radio-orient" id="radio-orient-auto" value="auto" checked="checked" />
+                            <input type="radio" name="radio-orient" id="radio-orient-auto" value="AUTO" checked="checked" />
                             <label for="radio-orient-auto" title="Match the orientation of the frame">
                                 Auto
                             </label>
     
-                            <input type="radio" name="radio-orient" id="radio-orient-portrait" value="portrait" />
+                            <input type="radio" name="radio-orient" id="radio-orient-portrait" value="PORTRAIT" />
                             <label for="radio-orient-portrait">Portrait</label>
                                                     
-                            <input type="radio" name="radio-orient" id="radio-orient-landscape" value="landscape" />
+                            <input type="radio" name="radio-orient" id="radio-orient-landscape" value="LANDSCAPE" />
                             <label for="radio-orient-landscape">Landscape</label>
                         </fieldset>
                     </div>
-                </div>
-                
-                <img id="img-preview" src="" />
-                <div class="text-align-right">
-                    <a id="change-picture-link" href="/edit">change picture</a>
                 </div>
                 
                 <c:choose>
@@ -169,20 +169,6 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
 </div>
 
-<div data-role="page" id="page-error">
-
-    <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
-
-    <div data-role="content">
-        <h3>Oh fudgecakes.</h3>
-        
-        <!-- generated with http://h5bp.github.com/caniuse/ -->
-        <div id="h5p-message"></div><script>Modernizr.browserPrompt=function(a,b){if(a.agents){Modernizr.browserPrompt.cb(a);return}var c=!0,d=a.features.split(" "),e=a.options,f;for(var g=-1,h=d.length;++g<h;)f=d[g],!Modernizr[f]&&(c=!1);if(c)return c;var i=document.createElement("script"),j=document.getElementsByTagName("script")[0],k="http://api.html5please.com/"+d.join("+")+".json?callback=Modernizr.browserPrompt&html&"+e;return Modernizr.browserPrompt.cb=b,i.src=k,j.parentNode.insertBefore(i,j),!1},Modernizr.browserPrompt({features: "filereader+canvas", options:"texticon&0"},function(a){var b=document.getElementById("h5p-message");b.innerHTML=a.html})</script>
-    </div>
-       
-    <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
-</div>
-
 <script type="text/javascript">
 
 var myCanvas = document.getElementById("myCanvas");
@@ -190,17 +176,11 @@ var ctx;
 var img = new Image();
 var frameSize = "";
     
-var cmToInches = 0.393700787;
-var dpiRender = 100;
-var dpiFull = 300;
-
 $(document).ready(function() {
-    var supportedBrowser = !!window.FileReader && Modernizr.canvas;
-    
     fileChooser();
     
-    if (!supportedBrowser) {    
-        $.mobile.changePage("#page-error");
+    if (!isSupportedBrowser()) {
+        $.mobile.changePage("/upload/basic");
         return;
     }
     
@@ -224,9 +204,9 @@ $(document).ready(function() {
         queueRenderPreview();  
     };
 
-    $("input").click(renderPreview);
+    $("input").click(queueRenderPreview);
     $("input").change(queueRenderPreview);
-    $("input").keyup(renderPreview);
+    $("input").keyup(queueRenderPreview);
     $(".span-slider").change(queueRenderPreview);
     $("#radio-cm, #radio-inches").change(renderPreview);
     
@@ -274,34 +254,7 @@ function loadFileUrl(url) {
     fileChosen();
 }
 
-function toCm(inches) {
-    return inches / cmToInches;
-}
-
-function toInches(cm) {
-    return cm * cmToInches;
-}
-
-function frameSizeString() {
-    var frameWidth = getFrameWidthString();
-    var frameHeight = getFrameHeightString();
-    var isInches = $("#radio-inches").attr('checked');
-    return frameWidth + (isInches? '"' : '') + 'x' + frameHeight + (isInches? '"' : 'cm');
-}
-
-function updateFrameHeader() {
-    $("#frame-size-text").html('Enter your frame size (currently ' + frameSizeString() + ')');
-}
-
 function drawImage(settings) {
-    // image rotation experiment:
-    // ctx.save(); 
-    // ctx.translate(settings.destinationX, settings.destinationY); 
-    // ctx.rotate(90 * Math.PI/180);
-    // ctx.translate(0, -settings.destinationHeight); 
-    // ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, 0,0, settings.destinationWidth, settings.destinationHeight);
-    // ctx.restore();
-    
     ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth, settings.destinationHeight);
 }
 
@@ -330,24 +283,6 @@ function drawLine(x1, y1, x2, y2) {
     ctx.stroke();
 }
 
-var renderDelay = 100;
-var renderTimeoutId = 0;
-
-// if there are multiple call in quick succession, only that last call does the real work
-function queueRenderPreview() {
-    $.mobile.showPageLoadingMsg();
-    updateFrameHeader();
-    restrictSliders();
-    clearTimeout(renderTimeoutId);
-    
-    renderTimeoutId = window.setTimeout(
-        function() {
-            renderPreview();
-        },
-        renderDelay
-    );
-}
-
 function renderPreview() {
     var jpegData = calculate(dpiRender);
     $("#img-preview").attr("src", jpegData);
@@ -373,16 +308,11 @@ function downloadImpl() {
 
 function calculate(dpi) {
     $.mobile.showPageLoadingMsg();
-    updateFrameHeader();
+    updateTextAndControls();
     
     var settings = calculateSettings(dpi);
-    
-    $("#print-size-text").html("Image must be printed at " + settings.printWidth + "\"x" + settings.printHeight + "\"");
-    
     $("canvas").attr("width", settings.canvasWidth);
     $("canvas").attr("height", settings.canvasHeight);
-    
-    restrictSliders();
       
     ctx.fillStyle="#dddddd";
     ctx.fillRect(0, 0, settings.canvasWidth, settings.canvasHeight);
@@ -406,83 +336,14 @@ function calculate(dpi) {
     return jpegData;
 }
 
-function restrictSliders() {
-    var maxFrameWidth = 10;
-    var maxFrameHeight = 8;
-    if (canvasIsCurrentlyPortrait()) {
-        maxFrameWidth = 8;
-        maxFrameHeight = 10;
-    }
-    
-    var visibleMaxFrameWidth = maxFrameWidth;
-    var visibleMaxFrameHeight = maxFrameHeight;
-    
-    if (getFrameUnits() === "cm") {
-        visibleMaxFrameWidth = toCm(maxFrameWidth);
-        visibleMaxFrameHeight = toCm(maxFrameHeight);
-    }
-    
-    $("#frame-width").attr("max", visibleMaxFrameWidth);
-    $("#frame-height").attr("max", visibleMaxFrameHeight);
-    
-    if (getFrameWidth() > visibleMaxFrameWidth) {
-        $("#frame-width").val(visibleMaxFrameWidth);
-    }
-    if (getFrameHeight() > visibleMaxFrameHeight) {
-        $("#frame-height").val(visibleMaxFrameHeight);
-    }
-}
-
-function canvasIsCurrentlyPortrait() {
-    return parseInt($("canvas").attr("height")) > parseInt($("canvas").attr("width"));
-}
-
-function getFrameUnits() {
-    return $('input:radio[name=radio-frame-units]:checked').val();
-}
-
 function calculateSettings(dpi) {
-    var zooming = 'fit';
-    if ($("#radio-fill").attr('checked')) {
-        zooming = 'fill';
-    }
-    if ($("#radio-crop").attr('checked')) {
-        zooming = 'crop';
-    }
-        
-    var printOrientation = $('input:radio[name=radio-orient]:checked').val(); 
-    
-    var frameWidthInInches = getFrameWidth();
-    var frameHeightInInches = getFrameHeight();
-    if (getFrameUnits() === "cm") {
-        frameWidthInInches = toInches(frameWidthInInches);
-        frameHeightInInches = toInches(frameHeightInInches);
-    }
-    
-    if (!(frameWidthInInches > 0 && frameHeightInInches > 0)) {
-        return;
-    }
-    
-    var settings = calculatePrintSize(frameWidthInInches, frameHeightInInches, printOrientation);
+    var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
     settings = calculateCanvasSize(settings.printWidth, settings.printHeight, dpi, settings);
-    settings = calculateFramePixelSize(frameWidthInInches, frameHeightInInches, dpi, settings);
+    settings = calculateFramePixelSize(getFrameWidthInInches(), getFrameHeightInInches(), dpi, settings);
     settings = calculateFrameXY(settings.canvasWidth, settings.canvasHeight, settings.frameWidthPx, settings.frameHeightPx, settings);
-    settings = calculateDestination(zooming, settings.frameWidthPx, settings.frameHeightPx, settings.frameX, settings.frameY, img.width, img.height, settings);
+    settings = calculateDestination(getZooming(), settings.frameWidthPx, settings.frameHeightPx, settings.frameX, settings.frameY, img.width, img.height, settings);
 
     return settings;
-}
-
-function getFrameWidth() {
-    return parseFloat($("#frame-width").val());
-}
-function getFrameHeight() {
-    return parseFloat($("#frame-height").val());
-}
-function getFrameWidthString() {
-    return getFrameWidth().toFixed(1);
-}
-function getFrameHeightString() {
-    return getFrameHeight().toFixed(1);
 }
 
 function uploadImage() {

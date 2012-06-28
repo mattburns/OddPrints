@@ -140,7 +140,7 @@ public class Transformer {
             int frameHeightPx, int frameX, int frameY, int imageWidth,
             int imageHeight, TransformSettings settings) {
 
-        boolean frameHasWiderRatioThanImage = (imageWidth / imageHeight) < (frameWidthPx / frameHeightPx);
+        boolean frameHasWiderRatioThanImage = ((double) imageWidth / imageHeight) < ((double) frameWidthPx / frameHeightPx);
 
         int sourceX = 0;
         int sourceY = 0;
@@ -201,15 +201,19 @@ public class Transformer {
         case CROP:
             if (frameHasWiderRatioThanImage) {
                 sourceWidth = imageWidth;
-                sourceHeight = (int) Math.floor((imageWidth * frameHeightPx)
-                        / frameWidthPx);
+                sourceHeight = (int) Math
+                        .floor((double) (imageWidth * frameHeightPx)
+                                / frameWidthPx);
                 sourceX = 0;
-                sourceY = (int) Math.floor((imageHeight - sourceHeight) / 2);
+                sourceY = (int) Math
+                        .floor((double) (imageHeight - sourceHeight) / 2);
             } else {
                 sourceHeight = imageHeight;
-                sourceWidth = (int) Math.floor((imageHeight * frameWidthPx)
-                        / frameHeightPx);
-                sourceX = (int) Math.floor((imageWidth - sourceWidth) / 2);
+                sourceWidth = (int) Math
+                        .floor((double) (imageHeight * frameWidthPx)
+                                / frameHeightPx);
+                sourceX = (int) Math
+                        .floor((double) (imageWidth - sourceWidth) / 2);
                 sourceY = 0;
             }
             destinationHeight = frameHeightPx;

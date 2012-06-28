@@ -38,27 +38,24 @@ import com.sun.jersey.api.view.Viewable;
 @Path("/checkout")
 public class Checkout {
 
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public Viewable view(@Context HttpServletRequest req) {
-        return viewCheckout(false, req);
+    private boolean basicMode(HttpServletRequest req) {
+        return (Boolean) req.getSession().getAttribute("basicMode");
+    }
+
+    private String editUrl(HttpServletRequest req) {
+        return "/edit" + (basicMode(req) ? "/basic" : "");
     }
 
     @GET
-    @Path("/basic")
     @Produces(MediaType.TEXT_HTML)
-    public Viewable viewBasic(@Context HttpServletRequest req) {
-        return viewCheckout(true, req);
-    }
-
-    private Viewable viewCheckout(boolean isBasic, HttpServletRequest req) {
+    public Viewable viewCheckout(@Context HttpServletRequest req) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
         Basket basket = Basket.fromSession(req, pm);
 
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);
-        it.put("editurl", "/edit" + (isBasic ? "/basic" : ""));
+        it.put("editurl", editUrl(req));
 
         if (basket != null) {
             it.put("merchantId", basket.getEnvironment()

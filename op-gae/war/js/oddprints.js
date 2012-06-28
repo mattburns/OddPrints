@@ -1,16 +1,19 @@
+var cmToInches = 0.393700787;
+var dpiRender = 100;
+var dpiFull = 300;
 
 function calculatePrintSize(frameWidthInInches, frameHeightInInches, orientation) {
 	var settings = new Object();
 	
-	if (!orientation || orientation === "auto") {
+	if (!orientation || orientation === "AUTO") {
 		if (frameWidthInInches < frameHeightInInches) {
-			orientation = "portrait";
+			orientation = "PORTRAIT";
 		} else {
-			orientation = "landscape";
+			orientation = "LANDSCAPE";
 		}
 	}
 	
-	if (orientation === "portrait") {
+	if (orientation === "PORTRAIT") {
 		settings.printWidth = 4;
 		settings.printHeight = 6;
 		if (frameWidthInInches > settings.printWidth || frameHeightInInches > settings.printHeight) {
@@ -108,7 +111,7 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
 	var frameHasWiderRatioThanImage = (imageWidth/imageHeight) < (frameWidthPx/frameHeightPx);
 		
 	switch (zooming) {
-		case ('fit') :
+		case ('FIT') :
 			if (frameHasWiderRatioThanImage) {
 				settings = forceNewHeight(frameHeightPx, imageWidth, imageHeight, settings);
 			    settings.destinationY = frameY;
@@ -123,7 +126,7 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
 			settings.sourceWidth = imageWidth;
 			settings.sourceHeight = imageHeight;
 			break;
-		case ('fill') :
+		case ('FILL') :
 			if (frameHasWiderRatioThanImage) {
 				settings = forceNewWidth(frameWidthPx, imageWidth, imageHeight, settings);
 				settings.destinationY = Math.floor(frameY - ((settings.destinationHeight - frameHeightPx) / 2));
@@ -138,7 +141,7 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
 			settings.sourceWidth = imageWidth;
 			settings.sourceHeight = imageHeight;
 			break;
-		case ('crop') :
+		case ('CROP') :
 			if (frameHasWiderRatioThanImage) {
 				settings.sourceWidth = imageWidth;
 				settings.sourceHeight = Math.floor((imageWidth * frameHeightPx) / frameWidthPx);
@@ -159,4 +162,140 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
 	}
 	
 	return settings;
+}
+
+function getZooming() {
+    return $('input:radio[name=radio-crop-fit]:checked').val();
+}
+
+function getOrientation() {
+    return $('input:radio[name=radio-orient]:checked').val();
+}
+
+function toCm(inches) {
+    return inches / cmToInches;
+}
+
+function toInches(cm) {
+    return cm * cmToInches;
+}
+
+function frameSizeString() {
+    var frameWidth = getFrameWidthString();
+    var frameHeight = getFrameHeightString();
+    var isInches = $("#radio-inches").attr('checked');
+    return frameWidth + (isInches? '"' : '') + 'x' + frameHeight + (isInches? '"' : 'cm');
+}
+
+function getFrameUnits() {
+    return $('input:radio[name=radio-frame-units]:checked').val();
+}
+
+function updateFrameHeader() {
+    $("#frame-size-text").html('Enter your frame size (' + getFrameUnits() + ')');
+}
+
+function getFrameWidth() {
+    var width = parseFloat($("#frame-width").val());
+    if (isNaN(width) || width <= 0) {
+        width = 0.1;
+        $("#frame-width").val(width);
+    }
+    return width;
+}
+
+function getFrameHeight() {
+    var height = parseFloat($("#frame-height").val());
+    if (isNaN(height) || height <= 0) {
+        height = 0.1;
+        $("#frame-height").val(height);
+    }
+    return height;
+}
+
+function getFrameWidthString() {
+    return getFrameWidth().toFixed(1);
+}
+
+function getFrameHeightString() {
+    return getFrameHeight().toFixed(1);
+}
+
+function getFrameWidthInInches() {
+    var frameWidthInInches = getFrameWidth();
+    if (getFrameUnits() === "cm") {
+        frameWidthInInches = toInches(frameWidthInInches);
+    }
+    return frameWidthInInches;
+
+}
+
+function getFrameHeightInInches() {
+    var frameHeightInInches = getFrameHeight();
+    if (getFrameUnits() === "cm") {
+        frameHeightInInches = toInches(frameHeightInInches);
+    }
+    return frameHeightInInches;
+}
+
+function isImageCurrentlyPortrait() {
+    var img = $("#img-preview");
+    var width = img.clientWidth;
+    var height = img.clientHeight;
+}
+
+function restrictSliders() {
+    var maxFrameWidth = 10;
+    var maxFrameHeight = 8;
+    if (isImageCurrentlyPortrait()) {
+        maxFrameWidth = 8;
+        maxFrameHeight = 10;
+    }
+    
+    var visibleMaxFrameWidth = maxFrameWidth;
+    var visibleMaxFrameHeight = maxFrameHeight;
+    
+    if (getFrameUnits() === "cm") {
+        visibleMaxFrameWidth = toCm(maxFrameWidth);
+        visibleMaxFrameHeight = toCm(maxFrameHeight);
+    }
+    
+    $("#frame-width").attr("max", visibleMaxFrameWidth);
+    $("#frame-height").attr("max", visibleMaxFrameHeight);
+    
+    if (getFrameWidth() > visibleMaxFrameWidth) {
+        $("#frame-width").val(visibleMaxFrameWidth);
+    }
+    if (getFrameHeight() > visibleMaxFrameHeight) {
+        $("#frame-height").val(visibleMaxFrameHeight);
+    }
+}
+
+var renderDelay = 100;
+var renderTimeoutId = 0;
+
+// if there are multiple call in quick succession, only that last call does the real work
+function queueRenderPreview() {
+    $.mobile.showPageLoadingMsg();
+    updateFrameHeader();
+    restrictSliders();
+    clearTimeout(renderTimeoutId);
+    
+    renderTimeoutId = window.setTimeout(
+        function() {
+            renderPreview();
+        },
+        renderDelay
+    );
+}
+
+function updateTextAndControls() {
+    updateFrameHeader();
+    var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
+    $("#print-size-text").html("Print at " + settings.printWidth + "\"x" + settings.printHeight + "\"");
+    restrictSliders();
+}
+
+function isSupportedBrowser() {
+    return !!window.FileReader && Modernizr.canvas;
 }

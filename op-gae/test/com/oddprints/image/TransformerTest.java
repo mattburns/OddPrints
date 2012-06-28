@@ -293,6 +293,21 @@ public class TransformerTest {
     }
 
     @Test
+    public void source_coordinates_are_correct() {
+        Image image = Mockito.mock(Image.class);
+        Mockito.when(image.getWidth()).thenReturn(830);
+        Mockito.when(image.getHeight()).thenReturn(554);
+        Transformer transformer = new Transformer();
+        TransformSettings settings = transformer.calculateSettings(image, 100,
+                5, 3, Zooming.CROP, Orientation.AUTO);
+        assertEquals(0, settings.getSourceX());
+        assertEquals(28, settings.getSourceY());
+
+        assertEquals(830, settings.getSourceWidth());
+        assertEquals(498, settings.getSourceHeight());
+    }
+
+    @Test
     public void source_coordinates_are_positive() {
         Image image = Mockito.mock(Image.class);
         Mockito.when(image.getWidth()).thenReturn(2000);
@@ -300,8 +315,8 @@ public class TransformerTest {
         Transformer transformer = new Transformer();
         TransformSettings settings = transformer.calculateSettings(image, 300,
                 5, 3, Zooming.CROP, Orientation.AUTO);
-        assertTrue(settings.getSourceX() > 0);
-        assertTrue(settings.getSourceY() > 0);
+        assertTrue(settings.getSourceX() >= 0);
+        assertTrue(settings.getSourceY() >= 0);
     }
 
 }

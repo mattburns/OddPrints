@@ -39,10 +39,10 @@ limitations under the License.
         <h2>Step 2: Enter the size of your frame</h2>
         <p>This is the size in real inches (or centimetres) you would like your photo printed.</p>
         <h2>Step 3: Print your photo</h2>
-        <p>Your print will have guidelines to help you cut it out at just the right size.</p>
+        <p>Your print will ready for you to cut at just the right size.</p>
 
         <div class="supported-browser">
-            <p><a href="/edit" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right"  data-ajax="false">Get Started!</a></p>
+            <p><a href="/upload/basic" id="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right"  data-ajax="false">Get Started!</a></p>
         </div>
             
     </div>
@@ -50,6 +50,14 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
     
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    if (isSupportedBrowser()) {
+        $("#get-started").attr("href", "/edit");
+    }
+});
+</script>
 
 </body>
 </html>

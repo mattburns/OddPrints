@@ -8,38 +8,38 @@
   <script type="text/javascript" src="js/oddprints.js"></script>
 
   <script>
-	$(document).ready(function(){
-	
-		function assertEquals(expected, actual, message) {
-			return equal(actual, expected, message);
-		}
+    $(document).ready(function(){
+    
+        function assertEquals(expected, actual, message) {
+            return equal(actual, expected, message);
+        }
 
-		function assertNotEquals(expected, actual, message) {
-			return notEqual(actual, expected, message);
-		}
+        function assertNotEquals(expected, actual, message) {
+            return notEqual(actual, expected, message);
+        }
 
-		test("print size", function() {
-			settings = calculatePrintSize(1, 1);
-			assertEquals(6, settings.printWidth);
-			assertEquals(4, settings.printHeight);
-			
-			settings = calculatePrintSize(6, 4);
-			assertEquals(6, settings.printWidth);
-			assertEquals(4, settings.printHeight);
-			
-			settings = calculatePrintSize(6.1, 4);
-			assertEquals(7, settings.printWidth);
-			assertEquals(5, settings.printHeight);
-			
-			settings = calculatePrintSize(6, 4.1);
-			assertEquals(7, settings.printWidth);
-			assertEquals(5, settings.printHeight);
-			
-			settings = calculatePrintSize(7.1, 5);
-			assertEquals(10, settings.printWidth);
-			assertEquals(8, settings.printHeight);
-		});
-		
+        test("print size", function() {
+            settings = calculatePrintSize(1, 1);
+            assertEquals(6, settings.printWidth);
+            assertEquals(4, settings.printHeight);
+            
+            settings = calculatePrintSize(6, 4);
+            assertEquals(6, settings.printWidth);
+            assertEquals(4, settings.printHeight);
+            
+            settings = calculatePrintSize(6.1, 4);
+            assertEquals(7, settings.printWidth);
+            assertEquals(5, settings.printHeight);
+            
+            settings = calculatePrintSize(6, 4.1);
+            assertEquals(7, settings.printWidth);
+            assertEquals(5, settings.printHeight);
+            
+            settings = calculatePrintSize(7.1, 5);
+            assertEquals(10, settings.printWidth);
+            assertEquals(8, settings.printHeight);
+        });
+        
         test("print size - auto portrait", function() {
             settings = calculatePrintSize(6, 4);
             assertEquals(6, settings.printWidth);
@@ -54,195 +54,207 @@
             assertEquals(8, settings.printHeight);
 
             // same behaviour with args
-            settings = calculatePrintSize(4, 6, "auto");
+            settings = calculatePrintSize(4, 6, "AUTO");
             assertEquals(4, settings.printWidth);
             assertEquals(6, settings.printHeight);
         });
 
         test("print size - force landscape", function() {
-            settings = calculatePrintSize(6, 4, "landscape");
+            settings = calculatePrintSize(6, 4, "LANDSCAPE");
             assertEquals(6, settings.printWidth);
             assertEquals(4, settings.printHeight);
 
-            settings = calculatePrintSize(4, 6, "landscape");
+            settings = calculatePrintSize(4, 6, "LANDSCAPE");
             assertEquals(10, settings.printWidth);
             assertEquals(8, settings.printHeight);
         });
 
         test("print size - force portrait", function() {
-            settings = calculatePrintSize(4, 6, "portrait");
+            settings = calculatePrintSize(4, 6, "PORTRAIT");
             assertEquals(4, settings.printWidth);
             assertEquals(6, settings.printHeight);
 
-            settings = calculatePrintSize(6, 4, "portrait");
+            settings = calculatePrintSize(6, 4, "PORTRAIT");
             assertEquals(8, settings.printWidth);
             assertEquals(10, settings.printHeight);
         });
-		
-		test("canvas size", function() {
-			settings = calculateCanvasSize(6, 4, 150);
-			assertEquals(900, settings.canvasWidth);
-			assertEquals(600, settings.canvasHeight);
-			
-			settings = calculateCanvasSize(6, 4, 300);
-			assertEquals(1800, settings.canvasWidth);
-			assertEquals(1200, settings.canvasHeight);
-			
-			settings = calculateCanvasSize(7, 5, 150);
-			assertEquals(1050, settings.canvasWidth);
-			assertEquals(750, settings.canvasHeight);
-		});
-			
-		test("frame pixel size", function() {
-			settings = calculateFramePixelSize(1, 1, 150);
-			assertEquals(150, settings.frameWidthPx);
-			assertEquals(150, settings.frameHeightPx);
-			
-			settings = calculateFramePixelSize(6, 4, 150);
-			assertEquals(900, settings.frameWidthPx);
-			assertEquals(600, settings.frameHeightPx);
-			
-			settings = calculateFramePixelSize(6, 4, 300);
-			assertEquals(1800, settings.frameWidthPx);
-			assertEquals(1200, settings.frameHeightPx);
-		});
-		
-		test("frame position on canvas", function() {
-			settings = calculateFrameXY(6, 4, 6, 4);
-			assertEquals(0, settings.frameX);
-			assertEquals(0, settings.frameY);
-			
-			settings = calculateFrameXY(3, 3, 1, 1);
-			assertEquals(1, settings.frameX);
-			assertEquals(1, settings.frameY);
-			
-			settings = calculateFrameXY(4, 3, 2, 1);
-			assertEquals(1, settings.frameX);
-			assertEquals(1, settings.frameY);
-			
-			// if not exact fit, should snap left and up by half pixel
-			settings = calculateFrameXY(3, 3, 2, 2);
-			assertEquals(0, settings.frameX);
-			assertEquals(0, settings.frameY);
-		});
-		
-		test("image position on canvas (fit)", function() {
-			settings = calculateDestination('fit', 4, 4, 2, 2, 4, 8);
-			assertEquals(2, settings.destinationWidth);
-			assertEquals(4, settings.destinationHeight);
-			assertEquals(3, settings.destinationX);
-			assertEquals(2, settings.destinationY);
-			assertEquals(4, settings.sourceWidth);
-			assertEquals(8, settings.sourceHeight);
-			assertEquals(0, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-			
-			settings = calculateDestination('fit', 4, 4, 2, 2, 8, 4);
-			assertEquals(4, settings.destinationWidth);
-			assertEquals(2, settings.destinationHeight);
-			assertEquals(2, settings.destinationX);
-			assertEquals(3, settings.destinationY);
-			assertEquals(8, settings.sourceWidth);
-			assertEquals(4, settings.sourceHeight);
-			assertEquals(0, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-		});
-		
-		test("image position on canvas (fill)", function() {
-			settings = calculateDestination('fill', 4, 4, 2, 2, 4, 8);
-			assertEquals(4, settings.destinationWidth);
-			assertEquals(8, settings.destinationHeight);
-			assertEquals(2, settings.destinationX);
-			assertEquals(0, settings.destinationY);
-			assertEquals(4, settings.sourceWidth);
-			assertEquals(8, settings.sourceHeight);
-			assertEquals(0, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-			
-			settings = calculateDestination('fill', 4, 4, 2, 2, 8, 4);
-			assertEquals(8, settings.destinationWidth);
-			assertEquals(4, settings.destinationHeight);
-			assertEquals(0, settings.destinationX);
-			assertEquals(2, settings.destinationY);
-			assertEquals(8, settings.sourceWidth);
-			assertEquals(4, settings.sourceHeight);
-			assertEquals(0, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-			
-			settings = calculateDestination('fill', 4, 4, 3, 3, 8, 4);
-			assertEquals(8, settings.destinationWidth);
-			assertEquals(4, settings.destinationHeight);
-			assertEquals(1, settings.destinationX);
-			assertEquals(3, settings.destinationY);
-			assertEquals(8, settings.sourceWidth);
-			assertEquals(4, settings.sourceHeight);
-			assertEquals(0, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-			
-			settings = calculateDestination('fill', 3, 2, 2, 1, 6, 4);
-			assertEquals(3, settings.destinationWidth);
-			assertEquals(2, settings.destinationHeight);
-			assertEquals(2, settings.destinationX);
-			assertEquals(1, settings.destinationY);
-			assertEquals(6, settings.sourceWidth);
-			assertEquals(4, settings.sourceHeight);
-			assertEquals(0, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-		});
-		
-		test("image position on canvas (crop)", function() {
-			settings = calculateDestination('crop', 4, 4, 2, 2, 4, 8);
-			assertEquals(4, settings.destinationWidth);
-			assertEquals(4, settings.destinationHeight);
-			assertEquals(2, settings.destinationX);
-			assertEquals(2, settings.destinationY);
-			assertEquals(4, settings.sourceWidth);
-			assertEquals(4, settings.sourceHeight);
-			assertEquals(0, settings.sourceX);
-			assertEquals(2, settings.sourceY);
-			
-			settings = calculateDestination('crop', 4, 4, 2, 2, 8, 4);
-			assertEquals(4, settings.destinationWidth);
-			assertEquals(4, settings.destinationHeight);
-			assertEquals(2, settings.destinationX);
-			assertEquals(2, settings.destinationY);
-			assertEquals(4, settings.sourceWidth);
-			assertEquals(4, settings.sourceHeight);
-			assertEquals(2, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-			
-			settings = calculateDestination('crop', 4, 4, 3, 3, 8, 4);
-			assertEquals(4, settings.destinationWidth);
-			assertEquals(4, settings.destinationHeight);
-			assertEquals(3, settings.destinationX);
-			assertEquals(3, settings.destinationY);
-			assertEquals(4, settings.sourceWidth);
-			assertEquals(4, settings.sourceHeight);
-			assertEquals(2, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-			
-			settings = calculateDestination('crop', 3, 2, 2, 1, 6, 4);
-			assertEquals(3, settings.destinationWidth);
-			assertEquals(2, settings.destinationHeight);
-			assertEquals(2, settings.destinationX);
-			assertEquals(1, settings.destinationY);
-			assertEquals(6, settings.sourceWidth);
-			assertEquals(4, settings.sourceHeight);
-			assertEquals(0, settings.sourceX);
-			assertEquals(0, settings.sourceY);
-		});
-		
-		test("image shrinking algorithm", function() {
-			settings = forceNewHeight(3, 4, 6);
-			assertEquals(2, settings.destinationWidth);
-			assertEquals(3, settings.destinationHeight);
-			
-			settings = forceNewWidth(3, 6, 4);
-			assertEquals(3, settings.destinationWidth);
-			assertEquals(2, settings.destinationHeight);
-		});
-		
-	});
+        
+        test("canvas size", function() {
+            settings = calculateCanvasSize(6, 4, 150);
+            assertEquals(900, settings.canvasWidth);
+            assertEquals(600, settings.canvasHeight);
+            
+            settings = calculateCanvasSize(6, 4, 300);
+            assertEquals(1800, settings.canvasWidth);
+            assertEquals(1200, settings.canvasHeight);
+            
+            settings = calculateCanvasSize(7, 5, 150);
+            assertEquals(1050, settings.canvasWidth);
+            assertEquals(750, settings.canvasHeight);
+        });
+            
+        test("frame pixel size", function() {
+            settings = calculateFramePixelSize(1, 1, 150);
+            assertEquals(150, settings.frameWidthPx);
+            assertEquals(150, settings.frameHeightPx);
+            
+            settings = calculateFramePixelSize(6, 4, 150);
+            assertEquals(900, settings.frameWidthPx);
+            assertEquals(600, settings.frameHeightPx);
+            
+            settings = calculateFramePixelSize(6, 4, 300);
+            assertEquals(1800, settings.frameWidthPx);
+            assertEquals(1200, settings.frameHeightPx);
+        });
+        
+        test("frame position on canvas", function() {
+            settings = calculateFrameXY(6, 4, 6, 4);
+            assertEquals(0, settings.frameX);
+            assertEquals(0, settings.frameY);
+            
+            settings = calculateFrameXY(3, 3, 1, 1);
+            assertEquals(1, settings.frameX);
+            assertEquals(1, settings.frameY);
+            
+            settings = calculateFrameXY(4, 3, 2, 1);
+            assertEquals(1, settings.frameX);
+            assertEquals(1, settings.frameY);
+            
+            // if not exact fit, should snap left and up by half pixel
+            settings = calculateFrameXY(3, 3, 2, 2);
+            assertEquals(0, settings.frameX);
+            assertEquals(0, settings.frameY);
+        });
+        
+        test("image position on canvas (fit)", function() {
+            settings = calculateDestination('FIT', 4, 4, 2, 2, 4, 8);
+            assertEquals(2, settings.destinationWidth);
+            assertEquals(4, settings.destinationHeight);
+            assertEquals(3, settings.destinationX);
+            assertEquals(2, settings.destinationY);
+            assertEquals(4, settings.sourceWidth);
+            assertEquals(8, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+            
+            settings = calculateDestination('FIT', 4, 4, 2, 2, 8, 4);
+            assertEquals(4, settings.destinationWidth);
+            assertEquals(2, settings.destinationHeight);
+            assertEquals(2, settings.destinationX);
+            assertEquals(3, settings.destinationY);
+            assertEquals(8, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+        });
+        
+        test("image position on canvas (fill)", function() {
+            settings = calculateDestination('FILL', 4, 4, 2, 2, 4, 8);
+            assertEquals(4, settings.destinationWidth);
+            assertEquals(8, settings.destinationHeight);
+            assertEquals(2, settings.destinationX);
+            assertEquals(0, settings.destinationY);
+            assertEquals(4, settings.sourceWidth);
+            assertEquals(8, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+            
+            settings = calculateDestination('FILL', 4, 4, 2, 2, 8, 4);
+            assertEquals(8, settings.destinationWidth);
+            assertEquals(4, settings.destinationHeight);
+            assertEquals(0, settings.destinationX);
+            assertEquals(2, settings.destinationY);
+            assertEquals(8, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+            
+            settings = calculateDestination('FILL', 4, 4, 3, 3, 8, 4);
+            assertEquals(8, settings.destinationWidth);
+            assertEquals(4, settings.destinationHeight);
+            assertEquals(1, settings.destinationX);
+            assertEquals(3, settings.destinationY);
+            assertEquals(8, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+            
+            settings = calculateDestination('FILL', 3, 2, 2, 1, 6, 4);
+            assertEquals(3, settings.destinationWidth);
+            assertEquals(2, settings.destinationHeight);
+            assertEquals(2, settings.destinationX);
+            assertEquals(1, settings.destinationY);
+            assertEquals(6, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+        });
+        
+        test("image position on canvas (crop)", function() {
+            settings = calculateDestination('CROP', 4, 4, 2, 2, 4, 8);
+            assertEquals(4, settings.destinationWidth);
+            assertEquals(4, settings.destinationHeight);
+            assertEquals(2, settings.destinationX);
+            assertEquals(2, settings.destinationY);
+            assertEquals(4, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(2, settings.sourceY);
+            
+            settings = calculateDestination('CROP', 4, 4, 2, 2, 8, 4);
+            assertEquals(4, settings.destinationWidth);
+            assertEquals(4, settings.destinationHeight);
+            assertEquals(2, settings.destinationX);
+            assertEquals(2, settings.destinationY);
+            assertEquals(4, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(2, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+            
+            settings = calculateDestination('CROP', 4, 4, 3, 3, 8, 4);
+            assertEquals(4, settings.destinationWidth);
+            assertEquals(4, settings.destinationHeight);
+            assertEquals(3, settings.destinationX);
+            assertEquals(3, settings.destinationY);
+            assertEquals(4, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(2, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+            
+            settings = calculateDestination('CROP', 3, 2, 2, 1, 6, 4);
+            assertEquals(3, settings.destinationWidth);
+            assertEquals(2, settings.destinationHeight);
+            assertEquals(2, settings.destinationX);
+            assertEquals(1, settings.destinationY);
+            assertEquals(6, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+        });
+        
+        test("image shrinking algorithm", function() {
+            settings = forceNewHeight(3, 4, 6);
+            assertEquals(2, settings.destinationWidth);
+            assertEquals(3, settings.destinationHeight);
+            
+            settings = forceNewWidth(3, 6, 4);
+            assertEquals(3, settings.destinationWidth);
+            assertEquals(2, settings.destinationHeight);
+        });
+        
+        test("source coordinates are correct", function() {
+            settings = calculateDestination('CROP', 500, 300, 50, 50, 830, 554);
+            assertEquals(500, settings.destinationWidth);
+            assertEquals(300, settings.destinationHeight);
+            assertEquals(50, settings.destinationX);
+            assertEquals(50, settings.destinationY);
+            assertEquals(830, settings.sourceWidth);
+            assertEquals(498, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(28, settings.sourceY);
+        });
+        
+    });
   </script>
   
 </head>

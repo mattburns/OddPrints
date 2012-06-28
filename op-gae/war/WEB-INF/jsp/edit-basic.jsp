@@ -35,21 +35,26 @@ limitations under the License.
         <div id="file-chosen">
             <c:if test="${not empty it.basket and it.basket.size gt 0}">
                 <div class="text-align-right">
-                    <a href="/checkout/basic">basket (${it.basket.size})</a>
+                    <a href="/checkout">basket (${it.basket.size})</a>
                 </div>
             </c:if>
     
             <form action="#" method="get">
                 <div data-role="fieldcontain" title="Width of picture frame">                
                     <h2 id="frame-size-text"></h2>
-                    <label for="frame-width">Width:</label>
+                    <label for="frame-width" id="width-label">Width:</label>
                     <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="10" data-highlight="true"/></span>
                 </div>
                 <div data-role="fieldcontain" title="Height of picture frame">
-                    <label for="frame-height">Height:</label>
+                    <label for="frame-height" id="height-label">Height:</label>
                     <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="8" data-highlight="true"/></span>
                 </div>
                 
+                <img id="img-preview" src="/images/grey.jpg" />
+                <div class="text-align-right">
+                    <a id="change-picture-link" href="/upload/basic">change picture</a>
+                </div>
+
                 <div data-role="collapsible" data-collapsed="true"  data-content-theme="c" >
                     <h3 title="Advanced control of the generated image">Extra options</h3>
                     
@@ -69,17 +74,17 @@ limitations under the License.
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Zooming:</legend>
                             
-                            <input type="radio" name="radio-crop-fit" id="radio-fill" value="fit"/>
+                            <input type="radio" name="radio-crop-fit" id="radio-fill" value="FILL"/>
                             <label for="radio-fill" title="Ensure the picture fills the frame, however, some of the picture may not fit in the frame">
                                 Fill
                             </label>
     
-                            <input type="radio" name="radio-crop-fit" id="radio-fit" value="fit" />
+                            <input type="radio" name="radio-crop-fit" id="radio-fit" value="FIT" />
                             <label for="radio-fit" title="Ensure the picture fits in the frame, however, some margin may be visible in the frame">
                                 Fit
                             </label>
                                                     
-                            <input type="radio" name="radio-crop-fit" id="radio-crop" value="crop" checked="checked" />
+                            <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP" checked="checked" />
                             <label for="radio-crop" title="Crop parts of the image that are outside the frame">
                                 Crop
                             </label>
@@ -90,23 +95,18 @@ limitations under the License.
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Print orientation:</legend>
                             
-                            <input type="radio" name="radio-orient" id="radio-orient-auto" value="auto" checked="checked" />
+                            <input type="radio" name="radio-orient" id="radio-orient-auto" value="AUTO" checked="checked" />
                             <label for="radio-orient-auto" title="Match the orientation of the frame">
                                 Auto
                             </label>
     
-                            <input type="radio" name="radio-orient" id="radio-orient-portrait" value="portrait" />
+                            <input type="radio" name="radio-orient" id="radio-orient-portrait" value="PORTRAIT" />
                             <label for="radio-orient-portrait">Portrait</label>
                                                     
-                            <input type="radio" name="radio-orient" id="radio-orient-landscape" value="landscape" />
+                            <input type="radio" name="radio-orient" id="radio-orient-landscape" value="LANDSCAPE" />
                             <label for="radio-orient-landscape">Landscape</label>
                         </fieldset>
                     </div>
-                </div>
-                
-                <img id="img-preview" src="/images/grey.jpg" />
-                <div class="text-align-right">
-                    <a id="change-picture-link" href="/upload/basic">change picture</a>
                 </div>
                 
                 <c:choose>
@@ -115,7 +115,7 @@ limitations under the License.
                     </c:when>
                     <c:otherwise>
                         <h2 id="print-size-text"></h2>
-                        <a href="#" id="img-link" data-role="button" data-theme="b">Download</a>
+                        <a href="#" id="img-link" data-role="button" data-theme="b" target="_blank">Download</a>
                         Or just <a href="#" id="img-upload" data-theme="b">order prints from us</a>.
                     </c:otherwise>
                 </c:choose>
@@ -129,18 +129,14 @@ limitations under the License.
 <script type="text/javascript">
 
 var frameSize = "";
-    
-var cmToInches = 0.393700787;
-var dpiRender = 100;
-var dpiFull = 300;
 
 $(document).ready(function() {
     
-    $("input").click(updateImage);
-    $("input").change(updateImage);
-    $("input").keyup(updateImage);
-    $(".span-slider").change(updateImage);
-    $("#radio-cm, #radio-inches").change(updateImage);
+    $("input").click(queueRenderPreview);
+    $("input").change(queueRenderPreview);
+    $("input").keyup(queueRenderPreview);
+    $(".span-slider").change(queueRenderPreview);
+    $("#radio-cm, #radio-inches").change(renderPreview);
     
     $("#img-upload").click(uploadImage);
 
@@ -149,149 +145,34 @@ $(document).ready(function() {
         $('#debugging').show();
     }
     
-    updateImage();
+    renderPreview();
 });
 
-function toCm(inches) {
-    return inches / cmToInches;
-}
+function renderPreview() {
+    updateTextAndControls();
 
-function toInches(cm) {
-    return cm * cmToInches;
-}
-
-function frameSizeString() {
-    var frameWidth = getFrameWidthString();
-    var frameHeight = getFrameHeightString();
-    var isInches = $("#radio-inches").attr('checked');
-    return frameWidth + (isInches? '"' : '') + 'x' + frameHeight + (isInches? '"' : 'cm');
-}
-
-function updateFrameHeader() {
-    $("#frame-size-text").html('Enter your frame size (currently ' + frameSizeString() + ')');
-}
-
-var renderDelay = 100;
-var renderTimeoutId = 0;
-
-// if there are multiple call in quick succession, only that last call does the real work
-function queueRenderPreview() {
-    $.mobile.showPageLoadingMsg();
-    updateFrameHeader();
-    restrictSliders();
-    clearTimeout(renderTimeoutId);
-    
-    renderTimeoutId = window.setTimeout(
-        function() {
-            renderPreview();
-        },
-        renderDelay
-    );
-}
-
-function getZooming() {
-    var zooming = 'FIT';
-    if ($("#radio-fill").attr('checked')) {
-        zooming = 'FILL';
-    }
-    if ($("#radio-crop").attr('checked')) {
-        zooming = 'CROP';
-    }
-    return zooming;
-}
-
-function getOrientation() {
-    return $('input:radio[name=radio-orient]:checked').val().toUpperCase(); 
-}
-
-function updateImage() {
-    var zooming = getZooming();
-    
-    var frameWidthInInches = getFrameWidth();
-    var frameHeightInInches = getFrameHeight();
-    if (getFrameUnits() === "cm") {
-        frameWidthInInches = toInches(frameWidthInInches);
-        frameHeightInInches = toInches(frameHeightInInches);
-    }
-    
-    var previewImageUrl = "/transformer/" + dpiRender + "/" + frameWidthInInches + "/" + frameHeightInInches + "/" + zooming + "/" + getOrientation() + "/JPEG/95";
-    var finalImageUrl = "/transformer/" + dpiFull + "/" + frameWidthInInches + "/" + frameHeightInInches + "/" + zooming + "/" + getOrientation() + "/JPEG/95";
+    var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95";
+    var previewImageUrl = "/transformer/" + dpiRender + urlEnding;
+    var finalImageUrl = "/transformer/" + dpiFull + urlEnding;
     
     $("#img-preview").attr("src", previewImageUrl);
     $("#img-link").attr("href", finalImageUrl);
-    $.mobile.showPageLoadingMsg();
     var img = new Image();
     img.src = previewImageUrl;
     img.onload = function(){
         $.mobile.hidePageLoadingMsg();
     };
-    
-}
-
-function restrictSliders() {
-    var maxFrameWidth = 10;
-    var maxFrameHeight = 8;
-    if (canvasIsCurrentlyPortrait()) {
-        maxFrameWidth = 8;
-        maxFrameHeight = 10;
-    }
-    
-    var visibleMaxFrameWidth = maxFrameWidth;
-    var visibleMaxFrameHeight = maxFrameHeight;
-    
-    if (getFrameUnits() === "cm") {
-        visibleMaxFrameWidth = toCm(maxFrameWidth);
-        visibleMaxFrameHeight = toCm(maxFrameHeight);
-    }
-    
-    $("#frame-width").attr("max", visibleMaxFrameWidth);
-    $("#frame-height").attr("max", visibleMaxFrameHeight);
-    
-    if (getFrameWidth() > visibleMaxFrameWidth) {
-        $("#frame-width").val(visibleMaxFrameWidth);
-    }
-    if (getFrameHeight() > visibleMaxFrameHeight) {
-        $("#frame-height").val(visibleMaxFrameHeight);
-    }
-}
-
-function canvasIsCurrentlyPortrait() {
-    return parseInt($("canvas").attr("height")) > parseInt($("canvas").attr("width"));
-}
-
-function getFrameUnits() {
-    return $('input:radio[name=radio-frame-units]:checked').val();
-}
-
-function getFrameWidth() {
-    return parseFloat($("#frame-width").val());
-}
-function getFrameHeight() {
-    return parseFloat($("#frame-height").val());
-}
-function getFrameWidthString() {
-    return getFrameWidth().toFixed(1);
-}
-function getFrameHeightString() {
-    return getFrameHeight().toFixed(1);
 }
 
 function uploadImage() {
-    var zooming = getZooming();
-    var frameWidthInInches = getFrameWidth();
-    var frameHeightInInches = getFrameHeight();
-    if (getFrameUnits() === "cm") {
-        frameWidthInInches = toInches(frameWidthInInches);
-        frameHeightInInches = toInches(frameHeightInInches);
-    }
-
-    var settings = calculatePrintSize(frameWidthInInches, frameHeightInInches, getOrientation().toLowerCase());
+    $.mobile.showPageLoadingMsg();
+    var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
     
     $.post("/upload/basic",
        { dpi: dpiFull,
-         frameWidthInInches: frameWidthInInches,
-         frameHeightInInches: frameHeightInInches,
-         zooming: zooming,
+         frameWidthInInches: getFrameWidthInInches(),
+         frameHeightInInches: getFrameHeightInInches(),
+         zooming: getZooming(),
          orientation: getOrientation(),
          outputEncoding: 'JPEG',
          quality: 95,
@@ -302,15 +183,14 @@ function uploadImage() {
     )
     .success(
             function() { 
-            	window.location.href = "/checkout/basic";
+                window.location.href = "/checkout";
             }
     )
     .error(
     		function() { 
-    			window.location.href = "/error?message=Failed+to+upload+image.";
+    		    window.location.href = "/error?message=Failed+to+upload+original+image.";
 		    }
 	);
-    
 }
 
 </script>
