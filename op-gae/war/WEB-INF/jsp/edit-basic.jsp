@@ -51,6 +51,9 @@ limitations under the License.
                 </div>
                 
                 <img id="img-preview" src="/images/grey.jpg" />
+                <div id="error-loading-preview">
+                    <p>Error loading preview. Retrying...</p>
+                </div>
                 <div class="text-align-right">
                     <a id="change-picture-link" href="/upload/basic">change picture</a>
                 </div>
@@ -131,7 +134,7 @@ limitations under the License.
 var frameSize = "";
 
 $(document).ready(function() {
-    
+    $("#error-loading-preview").hide();
     $("input").click(queueRenderPreview);
     $("input").change(queueRenderPreview);
     $("input").keyup(queueRenderPreview);
@@ -161,10 +164,13 @@ function renderPreview() {
     var img = new Image();
     img.src = previewImageUrl;
     img.onload = function(){
+        $("#error-loading-preview").hide();
         $.mobile.hidePageLoadingMsg();
     };
     img.onerror = function(){
         $.mobile.hidePageLoadingMsg();
+        $("#error-loading-preview").show();
+        renderPreview(); // try again
     };
 }
 
