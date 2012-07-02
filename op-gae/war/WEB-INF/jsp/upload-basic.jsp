@@ -40,6 +40,7 @@ limitations under the License.
                 <input type="file" name="myFile" >
                 <input type="submit" value="Upload" id="submit-button">
             </form>
+            <p>Or just play with the <a id="sample-photo-link" data-ajax="false" href="/edit/basic/sample">sample photo</a>.</p>
         </div>
     </div>
        

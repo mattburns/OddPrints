@@ -34,7 +34,7 @@ import com.oddprints.PMF;
 public class ApplicationSetting {
 
     public enum Settings {
-        APPLICATION_ENVIRONMENT, PWINTY_MERCHANT_ID, PWINTY_MERCHANT_KEY, CHECKOUT_MERCHANT_KEY_SANDBOX, CHECKOUT_MERCHANT_ID_SANDBOX, CHECKOUT_MERCHANT_KEY_LIVE, CHECKOUT_MERCHANT_ID_LIVE;
+        APPLICATION_ENVIRONMENT, PWINTY_MERCHANT_ID, PWINTY_MERCHANT_KEY, CHECKOUT_MERCHANT_KEY_SANDBOX, CHECKOUT_MERCHANT_ID_SANDBOX, CHECKOUT_MERCHANT_KEY_LIVE, CHECKOUT_MERCHANT_ID_LIVE, SAMPLE_PHOTO_BLOB_KEY, SAMPLE_PHOTO_BLOB_SIZE;
     }
 
     @PrimaryKey
@@ -74,6 +74,10 @@ public class ApplicationSetting {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public static void putSetting(Settings key, String value) {
+        putSetting(key.toString(), value);
     }
 
     public static void putSetting(String keyString, String value) {

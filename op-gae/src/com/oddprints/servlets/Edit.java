@@ -18,6 +18,7 @@ package com.oddprints.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
@@ -38,6 +39,8 @@ import org.apache.commons.io.IOUtils;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.common.collect.Maps;
 import com.oddprints.PMF;
+import com.oddprints.dao.ApplicationSetting;
+import com.oddprints.dao.ApplicationSetting.Settings;
 import com.oddprints.dao.Basket;
 import com.oddprints.util.ImageBlobStore;
 import com.sun.jersey.api.view.Viewable;
@@ -97,6 +100,37 @@ public class Edit {
 
         req.getSession().setAttribute("blobKeyString", blobKey.getKeyString());
         req.getSession().setAttribute("blobSize", bytes.length + "");
+        req.getSession().setAttribute("basicMode", Boolean.TRUE);
+
+        return viewBasic(req);
+    }
+
+    @GET
+    @Path("/basic/sample")
+    @Produces(MediaType.TEXT_HTML)
+    public Viewable loadBasicSample(@Context HttpServletRequest req)
+            throws FileUploadException, IOException, URISyntaxException {
+
+        String blobKeyString = ApplicationSetting
+                .getSetting(Settings.SAMPLE_PHOTO_BLOB_KEY);
+        if (blobKeyString == null) {
+            URL url = new URL("http://www.oddprints.com/images/sample.jpg");
+            InputStream imgStream = url.openStream();
+
+            byte[] bytes = IOUtils.toByteArray(imgStream);
+
+            BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
+            blobKeyString = blobKey.getKeyString();
+            ApplicationSetting.putSetting(Settings.SAMPLE_PHOTO_BLOB_KEY,
+                    blobKeyString);
+            ApplicationSetting.putSetting(Settings.SAMPLE_PHOTO_BLOB_SIZE, ""
+                    + bytes.length);
+        }
+        String blobSize = ApplicationSetting
+                .getSetting(Settings.SAMPLE_PHOTO_BLOB_SIZE);
+
+        req.getSession().setAttribute("blobKeyString", blobKeyString);
+        req.getSession().setAttribute("blobSize", blobSize);
         req.getSession().setAttribute("basicMode", Boolean.TRUE);
 
         return viewBasic(req);
