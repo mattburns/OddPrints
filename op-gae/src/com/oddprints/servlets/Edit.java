@@ -36,9 +36,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 
 import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.images.Image;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.Transform;
 import com.google.common.collect.Maps;
 import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
@@ -96,7 +93,6 @@ public class Edit {
 
         byte[] bytes = IOUtils.toByteArray(imgStream);
 
-        // bytes = shrink(bytes);
         BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
 
         req.getSession().setAttribute("blobKeyString", blobKey.getKeyString());
@@ -105,19 +101,4 @@ public class Edit {
 
         return viewBasic(req);
     }
-
-    // FIXME: investigate usefulness of shrinking (effect on quality?
-    // On production only top part of image remains. why?
-    private byte[] shrink(byte[] fileData) {
-        Image image = ImagesServiceFactory.makeImage(fileData);
-        if (image.getWidth() > 3000 || image.getHeight() > 3000) {
-            Transform resize = ImagesServiceFactory.makeResize(3000, 3000);
-            image = ImagesServiceFactory.getImagesService().applyTransform(
-                    resize, image);
-
-        }
-
-        return image.getImageData();
-    }
-
 }
