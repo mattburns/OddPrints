@@ -36,9 +36,8 @@ limitations under the License.
         <div id="choose-a-file">
             <h2>Upload a photo</h2>
             
-            <form action="/edit/basic" data-ajax="false" method="POST" enctype="multipart/form-data">
-                <input type="file" name="myFile" >
-                <input type="submit" value="Upload" id="submit-button">
+            <form action="/edit/basic" data-ajax="false" method="POST" id="file-form" enctype="multipart/form-data">
+                <input type="file" id="file-chooser" name="myFile" >
             </form>
             <p>Or just play with the <a id="sample-photo-link" data-ajax="false" href="/edit/basic/sample">sample photo</a>.</p>
         </div>
@@ -49,8 +48,9 @@ limitations under the License.
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $("#submit-button").click(function() {
+    $("#file-chooser").change(function() {
         $.mobile.showPageLoadingMsg();
+        $("#file-form").submit();
     });
 });
 </script>
