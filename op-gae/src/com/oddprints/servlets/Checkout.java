@@ -39,11 +39,16 @@ import com.sun.jersey.api.view.Viewable;
 public class Checkout {
 
     private boolean basicMode(HttpServletRequest req) {
-        return (Boolean) req.getSession().getAttribute("basicMode");
+        Object basicMode = req.getSession().getAttribute("basicMode");
+        return basicMode != null && (Boolean) basicMode;
     }
 
     private String editUrl(HttpServletRequest req) {
-        return "/edit" + (basicMode(req) ? "/basic" : "");
+        if (basicMode(req)) {
+            return "/upload/basic";
+        } else {
+            return "/edit";
+        }
     }
 
     @GET
