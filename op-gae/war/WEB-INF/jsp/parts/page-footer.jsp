@@ -4,7 +4,9 @@
 
 <div data-role="content">
     <!-- footer padding -->
-    <span>&nbsp;</span>
+    <br />
+    <br />
+    <br />
 </div>
 
 <div data-role="footer" class="ui-bar footer-links"  data-theme="c">
