@@ -15,19 +15,6 @@
 </div>
 
 <script type="text/javascript">
-
-$('[title]').qtip({
-    content: {
-        attr: 'title'
-    },
-    position: {
-        my: 'top center', 
-        at: 'bottom center'
-    },
-    style: {
-        classes: 'ui-tooltip-tipsy'
-    }
-})
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-32205253-1']);
   _gaq.push(['_setDomainName', 'oddprints.com']);
@@ -38,5 +25,4 @@ $('[title]').qtip({
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
 </script>

@@ -16,12 +16,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="stylesheet" href="/css/jquery.mobile-1.1.0.min.css" />
     <link rel="stylesheet" href="/css/oddprints.css" />
-    <link rel="stylesheet" href="/css/jquery.qtip.min.css" />
     <script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="/js/jquery.mobile-1.1.0.min.js"></script>
     <script type="text/javascript" src="/js/modernizr.custom.11873.js"></script>
     <script type="text/javascript" src="/js/oddprints.js"></script>
-    <script type="text/javascript" src="/js/jquery.qtip.min.js"></script>
 </head>
 
 <c:set var="html_year" scope="application" value="2012"/>
