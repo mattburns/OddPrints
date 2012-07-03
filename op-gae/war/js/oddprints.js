@@ -298,5 +298,11 @@ function updateTextAndControls() {
 }
 
 function isSupportedBrowser() {
-    return !!window.FileReader && Modernizr.canvas;
+    return !!window.FileReader && Modernizr.canvas && isFileInputSupported();
+}
+
+function isFileInputSupported() {
+    var el = document.createElement("input");
+    el.setAttribute("type", "file");
+    return !el.disabled;
 }

@@ -15,7 +15,6 @@ limitations under the License.
 --%>
 
 <!DOCTYPE html>
-<%@page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -28,36 +27,23 @@ limitations under the License.
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp" />
 <body>
 
-<div data-role="page" id="page-upload">
+<div data-role="page" id="page-error">
 
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <div id="choose-a-file">
-            <h2>Upload a photo</h2>
-            
-            <form action="/edit/basic" data-ajax="false" method="POST" id="file-form" enctype="multipart/form-data">
-                <input type="file" id="file-chooser" name="myFile" >
-            </form>
-            <p>Or just play with the <a id="sample-photo-link" data-ajax="false" href="/edit/basic/sample">sample photo</a>.</p>
-        </div>
+        <h2>Oh fudgecakes.</h2>
+        
+        <p>Browser not supported.</p>
+        
+        <p>I know, it's seriously not cool. I feel your pain.</p>
+        
+        <p>If you want to shout at someone, <a href="/contact">shout at us</a>, it'll make you feel better.</p>
     </div>
-       
+    
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
+
 </div>
 
-<script type="text/javascript">
-$(document).ready(function() {
-    if (!isFileInputSupported()) {
-        $.mobile.changePage("/mobile-safari-error?agent=" + navigator.userAgent);
-        return;
-    }
-    
-    $("#file-chooser").change(function() {
-        $.mobile.showPageLoadingMsg();
-        $("#file-form").submit();
-    });
-});
-</script>
 </body>
 </html>

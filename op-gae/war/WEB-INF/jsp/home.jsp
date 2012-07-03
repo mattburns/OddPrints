@@ -55,6 +55,10 @@ limitations under the License.
 $(document).ready(function() {
     if (isSupportedBrowser()) {
         $("#get-started").attr("href", "/edit");
+    } else if (!isFileInputSupported()) {
+        $("#get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
+    } else {
+        // stick with basic upload
     }
 });
 </script>
