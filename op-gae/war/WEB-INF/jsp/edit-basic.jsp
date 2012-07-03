@@ -155,7 +155,7 @@ function renderPreview() {
 
     var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95";
     var previewImageUrl = "/transformer/" + dpiRender + urlEnding;
-    var finalImageUrl = "/transformer/" + dpiFull + urlEnding;
+    var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "?download=true";
     
     $("#img-preview").attr("src", previewImageUrl);
     $("#img-link").attr("href", finalImageUrl);

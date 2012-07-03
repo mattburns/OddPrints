@@ -23,8 +23,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.images.Composite;
@@ -43,6 +45,7 @@ import com.oddprints.image.TransformSettings.Orientation;
 import com.oddprints.image.TransformSettings.Zooming;
 import com.oddprints.image.Transformer;
 import com.oddprints.util.ImageBlobStore;
+import com.sun.jersey.core.header.ContentDisposition;
 
 @Path("/transformer")
 public class ImageTransformer {
@@ -56,8 +59,9 @@ public class ImageTransformer {
             @PathParam("zooming") Zooming zooming,
             @PathParam("orientation") Orientation orientation,
             @PathParam("outputEncoding") OutputEncoding outputEncoding,
-            @PathParam("quality") int quality, @Context HttpServletRequest req)
-            throws IOException {
+            @PathParam("quality") int quality,
+            @QueryParam("download") boolean download,
+            @Context HttpServletRequest req) throws IOException {
 
         String blobKeyString = (String) req.getSession().getAttribute(
                 "blobKeyString");
@@ -71,7 +75,14 @@ public class ImageTransformer {
         Image finalImage = generateOddPrint(blobKeyString, blobSize, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation,
                 outputEncoding, quality);
-        return Response.ok(finalImage.getImageData()).build();
+        ResponseBuilder rb = Response.ok(finalImage.getImageData());
+
+        if (download) {
+            ContentDisposition cd = ContentDisposition.type("file")
+                    .fileName("OddPrints.jpg").build();
+            rb.header("Content-Disposition", cd);
+        }
+        return rb.build();
     }
 
     Image generateOddPrint(String blobKeyString, long blobSize, int dpi,
