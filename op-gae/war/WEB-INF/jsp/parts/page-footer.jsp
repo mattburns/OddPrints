@@ -1,4 +1,8 @@
-<span>&nbsp;</span>
+<div data-role="content">
+    <!-- footer padding -->
+    <span>&nbsp;</span>
+</div>
+
 <div data-role="footer" class="ui-bar footer-links"  data-theme="c">
     <div class="center-wrapper">
         &copy; ${html_year} <a href="/mattburnsltd">matt burns ltd</a> |
