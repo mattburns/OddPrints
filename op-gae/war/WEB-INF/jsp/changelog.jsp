@@ -34,7 +34,7 @@ limitations under the License.
     <div data-role="content">
         <h2>v.2 - 2012/06/26</h2>
         <ul>
-            <li>Added a server-side implementation for all browsers.</li>
+            <li>Added a server-side implementation to support more browsers.</li>
         </ul>
 
         <h2>v.1 - 2012/06/12</h2>
