@@ -117,7 +117,7 @@ limitations under the License.
                 </c:when>
                 <c:otherwise>
                     <h2 id="print-size-text"></h2>
-                    <a href="#" id="img-link" data-role="button" data-theme="b" target="_blank">Download</a>
+                    <a href="#" id="img-download" data-role="button" data-theme="b" target="_blank">Download</a>
                     Or just <a href="#" id="img-upload" data-theme="b">order prints from us</a>.
                 </c:otherwise>
             </c:choose>
@@ -158,7 +158,7 @@ function renderPreview() {
     var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "?download=true";
     
     $("#img-preview").attr("src", previewImageUrl);
-    $("#img-link").attr("href", finalImageUrl);
+    $("#img-download").attr("href", finalImageUrl);
     var img = new Image();
     img.src = previewImageUrl;
     img.onload = function(){

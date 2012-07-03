@@ -146,7 +146,7 @@ limitations under the License.
                     </c:when>
                     <c:otherwise>
                         <h2 id="print-size-text"></h2>
-                        <a href="#" id="img-link" data-role="button" data-theme="b">Download</a>
+                        <a href="#" id="img-download" data-role="button" data-theme="b">Download</a>
                         Or just <a href="#" id="img-upload" data-theme="b">order prints from us</a>.
                     </c:otherwise>
                 </c:choose>
@@ -188,7 +188,6 @@ $(document).ready(function() {
     
     ctx = myCanvas.getContext("2d");
     
-    $("#img-link").click(download);
     $("#sample-photo-link").click(function(e) {
         e.preventDefault();
         loadSample();
@@ -211,6 +210,7 @@ $(document).ready(function() {
     $("#radio-cm, #radio-inches").change(renderPreview);
     
     $("#img-upload").click(uploadImage);
+    $("#img-download").click(uploadDownloadImage);
 
     var sURL = window.document.URL.toString();  
     if (sURL.indexOf("showCanvas") > 0) {
@@ -243,8 +243,6 @@ function loadFile(file) {
     var reader = new FileReader();
     reader.onload = function (event) {
     	loadFileUrl(event.target.result);
-        //$.mobile.changePage("/edit");
-        //fileChosen();
     };
     reader.readAsDataURL(file);
 }
@@ -372,6 +370,28 @@ function uploadImageImpl() {
 		    }
 	);
     
+}
+
+function uploadDownloadImage() {
+    $.mobile.showPageLoadingMsg();
+    var t=setTimeout("uploadDownloadImageImpl()", 50);
+}
+
+function uploadDownloadImageImpl() {
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", "/upload/download");
+
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", "imageData");
+    hiddenField.setAttribute("value", renderFull());
+
+    form.appendChild(hiddenField);
+
+    document.body.appendChild(form);
+    form.submit();
+    $.mobile.hidePageLoadingMsg();
 }
 
 </script>

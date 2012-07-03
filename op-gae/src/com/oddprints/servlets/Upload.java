@@ -25,6 +25,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
@@ -41,6 +42,7 @@ import com.oddprints.image.TransformSettings.Zooming;
 import com.oddprints.util.ImageBlobStore;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.view.Viewable;
+import com.sun.jersey.core.header.ContentDisposition;
 import com.sun.jersey.core.util.Base64;
 
 @Path("/upload")
@@ -62,6 +64,22 @@ public class Upload {
 
         return addToBasket(frameSize, printWidth, printHeight, req, blobKey,
                 bytes.length);
+    }
+
+    @POST
+    @Path("/download")
+    @Produces("image/jpeg")
+    public Response reDownload(@FormParam("imageData") String imageData)
+            throws IOException, URISyntaxException {
+
+        String rawImageData = imageData.replaceFirst("data:image/jpeg;base64,",
+                "");
+
+        byte[] bytes = Base64.decode(rawImageData);
+
+        ContentDisposition cd = ContentDisposition.type("file")
+                .fileName("OddPrints.jpg").build();
+        return Response.ok(bytes).header("Content-Disposition", cd).build();
     }
 
     private Response addToBasket(String frameSize, int printWidth,
