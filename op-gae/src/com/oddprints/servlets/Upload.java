@@ -94,6 +94,7 @@ public class Upload {
     @GET
     @Path("/basic")
     public Viewable viewBasic(@Context HttpServletRequest req) {
+        req.getSession().setAttribute("basicMode", Boolean.TRUE);
         return new Viewable("/upload-basic");
     }
 
@@ -123,7 +124,7 @@ public class Upload {
 
         byte[] bytes = image.getImageData();
         BlobKey oddPrintBlobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
-
+        req.getSession().setAttribute("basicMode", Boolean.TRUE);
         return addToBasket(frameSize, printWidth, printHeight, req,
                 oddPrintBlobKey, bytes.length);
     }

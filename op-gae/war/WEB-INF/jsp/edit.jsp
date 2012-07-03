@@ -50,7 +50,7 @@ limitations under the License.
             </c:if>
     
             <form action="#" method="get">
-                <div data-role="fieldcontain" title="Width of picture frame">                
+                <div data-role="fieldcontain" title="Width of picture frame">
                     <h2 id="frame-size-text"></h2>
                     <label for="frame-width">Width:</label>
                     <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="10" data-highlight="true"/></span>

@@ -53,7 +53,7 @@ limitations under the License.
 
 <script type="text/javascript">
 $(document).ready(function() {
-    if (isSupportedBrowser()) {
+    if (isSupportedBrowser() && !${basicMode}) {
         $("#get-started").attr("href", "/edit");
     } else if (!isFileInputSupported()) {
         $("#get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
