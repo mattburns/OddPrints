@@ -51,7 +51,7 @@ import com.sun.jersey.core.header.ContentDisposition;
 public class ImageTransformer {
 
     @GET
-    @Path("/{dpi}/{frameWidthInInches}/{frameHeightInInches}/{zooming}/{orientation}/{outputEncoding}/{quality}")
+    @Path("/{dpi}/{frameWidthInInches}/{frameHeightInInches}/{zooming}/{orientation}/{outputEncoding}/{quality}/{tileMargin}")
     @Produces("image/jpeg")
     public Response get(@PathParam("dpi") int dpi,
             @PathParam("frameWidthInInches") double frameWidthInInches,
@@ -60,6 +60,7 @@ public class ImageTransformer {
             @PathParam("orientation") Orientation orientation,
             @PathParam("outputEncoding") OutputEncoding outputEncoding,
             @PathParam("quality") int quality,
+            @PathParam("tileMargin") int tileMargin,
             @QueryParam("download") boolean download,
             @Context HttpServletRequest req) throws IOException {
 
@@ -74,7 +75,7 @@ public class ImageTransformer {
 
         Image finalImage = generateOddPrint(blobKeyString, blobSize, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation,
-                outputEncoding, quality);
+                outputEncoding, quality, tileMargin);
         ResponseBuilder rb = Response.ok(finalImage.getImageData());
 
         if (download) {
@@ -88,7 +89,7 @@ public class ImageTransformer {
     Image generateOddPrint(String blobKeyString, long blobSize, int dpi,
             double frameWidthInInches, double frameHeightInInches,
             Zooming zooming, Orientation orientation,
-            OutputEncoding outputEncoding, int quality) {
+            OutputEncoding outputEncoding, int quality, int tileMargin) {
 
         if (SystemProperty.environment.value() == Value.Development) {
             outputEncoding = OutputEncoding.PNG;
@@ -103,7 +104,7 @@ public class ImageTransformer {
         TransformSettings settings = t.calculateSettings(image, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation);
 
-        if (zooming == Zooming.CROP) {
+        if (zooming == Zooming.CROP || zooming == Zooming.TILE) {
             double xTrim = (double) settings.getSourceX() / image.getWidth();
             double yTrim = (double) settings.getSourceY() / image.getHeight();
             Transform crop = ImagesServiceFactory.makeCrop(xTrim, yTrim,
@@ -116,11 +117,28 @@ public class ImageTransformer {
                         settings.getDestinationHeight());
         Image shrunkImage = is.applyTransform(resize, image);
 
-        Composite composite = ImagesServiceFactory.makeComposite(shrunkImage,
-                settings.getDestinationX(), settings.getDestinationY(), 1f,
-                Anchor.TOP_LEFT);
+        List<Composite> composites = Lists.newArrayList();
+        if (zooming == Zooming.TILE) {
+            int x = tileMargin;
+            while (x + settings.getDestinationWidth() - 1 < settings
+                    .getCanvasWidth()) {
+                int y = tileMargin;
+                while (y + settings.getDestinationHeight() - 1 < settings
+                        .getCanvasHeight()) {
+                    Composite composite = ImagesServiceFactory.makeComposite(
+                            shrunkImage, x, y, 1f, Anchor.TOP_LEFT);
+                    composites.add(composite);
+                    y += (settings.getDestinationHeight() - 1) + tileMargin;
+                }
+                x += (settings.getDestinationWidth() - 1) + tileMargin;
+            }
+        } else {
+            Composite composite = ImagesServiceFactory.makeComposite(
+                    shrunkImage, settings.getDestinationX(),
+                    settings.getDestinationY(), 1f, Anchor.TOP_LEFT);
 
-        List<Composite> composites = Lists.newArrayList(composite);
+            composites.add(composite);
+        }
 
         OutputSettings outputSettings = new OutputSettings(outputEncoding);
         outputSettings.setQuality(quality);

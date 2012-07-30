@@ -27,38 +27,34 @@ limitations under the License.
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp" />
 <body>
 
-<div data-role="page" id="page-intro">
-    
+<div data-role="page" id="page-passport">
+
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h1>Easy printing for tricky frames.</h1>
-        <p>OddPrints is the simple way to print your photos at non-standard sizes for your unusual picture frames.
-        You can now also use OddPrints to print your own <a data-ajax="false" href="/passport">passport photos</a> for free.</p>
-        <h2>Step 1: Upload a photo</h2>
-        <p>Picking your favourite is the hard part.</p>
-        <h2>Step 2: Enter the size of your frame</h2>
-        <p>This is the size in real inches (or centimetres) you would like your photo printed.</p>
-        <h2>Step 3: Print your photo</h2>
-        <p>Your print will ready for you to cut at just the right size.</p>
-
+        <h2>Print your own passport photos</h2>
+        <p>Did you know you can use OddPrints to print your own passport photos?
+      Just upload your photo and choose the preset for your country. Easy!</p>
+        <p>Unlike other online services, OddPrints is free and the image has no watermark or
+        any other nonsense. Just download the generated image and print it at 6"x4".</p>
+        <a class="get-started" data-ajax="false" href="/upload/basic"><img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.jpg"/></a>
+        
         <div class="supported-browser">
-            <p><a href="/upload/basic" id="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right"  data-ajax="false">Get Started!</a></p>
+            <p>Want to save money? <a href="/upload/basic" class="get-started" data-ajax="false">Get started</a>.</p>
         </div>
-            
     </div>
     
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
-    
+
 </div>
 
 <script type="text/javascript">
 $(document).ready(function() {
     var basicModeVar = ${not empty basicMode and basicMode};
     if (isSupportedBrowser() && !basicModeVar) {
-        $("#get-started").attr("href", "/edit");
+        $(".get-started").attr("href", "/edit");
     } else if (!isFileInputSupported()) {
-        $("#get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
+        $(".get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
     } else {
         // stick with basic upload
     }

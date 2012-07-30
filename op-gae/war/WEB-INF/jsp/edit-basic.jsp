@@ -49,6 +49,18 @@ limitations under the License.
                 <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="8" data-highlight="true"/></span>
             </div>
             
+            <div data-role="fieldcontain" title="Preset">
+                <label for="select-preset">Or select a preset:</label>
+            
+                <select name="select-preset" id="select-preset" >
+                    <option value="custom" selected>Custom</option>
+                    <option value="canada" >Passport - Canada (50mm x 70mm)</option>
+                    <option value="india" >Passport - India (35mm x 35mm)</option>
+                    <option value="uk" >Passport - UK (35mm x 45mm)</option>
+                    <option value="us" >Passport - US (2" x 2")</option>
+                </select>
+            </div>
+        
             <img id="img-preview" src="/images/grey.jpg" />
             <div id="error-loading-preview">
                 <p>Error loading preview. Retrying...</p>
@@ -90,6 +102,11 @@ limitations under the License.
                         <label for="radio-crop" title="Crop parts of the image that are outside the frame">
                             Crop
                         </label>
+                        
+                        <input type="radio" name="radio-crop-fit" id="radio-tile" value="TILE" />
+                        <label for="radio-tile" title="Tile the image">
+                            Tile
+                        </label>
                     </fieldset>
                 </div>
                 
@@ -130,6 +147,7 @@ limitations under the License.
 <script type="text/javascript">
 
 var frameSize = "";
+var tileMargin = 10;
 
 $(document).ready(function() {
     $("#error-loading-preview").hide();
@@ -140,6 +158,7 @@ $(document).ready(function() {
     $("#radio-cm, #radio-inches").change(renderPreview);
     
     $("#img-upload").click(uploadImage);
+    $("#select-preset").change(handlePresetSelect);
 
     var sURL = window.document.URL.toString();  
     if (sURL.indexOf("showCanvas") > 0) {
@@ -154,8 +173,8 @@ function renderPreview() {
     updateTextAndControls();
 
     var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95";
-    var previewImageUrl = "/transformer/" + dpiRender + urlEnding;
-    var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "?download=true";
+    var previewImageUrl = "/transformer/" + dpiRender + urlEnding + "/" + tileMargin;
+    var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "/" + (tileMargin*3) + "?download=true";
     
     $("#img-preview").attr("src", previewImageUrl);
     $("#img-download").attr("href", finalImageUrl);
@@ -184,6 +203,7 @@ function uploadImage() {
          orientation: getOrientation(),
          outputEncoding: 'JPEG',
          quality: 95,
+         tileMargin: tileMargin*3,
          frameSize: frameSizeString(),
          printWidth: settings.printWidth,
          printHeight: settings.printHeight

@@ -1,4 +1,5 @@
 var cmToInches = 0.393700787;
+// if you change these, consider tileMargin...
 var dpiRender = 100;
 var dpiFull = 300;
 
@@ -142,6 +143,7 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
 			settings.sourceHeight = imageHeight;
 			break;
 		case ('CROP') :
+		case ('TILE') :
 			if (frameHasWiderRatioThanImage) {
 				settings.sourceWidth = imageWidth;
 				settings.sourceHeight = Math.floor((imageWidth * frameHeightPx) / frameWidthPx);
@@ -305,4 +307,62 @@ function isFileInputSupported() {
     var el = document.createElement("input");
     el.setAttribute("type", "file");
     return !el.disabled;
+}
+
+function handlePresetSelect(evt) {
+    switch (evt.srcElement.value) {
+        case ('canada') :
+            $('#frame-width').val("5");
+            $('#frame-height').val("7");
+            $('#radio-cm').attr('checked', true);
+            $('#radio-tile').attr('checked', true);
+            $('#radio-orient-landscape').attr('checked', true);
+            $('#radio-guides-off').attr('checked', true);
+            $("input[type='radio']").checkboxradio("refresh");
+            tileMargin = 50;
+            break;
+        case ('india') :
+            $('#frame-width').val("3.5");
+            $('#frame-height').val("3.5");
+            $('#radio-cm').attr('checked', true);
+            $('#radio-tile').attr('checked', true);
+            $('#radio-orient-landscape').attr('checked', true);
+            $('#radio-guides-off').attr('checked', true);
+            $("input[type='radio']").checkboxradio("refresh");
+            tileMargin = 11;
+            break;
+        case ('uk') :
+            $('#frame-width').val("3.5");
+            $('#frame-height').val("4.5");
+            $('#radio-cm').attr('checked', true);
+            $('#radio-tile').attr('checked', true);
+            $('#radio-orient-landscape').attr('checked', true);
+            $('#radio-guides-off').attr('checked', true);
+            $("input[type='radio']").checkboxradio("refresh");
+            tileMargin = 11;
+            break;
+        case ('us') :
+            $('#frame-width').val("2");
+            $('#frame-height').val("2");
+            $('#radio-inches').attr('checked', true);
+            $('#radio-tile').attr('checked', true);
+            $('#radio-orient-landscape').attr('checked', true);
+            $('#radio-guides-off').attr('checked', true);
+            $("input[type='radio']").checkboxradio("refresh");
+            tileMargin = 65;
+            break;
+        case ('custom') :
+            $('#frame-width').val("4");
+            $('#frame-height').val("2");
+            $('#radio-inches').attr('checked', true);
+            $('#radio-fill').attr('checked', true);
+            $('#radio-orient-auto').attr('checked', true);
+            $('#radio-guides-top').attr('checked', true);
+            $("input[type='radio']").checkboxradio("refresh");
+            tileMargin = 11;
+            break;
+        default :
+            
+    }
+    renderPreview();
 }

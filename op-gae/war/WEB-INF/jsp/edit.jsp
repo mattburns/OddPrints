@@ -60,6 +60,18 @@ limitations under the License.
                     <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="8" data-highlight="true"/></span>
                 </div>
                 
+                <div data-role="fieldcontain" title="Preset">
+                    <label for="select-preset">Or use a preset:</label>
+                
+                    <select name="select-preset" id="select-preset" >
+                        <option value="custom" selected>Custom</option>
+                        <option value="canada" >Passport - Canada (50mm x 70mm)</option>
+                        <option value="india" >Passport - India (35mm x 35mm)</option>
+                        <option value="uk" >Passport - UK (35mm x 45mm)</option>
+                        <option value="us" >Passport - US (2" x 2")</option>
+                    </select>
+                </div>
+                
                 <img id="img-preview" src="" />
                 <div class="text-align-right">
                     <a id="change-picture-link" href="/edit">change picture</a>
@@ -97,6 +109,11 @@ limitations under the License.
                             <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP" />
                             <label for="radio-crop" title="Crop parts of the image that are outside the frame">
                                 Crop
+                            </label>
+
+                            <input type="radio" name="radio-crop-fit" id="radio-tile" value="TILE" />
+                            <label for="radio-tile" title="Tile the image">
+                                Tile
                             </label>
                         </fieldset>
                     </div>
@@ -175,6 +192,7 @@ var myCanvas = document.getElementById("myCanvas");
 var ctx;
 var img = new Image();
 var frameSize = "";
+var tileMargin = 10;
     
 $(document).ready(function() {
     fileChooser();
@@ -211,11 +229,13 @@ $(document).ready(function() {
     
     $("#img-upload").click(uploadImage);
     $("#img-download").click(uploadDownloadImage);
+    $("#select-preset").change(handlePresetSelect);
 
     var sURL = window.document.URL.toString();  
     if (sURL.indexOf("showCanvas") > 0) {
         $('#debugging').show();
     }
+    
 });
 
 function handleFileSelect(evt) {
@@ -253,18 +273,56 @@ function loadFileUrl(url) {
 }
 
 function drawImage(settings) {
-    ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth, settings.destinationHeight);
+    if (getZooming() == 'TILE') {
+    	drawTiledImage(settings);
+    } else {
+        ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth, settings.destinationHeight);
+    }
+}
+
+function drawTiledImage(settings) {
+    var tempFrameY = settings.tileMargin;
+    while ((tempFrameY + (settings.frameHeightPx - 1)) < settings.canvasHeight) {
+	    var tempFrameX = settings.tileMargin;
+	    while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
+	        ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, tempFrameX, tempFrameY, settings.destinationWidth, settings.destinationHeight);
+	        tempFrameX += (settings.frameWidthPx - 1) + settings.tileMargin;
+	    }
+        tempFrameY += (settings.frameHeightPx - 1) + settings.tileMargin;
+    }
 }
 
 function drawGuidelines(settings) {
-    // top
-    drawHorizontalLine(settings.frameY, settings);
-    // bottom
-    drawHorizontalLine(settings.frameY + settings.frameHeightPx - 1, settings);
-    // left
-    drawVerticalLine(settings.frameX, settings);
-    // right
-    drawVerticalLine(settings.frameX + settings.frameWidthPx - 1, settings);
+    if (getZooming() == 'TILE') {
+        drawTiledGuidelines(settings);
+    } else {
+        // top
+        drawHorizontalLine(settings.frameY, settings);
+        // bottom
+        drawHorizontalLine(settings.frameY + settings.frameHeightPx - 1, settings);
+        // left
+        drawVerticalLine(settings.frameX, settings);
+        // right
+        drawVerticalLine(settings.frameX + settings.frameWidthPx - 1, settings);
+    }
+}
+
+function drawTiledGuidelines(settings) {
+	var tempFrameY = settings.tileMargin;
+	while ((tempFrameY + (settings.frameHeightPx - 1)) < settings.canvasHeight) {
+		drawHorizontalLine(tempFrameY, settings);
+		tempFrameY += (settings.frameHeightPx - 1);
+		drawHorizontalLine(tempFrameY, settings);
+		tempFrameY += settings.tileMargin;
+	}
+
+	var tempFrameX = settings.tileMargin;
+	while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
+		drawVerticalLine(tempFrameX, settings);
+		tempFrameX += (settings.frameWidthPx - 1);
+		drawVerticalLine(tempFrameX, settings);
+		tempFrameX += settings.tileMargin;
+	}
 }
 
 function drawVerticalLine(x, settings) {
@@ -336,6 +394,7 @@ function calculate(dpi) {
 
 function calculateSettings(dpi) {
     var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
+    settings.tileMargin = tileMargin * (dpi/100);
     settings = calculateCanvasSize(settings.printWidth, settings.printHeight, dpi, settings);
     settings = calculateFramePixelSize(getFrameWidthInInches(), getFrameHeightInInches(), dpi, settings);
     settings = calculateFrameXY(settings.canvasWidth, settings.canvasHeight, settings.frameWidthPx, settings.frameHeightPx, settings);

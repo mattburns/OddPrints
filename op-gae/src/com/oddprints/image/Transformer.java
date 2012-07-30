@@ -199,6 +199,7 @@ public class Transformer {
             sourceHeight = imageHeight;
             break;
         case CROP:
+        case TILE:
             if (frameHasWiderRatioThanImage) {
                 sourceWidth = imageWidth;
                 sourceHeight = (int) Math

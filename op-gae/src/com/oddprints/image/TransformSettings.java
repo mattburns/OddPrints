@@ -25,7 +25,7 @@ public class TransformSettings {
     }
 
     public enum Zooming {
-        FIT, FILL, CROP;
+        FIT, FILL, CROP, TILE;
     }
 
     private TransformSettings(Builder builder) {
