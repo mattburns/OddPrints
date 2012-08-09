@@ -26,7 +26,7 @@ limitations under the License.
       
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
     <jsp:param name="titleText" value=" - Easy printing for tricky frames." />
-    <jsp:param name="descriptionText" value="Free and easy way print photos at ANY size for passports or strange frames like lockets." />
+    <jsp:param name="descriptionText" value="Free and easy way print photos at ANY size for passports or strange frames like lockets. Download the images to print at home, high street or online." />
 </jsp:include>
 
 <body>

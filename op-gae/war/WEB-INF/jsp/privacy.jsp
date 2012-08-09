@@ -93,7 +93,7 @@ limitations under the License.
         The information generated relating to our website is used to create reports about the use of the website.
         This helps us analyse data about webpage traffic and improve our website in order to tailor it
         to customer needs. Google will store this information. Google's privacy policy is
-        available at <a href="www.google.com/privacypolicy.html"
+        available at <a href="http://www.google.com/privacypolicy.html"
         target="_blank">www.google.com/privacypolicy.html</a>.</p>
         
         <p>Overall, cookies help us provide you with a better website by enabling us to monitor
