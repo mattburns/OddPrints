@@ -24,7 +24,11 @@ limitations under the License.
       xmlns:fb="http://www.facebook.com/2008/fbml"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
       
-<jsp:include page="/WEB-INF/jsp/parts/html-head.jsp" />
+<jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
+    <jsp:param name="titleText" value=" - Easy printing for tricky frames." />
+    <jsp:param name="descriptionText" value="Free and easy way print photos at ANY size for passports or strange frames like lockets." />
+</jsp:include>
+
 <body>
 
 <div data-role="page" id="page-intro">

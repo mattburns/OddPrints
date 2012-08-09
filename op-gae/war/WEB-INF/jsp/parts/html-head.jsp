@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 
 <head>
-    <title>OddPrints</title>
+    <title>OddPrints${param.titleText}</title>
     <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
     <meta property="og:title" content="OddPrints"/>
     <meta property="og:type" content="website"/>
@@ -11,9 +11,9 @@
     <meta property="og:image" content="http://www.oddprints.com/images/icon128.png"/>
     <meta property="og:site_name" content="OddPrints"/>
     <meta property="fb:admins" content="565140267, 565740296"/>
-    <meta property="og:description" content="Easy printing for tricky frames."/>
+    <meta property="og:description" content="${param.descriptionText}"/>
           
-    <meta name="Description" content="Easy printing for tricky frames." />
+    <meta name="Description" content="${param.descriptionText}" />
           
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link rel="stylesheet" href="/css/jquery.mobile-1.1.0.min.css" />

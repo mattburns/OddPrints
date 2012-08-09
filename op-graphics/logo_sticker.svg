@@ -15,9 +15,9 @@
    version="1.1"
    inkscape:version="0.48.2 r9819"
    sodipodi:docname="logo_sticker.svg"
-   inkscape:export-filename="C:\Dropbox\code\OddPrints\op-graphics\sticker.png"
-   inkscape:export-xdpi="149.85001"
-   inkscape:export-ydpi="149.85001">
+   inkscape:export-filename="C:\Users\matt\GitHubRepos\OddPrints\op-graphics\sticker.png"
+   inkscape:export-xdpi="360"
+   inkscape:export-ydpi="360">
   <defs
      id="defs3100" />
   <sodipodi:namedview
@@ -28,7 +28,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="239.27778"
+     inkscape:cx="157.77778"
      inkscape:cy="38.802871"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -63,6 +63,20 @@
        height="100.84975"
        x="-0.051172227"
        y="0.49915126" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Layer">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#fffcfc;stroke-width:0;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.59358287;stroke-dasharray:none"
+       id="rect2990"
+       width="449"
+       height="234.5"
+       x="-24.5"
+       y="-17.25"
+       rx="9.5194559"
+       ry="5.4443231" />
   </g>
   <g
      inkscape:label="Layer 1"

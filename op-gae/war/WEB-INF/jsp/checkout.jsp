@@ -24,7 +24,10 @@ limitations under the License.
       xmlns:fb="http://www.facebook.com/2008/fbml"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
       
-<jsp:include page="/WEB-INF/jsp/parts/html-head.jsp" />
+<jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
+    <jsp:param name="titleText" value=" - Checkout" />
+    <jsp:param name="descriptionText" value="View and amend items in your basket before you checkout." />
+</jsp:include>
 <body>
 
 <div data-role="page" id="page-checkout">
