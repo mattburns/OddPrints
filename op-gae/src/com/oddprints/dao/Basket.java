@@ -344,6 +344,14 @@ public class Basket {
     }
 
     public URL getUrl() {
+        return getUrlWithPath("/orders/");
+    }
+
+    public URL getSubmitUrl() {
+        return getUrlWithPath("/orders/submit/");
+    }
+
+    private URL getUrlWithPath(String path) {
         String hostUrl;
         String environment = System
                 .getProperty("com.google.appengine.runtime.environment");
@@ -354,7 +362,7 @@ public class Basket {
         }
 
         try {
-            return new URL(hostUrl + "/orders/" + getSecret() + "/"
+            return new URL(hostUrl + path + getSecret() + "/"
                     + KeyFactory.keyToString(id));
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);

@@ -56,6 +56,10 @@ limitations under the License.
             
             <h1>Order</h1>
             
+            <c:if test="${it.userIsAdmin and order.state eq 'payment_received'}">
+                <a href="${order.submitUrl}" data-ajax="false">Submit to Pwinty</a>
+            </c:if>
+            
             <div class="order-details">
                 <dl>
                     <dt>Status:</dt> <dd>${order.state.userFriendlyStatus}&nbsp;</dd>
@@ -64,21 +68,24 @@ limitations under the License.
                     <c:if test="${it.userIsAdmin}">
                         <dt>Environment:</dt> <dd>${order.environment}&nbsp;</dd>
                     </c:if>
-                    <c:if test="${not empty order.pwintyOrderEL}">
+                    
+                    <c:set var="pwintyOrder" value="${order.pwintyOrderEL}"/>
+                    <c:if test="${not empty pwintyOrder}">
                         
                         <c:if test="${it.userIsAdmin}">
-                            <dt>Pwinty status:</dt> <dd>${order.pwintyOrderEL.status}&nbsp;</dd>
+                            <dt>Pwinty status:</dt> <dd>${pwintyOrder.status}&nbsp;</dd>
                         </c:if>
                         
-                        <c:forEach var="generalError" items="${order.pwintyOrderEL.submissionStatus.generalErrors}">
+                        <c:forEach var="generalError" items="${pwintyOrder.submissionStatus.generalErrors}">
                             <dt>General error:</dt> <dd>${generalError}&nbsp;</dd>
                         </c:forEach>
                     </c:if>
                     
                     <c:if test="${not empty order.googleOrderNumber}">
                         <dt>Order Number:</dt> <dd> #${order.googleOrderNumber}&nbsp;</dd>
-                        <c:if test="${not empty order.googleOrderSummary}">
-                            <c:set var="orderSummary" value="${order.googleOrderSummary}"/>
+
+                        <c:set var="orderSummary" value="${order.googleOrderSummary}"/>
+                        <c:if test="${not empty orderSummary}">
             
                             <dt>Contact Name:</dt> <dd>${orderSummary.buyerShippingAddress.contactName}&nbsp;</dd>
                             <dt>Address 1:</dt> <dd>${orderSummary.buyerShippingAddress.address1}&nbsp;</dd>

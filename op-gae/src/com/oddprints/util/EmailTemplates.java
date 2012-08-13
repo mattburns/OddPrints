@@ -32,6 +32,15 @@ public class EmailTemplates {
                 + "<p>-Matt</p>" + "</font>";
     }
 
+    public static String orderReadyToSubmit(URL url) {
+        return "<font face=\"arial, helvetica, sans-serif\"><h2>Admin action</h2> "
+                + "<p>Payment has been recieved, check it is ok, "
+                + "then submit to Pwinty from the <a href=\""
+                + url.toExternalForm() + "\">Order Page</a>.</p>"
+
+                + "<p>-Matt</p>" + "</font>";
+    }
+
     public static String shippedOrder(String googleOrderNumber, URL url) {
         return "<font face=\"arial, helvetica, sans-serif\"><h2>Order Shipped!</h2> "
                 + "<p>Just a little email to let you know <a href=\""

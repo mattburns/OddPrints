@@ -60,8 +60,12 @@ public class CheckoutNotificationHandler extends BaseNotificationDispatcher {
             basket.setState(State.payment_received);
             basket.setGoogleOrderNumber(orderSummary.getGoogleOrderNumber());
 
-            // submit order to lab
-            submitOrder(basket, orderSummary, pm);
+            // create order on lab
+            createOrderOnPwinty(basket, orderSummary, pm);
+
+            String msg = EmailTemplates.orderReadyToSubmit(basket.getUrl());
+            EmailSender.INSTANCE.sendToAdmin(msg,
+                    "Order ready to submit to pwinty!");
         } else {
             String msg = "Auth notice received but not doing anything because basket state is "
                     + basket.getState()
@@ -112,7 +116,7 @@ public class CheckoutNotificationHandler extends BaseNotificationDispatcher {
 
     }
 
-    public void submitOrder(Basket basket, OrderSummary orderSummary,
+    public void createOrderOnPwinty(Basket basket, OrderSummary orderSummary,
             PersistenceManager pm) {
 
         Pwinty pwinty = basket.getEnvironment().getPwinty();
@@ -140,18 +144,6 @@ public class CheckoutNotificationHandler extends BaseNotificationDispatcher {
                     .toPwintyType(), item.getQuantity(), Sizing.Crop);
         }
 
-        if (newOrder.getSubmissionStatus().isValid()) {
-            basket.setPwintyOrderNumber(newOrder.getId());
-            newOrder.submit();
-            basket.setState(State.submitted_to_lab);
-        } else {
-            basket.setState(State.problem_submitting_to_lab);
-            // TODO: Ultimately, I want to handle this better, but for now,
-            // lets just see what the common problems are (if any).
-            String msg = "Error submitting to pwinty: "
-                    + basket.getGoogleOrderNumber();
-            EmailSender.INSTANCE.sendToAdmin(msg, msg);
-        }
-
+        basket.setPwintyOrderNumber(newOrder.getId());
     }
 }

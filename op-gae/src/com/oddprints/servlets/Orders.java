@@ -108,6 +108,47 @@ public class Orders {
     }
 
     @GET
+    @Path("/submit/{secret}/{key}")
+    @Produces(MediaType.TEXT_HTML)
+    public Response submitOrderToPwinty(@PathParam("secret") String secret,
+            @PathParam("key") String key) {
+
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        Basket basket = Basket.getBasketByKeyString(key, pm);
+
+        if (basket.getState() != State.payment_received) {
+            return Response
+                    .status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED)
+                    .build();
+        }
+
+        UserService userService = UserServiceFactory.getUserService();
+        boolean userIsAdmin = userService.isUserLoggedIn()
+                && userService.isUserAdmin();
+
+        if (!userIsAdmin) {
+            return Response
+                    .status(com.sun.jersey.api.client.ClientResponse.Status.UNAUTHORIZED)
+                    .build();
+        }
+
+        Order pwintyOrder = basket.getPwintyOrder();
+        if (pwintyOrder.getSubmissionStatus().isValid()) {
+            pwintyOrder.submit();
+            basket.setState(State.submitted_to_lab);
+        } else {
+            basket.setState(State.problem_submitting_to_lab);
+            // TODO: Ultimately, I want to handle this better, but for now,
+            // lets just see what the common problems are (if any).
+            String msg = "Error submitting to pwinty: "
+                    + basket.getGoogleOrderNumber();
+            EmailSender.INSTANCE.sendToAdmin(msg, msg);
+        }
+
+        return Response.ok().build();
+    }
+
+    @GET
     @Path("/charge")
     @Produces(MediaType.TEXT_HTML)
     public Response chargeAndShipOrders() {

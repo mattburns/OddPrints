@@ -35,6 +35,11 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.4 - 2012/08/13</h2>
+        <ul>
+            <li>Don't auto-submit orders to Pwinty.</li>
+        </ul>
+
         <h2>v.3 - 2012/07/30</h2>
         <ul>
             <li>Added presets for a few common passport sizes.</li>
