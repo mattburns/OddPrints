@@ -71,6 +71,13 @@ limitations under the License.
                     
                     <c:set var="pwintyOrder" value="${order.pwintyOrderEL}"/>
                     <c:if test="${not empty pwintyOrder}">
+                        <dt>Contact Name:</dt> <dd>${pwintyOrder.recipientName}&nbsp;</dd>
+                        <dt>Address 1:</dt> <dd>${pwintyOrder.address1}&nbsp;</dd>
+                        <dt>Address 2:</dt> <dd>${pwintyOrder.address2}&nbsp;</dd>
+                        <dt>City:</dt> <dd>${pwintyOrder.addressTownOrCity}&nbsp;</dd>
+                        <dt>Region:</dt> <dd>${pwintyOrder.stateOrCounty}&nbsp;</dd>
+                        <dt>Postal Code:</dt> <dd>${pwintyOrder.postalOrZipCode}&nbsp;</dd>
+                        <dt>Country:</dt> <dd>${pwintyOrder.country}&nbsp;</dd>
                         
                         <c:if test="${it.userIsAdmin}">
                             <dt>Pwinty status:</dt> <dd>${pwintyOrder.status}&nbsp;</dd>
@@ -81,21 +88,8 @@ limitations under the License.
                         </c:forEach>
                     </c:if>
                     
-                    <c:if test="${not empty order.googleOrderNumber}">
-                        <dt>Order Number:</dt> <dd> #${order.googleOrderNumber}&nbsp;</dd>
-
-                        <c:set var="orderSummary" value="${order.googleOrderSummary}"/>
-                        <c:if test="${not empty orderSummary}">
-            
-                            <dt>Contact Name:</dt> <dd>${orderSummary.buyerShippingAddress.contactName}&nbsp;</dd>
-                            <dt>Address 1:</dt> <dd>${orderSummary.buyerShippingAddress.address1}&nbsp;</dd>
-                            <dt>Address 2:</dt> <dd>${orderSummary.buyerShippingAddress.address2}&nbsp;</dd>
-                            <dt>City:</dt> <dd>${orderSummary.buyerShippingAddress.city}&nbsp;</dd>
-                            <dt>Region:</dt> <dd>${orderSummary.buyerShippingAddress.region}&nbsp;</dd>
-                            <dt>Postal Code:</dt> <dd>${orderSummary.buyerShippingAddress.postalCode}&nbsp;</dd>
-                            <dt>Country Code:</dt> <dd>${orderSummary.buyerShippingAddress.countryCode}&nbsp;</dd>
-                            <dt>Purchase Date:</dt> <dd>${orderSummary.purchaseDate}&nbsp;</dd>
-                        </c:if>
+                    <c:if test="${not empty order.checkoutSystemOrderNumber}">
+                        <dt>Order Number:</dt> <dd> #${order.checkoutSystemOrderNumber}&nbsp;</dd>
                     </c:if>
                 </dl>
             </div>

@@ -29,6 +29,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.collect.Maps;
 import com.oddprints.Environment;
 import com.oddprints.PMF;
@@ -61,10 +63,13 @@ public class Checkout {
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);
         it.put("editurl", editUrl(req));
+        UserService userService = UserServiceFactory.getUserService();
+        it.put("userIsAdmin",
+                userService.isUserLoggedIn() && userService.isUserAdmin());
 
         if (basket != null) {
             it.put("merchantId", basket.getEnvironment()
-                    .getCheckoutAPIContext().getMerchantId());
+                    .getGoogleCheckoutAPIContext().getMerchantId());
         }
 
         return new Viewable("/checkout", it);

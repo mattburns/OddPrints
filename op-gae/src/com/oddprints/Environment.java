@@ -28,33 +28,34 @@ public enum Environment {
             com.google.checkout.sdk.commands.Environment.SANDBOX);
 
     private final uk.co.mattburns.pwinty.Pwinty.Environment pwintyEnvironment;
-    private final com.google.checkout.sdk.commands.Environment checkoutEnvironment;
+    private final com.google.checkout.sdk.commands.Environment googleCheckoutEnvironment;
 
     private final Settings pwintyMerchantIdSetting = Settings.PWINTY_MERCHANT_ID;
     private final Settings pwintyMerchantKeySetting = Settings.PWINTY_MERCHANT_KEY;
 
-    private final Settings checkoutMerchantKeySetting;
-    private final Settings checkoutMerchantIdSetting;
+    private final Settings googleCheckoutMerchantKeySetting;
+    private final Settings googleCheckoutMerchantIdSetting;
 
     private Environment(
             uk.co.mattburns.pwinty.Pwinty.Environment pwintyEnvironment,
-            com.google.checkout.sdk.commands.Environment checkoutEnvironment) {
+            com.google.checkout.sdk.commands.Environment googleCheckoutEnvironment) {
         this.pwintyEnvironment = pwintyEnvironment;
-        this.checkoutEnvironment = checkoutEnvironment;
+        this.googleCheckoutEnvironment = googleCheckoutEnvironment;
 
-        if (checkoutEnvironment
+        if (googleCheckoutEnvironment
                 .equals(com.google.checkout.sdk.commands.Environment.SANDBOX)) {
-            checkoutMerchantKeySetting = Settings.CHECKOUT_MERCHANT_KEY_SANDBOX;
-            checkoutMerchantIdSetting = Settings.CHECKOUT_MERCHANT_ID_SANDBOX;
+            googleCheckoutMerchantKeySetting = Settings.GOOGLE_CHECKOUT_MERCHANT_KEY_SANDBOX;
+            googleCheckoutMerchantIdSetting = Settings.GOOGLE_CHECKOUT_MERCHANT_ID_SANDBOX;
         } else {
-            checkoutMerchantKeySetting = Settings.CHECKOUT_MERCHANT_KEY_LIVE;
-            checkoutMerchantIdSetting = Settings.CHECKOUT_MERCHANT_ID_LIVE;
+            googleCheckoutMerchantKeySetting = Settings.GOOGLE_CHECKOUT_MERCHANT_KEY_LIVE;
+            googleCheckoutMerchantIdSetting = Settings.GOOGLE_CHECKOUT_MERCHANT_ID_LIVE;
         }
     }
 
-    public ApiContext getCheckoutAPIContext() {
-        return new ApiContext(checkoutEnvironment, getCheckoutMerchantId(),
-                getCheckoutMerchantKey(), "GBP");
+    public ApiContext getGoogleCheckoutAPIContext() {
+        return new ApiContext(googleCheckoutEnvironment,
+                getGoogleCheckoutMerchantId(), getGoogleCheckoutMerchantKey(),
+                "GBP");
     }
 
     public Pwinty getPwinty() {
@@ -66,12 +67,12 @@ public enum Environment {
         return this == SANDBOX;
     }
 
-    public String getCheckoutMerchantId() {
-        return ApplicationSetting.getSetting(checkoutMerchantIdSetting);
+    public String getGoogleCheckoutMerchantId() {
+        return ApplicationSetting.getSetting(googleCheckoutMerchantIdSetting);
     }
 
-    public String getCheckoutMerchantKey() {
-        return ApplicationSetting.getSetting(checkoutMerchantKeySetting);
+    public String getGoogleCheckoutMerchantKey() {
+        return ApplicationSetting.getSetting(googleCheckoutMerchantKeySetting);
     }
 
     public String getPwintyMerchantId() {

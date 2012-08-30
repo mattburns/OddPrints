@@ -19,13 +19,13 @@ import java.net.URL;
 
 public class EmailTemplates {
 
-    public static String newOrder(String googleOrderNumber, URL url) {
+    public static String newOrder(String checkoutSystemOrderNumber, URL url) {
         return "<font face=\"arial, helvetica, sans-serif\"><h2>Thank You</h2> "
                 + "<p>We have recieved your order and are rushing around to get it to you as soon as possible."
                 + " You can see how we're getting on by checking the <a href=\""
                 + url.toExternalForm()
                 + "\">Order Status (#"
-                + googleOrderNumber
+                + checkoutSystemOrderNumber
                 + ")</a></p>"
                 + "<p>Big thanks from us and if you have any questions, just reply to this email.<p>"
 
@@ -41,7 +41,7 @@ public class EmailTemplates {
                 + "<p>-Matt</p>" + "</font>";
     }
 
-    public static String shippedOrder(String googleOrderNumber, URL url) {
+    public static String shippedOrder(String checkoutSystemOrderNumber, URL url) {
         return "<font face=\"arial, helvetica, sans-serif\"><h2>Order Shipped!</h2> "
                 + "<p>Just a little email to let you know <a href=\""
                 + url.toExternalForm()

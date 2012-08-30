@@ -135,6 +135,10 @@ public class BasketItem {
         return StringUtils.formatMoney(printSize.getPrice() * quantity);
     }
 
+    public String getUnitPriceStringNoSymbol() {
+        return StringUtils.formatMoneyNoSymbol(printSize.getPrice());
+    }
+
     public void setQuantity(int quantity) {
         if (basket.getState() != State.draft) {
             throw new RuntimeException("cant edit draft");

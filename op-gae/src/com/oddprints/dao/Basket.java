@@ -38,8 +38,6 @@ import uk.co.mattburns.pwinty.Order;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.checkout.sdk.domain.OrderSummary;
-import com.google.common.collect.Lists;
 import com.oddprints.Environment;
 import com.oddprints.PrintSize;
 import com.oddprints.util.StringUtils;
@@ -59,7 +57,7 @@ public class Basket {
     private Integer version;
 
     @Persistent
-    private String googleOrderNumber;
+    private String checkoutSystemOrderNumber;
 
     @Persistent
     private Integer pwintyOrderNumber;
@@ -80,7 +78,13 @@ public class Basket {
     @Persistent
     private Environment environment;
 
+    @Persistent
+    private CheckoutSystem checkoutSystem;
+
     private Order tempPwintyOrder;
+
+    @Persistent
+    private String buyerEmail;
 
     public static final int LATEST_VERSION = 1;
     public static int FLAT_RATE_SHIPPING = 299;
@@ -97,6 +101,10 @@ public class Basket {
         }
     }
 
+    public enum CheckoutSystem {
+        google, paypal;
+    }
+
     public Basket(Environment environment) {
         this.state = State.draft;
         this.version = LATEST_VERSION;
@@ -111,6 +119,10 @@ public class Basket {
         return id;
     }
 
+    public String getIdString() {
+        return KeyFactory.keyToString(id);
+    }
+
     public String getSecret() {
         return secret;
     }
@@ -119,12 +131,20 @@ public class Basket {
         return version;
     }
 
-    public String getGoogleOrderNumber() {
-        return googleOrderNumber;
+    public String getCheckoutSystemOrderNumber() {
+        return checkoutSystemOrderNumber;
     }
 
-    public void setGoogleOrderNumber(String googleOrderNumber) {
-        this.googleOrderNumber = googleOrderNumber;
+    public void setCheckoutSystemOrderNumber(String checkoutSystemOrderNumber) {
+        this.checkoutSystemOrderNumber = checkoutSystemOrderNumber;
+    }
+
+    public String getBuyerEmail() {
+        return buyerEmail;
+    }
+
+    public void setBuyerEmail(String buyerEmail) {
+        this.buyerEmail = buyerEmail;
     }
 
     public Integer getPwintyOrderNumber() {
@@ -145,21 +165,6 @@ public class Basket {
 
     public Integer getShipping() {
         return shipping;
-    }
-
-    public static Basket getBasketByOrderNumber(String googleOrderNumber,
-            PersistenceManager pm) {
-        Query query = pm.newQuery(Basket.class);
-
-        query.setFilter("googleOrderNumber == '" + googleOrderNumber + "'");
-
-        @SuppressWarnings("unchecked")
-        List<Basket> baskets = (List<Basket>) query.execute();
-        if (baskets.size() != 1) {
-            throw new RuntimeException(
-                    "I expected exactly one basket for a given google order number");
-        }
-        return baskets.get(0);
     }
 
     public static List<Basket> getBasketsByState(State state,
@@ -198,12 +203,17 @@ public class Basket {
 
     public void addItem(BlobKey blobImage, long blobSize, String frameSize,
             PrintSize printSize) {
+        addItem(blobImage, blobSize, frameSize, printSize, 1);
+    }
+
+    public void addItem(BlobKey blobImage, long blobSize, String frameSize,
+            PrintSize printSize, int quantity) {
         if (state != State.draft) {
             throw new RuntimeException("cant edit draft");
         }
 
         BasketItem item = new BasketItem(this, blobImage, blobSize, frameSize,
-                printSize, 1);
+                printSize, quantity);
         items.add(item);
     }
 
@@ -223,10 +233,10 @@ public class Basket {
     }
 
     public String getPrintPriceString() {
-        return StringUtils.formatMoney(getPrintPrice());
+        return StringUtils.formatMoney(getPriceOfPrintsInPennies());
     }
 
-    private int getPrintPrice() {
+    public int getPriceOfPrintsInPennies() {
         int orderPricePence = 0;
         for (BasketItem item : getItems()) {
             orderPricePence += item.getPrintSize().getPrice()
@@ -240,7 +250,7 @@ public class Basket {
     }
 
     public String getTotalPriceString() {
-        int totalPricePence = getPrintPrice() + shipping;
+        int totalPricePence = getPriceOfPrintsInPennies() + shipping;
 
         return StringUtils.formatMoney(totalPricePence);
     }
@@ -290,23 +300,10 @@ public class Basket {
         Basket newBasket = new Basket(basket.getEnvironment());
         for (BasketItem item : basket.getItems()) {
             newBasket.addItem(item.getBlobImage(), item.getBlobSize(),
-                    item.getFrameSize(), item.getPrintSize());
+                    item.getFrameSize(), item.getPrintSize(),
+                    item.getQuantity());
         }
         return newBasket;
-    }
-
-    public OrderSummary getGoogleOrderSummary() {
-        if (googleOrderNumber == null) {
-            return null;
-        }
-        List<String> gons = Lists.newArrayList(googleOrderNumber);
-
-        List<OrderSummary> summaries = getEnvironment().getCheckoutAPIContext()
-                .reportsRequester().requestOrderSummaries(gons);
-        if (summaries.size() != 1) {
-            return null;
-        }
-        return summaries.get(0);
     }
 
     public Order getPwintyOrder() {
@@ -349,6 +346,14 @@ public class Basket {
 
     public URL getSubmitUrl() {
         return getUrlWithPath("/orders/submit/");
+    }
+
+    public CheckoutSystem getCheckoutSystem() {
+        return checkoutSystem;
+    }
+
+    public void setCheckoutSystem(CheckoutSystem checkoutSystem) {
+        this.checkoutSystem = checkoutSystem;
     }
 
     private URL getUrlWithPath(String path) {

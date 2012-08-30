@@ -34,90 +34,92 @@ limitations under the License.
 
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
-	<div data-role="content" class="">
-	
-		<c:choose>
-			<c:when test="${empty it.basket.items}">
-			    <h1>Basket is empty</h1>
-			    <p><a href="${it.editurl}" data-ajax="false">upload something</a></p>
-			</c:when>
-			<c:otherwise>
-				<h1>Checkout</h1>
-				
-				<table>
-					<thead>
-					  <tr>
-					      <th></th>
-					      <th></th>
-					      <th class="quantity-input-column">Quantity</th>
-					      <th>Price</th>
-					  </tr>
-					</thead>
-					<tbody>
-				        <c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">
-				            <tr>
-					    		<td class="text-align-left">
-						    		<a href="/image/basket/${basketItemNumber.index}" data-ajax="false" title="Preview"><img class="checkout-thumb" style="background:url(/image/basket/thumb/${basketItemNumber.index}) no-repeat center;" src="/images/mag.png" alt="" /></a>
-					    		</td>
-					    		<td>
+    <div data-role="content" class="">
+    
+        <c:choose>
+            <c:when test="${empty it.basket.items}">
+                <h1>Basket is empty</h1>
+                <p><a href="${it.editurl}" data-ajax="false">upload something</a></p>
+            </c:when>
+            <c:otherwise>
+                <h1>Checkout</h1>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th class="quantity-input-column">Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">
+                            <tr>
+                                <td class="text-align-left">
+                                    <a href="/image/basket/${basketItemNumber.index}" data-ajax="false" title="Preview"><img class="checkout-thumb" style="background:url(/image/basket/thumb/${basketItemNumber.index}) no-repeat center;" src="/images/mag.png" alt="" /></a>
+                                </td>
+                                <td>
                                     ${basketItem.printSize.displayString} print / ${basketItem.frameSize} frame
                                     (<a href="/checkout/delete/${basketItemNumber.index}" data-mini="true" data-inline="true" data-ajax="false">remove</a>)
                                 </td>
-					    		<td>
-					    		<input type="number" name="quantity" class="quantity-input" id="quantity-${basketItemNumber.index}" data-mini="true" pattern="[0-9]*" min="1" value="${basketItem.quantity}">
-					    		</td>
-					    		<td>${basketItem.priceString}</td>
-				    		</tr>
-				  		</c:forEach>
-			  		</tbody>
-		  		</table>
-		  		<p>
-    		  		<a href="${it.editurl}" data-ajax="false" data-role="button" data-theme="b" data-icon="plus" data-inline="true" data-mini="true">Upload more</a>
+                                <td>
+                                    <input type="number" name="quantity" class="quantity-input" id="quantity-${basketItemNumber.index}" data-mini="true" pattern="[0-9]*" min="1" value="${basketItem.quantity}">
+                                </td>
+                                <td>${basketItem.priceString}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+                <p>
+                    <a href="${it.editurl}" data-ajax="false" data-role="button" data-theme="b" data-icon="plus" data-inline="true" data-mini="true">Upload more</a>
                 </p>
-		  		
-		        <div>
-		            <div class="text-align-right">
-    		            <a href="/checkout">update</a>
-		                <p class="checkout-subtotal">prints: ${it.basket.printPriceString}</p>
-		                <p class="checkout-subtotal">shipping: ${it.basket.shippingPriceString}</p>
-		                <p class="checkout-total">Total: ${it.basket.totalPriceString}</p>
-		            </div>
-		        </div>
-		        
-		        <c:if test="${it.basket.environment.sandbox}">
-			        <div style="background-color: #cfc">
-			            <h4>Hey there beta tester!</h4>
-			            <p>This is currently set in sandbox mode so no real payments are possible
-			            and no photos are ever printed or posted.
-			            You can even go right through the checkout with your sandbox buyer account (<a href="https://developers.google.com/checkout/developer/Google_Checkout_Basic_HTML_Sandbox#Create_Sandbox_Accounts" target="_blank"><i>more info</i></a>).</p>
-			            <p>Want the real experience? 
-			            <a href="/checkout/environment/live" data-ajax="false">Switch this basket live.</a>
-			            </p>
-		            </div>
-		        </c:if>
-		
-		        <div>
-		            <div class="text-align-right">
-			  		   <p><a href="/purchase" data-ajax="false"><img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=${it.merchantId}&w=180&h=46&style=trans&variant=text&loc=en_GB" alt="Proceed to Google Checkout"/></a></p>
-			  		</div>
-		  		</div>
-	  		</c:otherwise>
-  		</c:choose>
-	</div>
-	
+                  
+                <div>
+                    <div class="text-align-right">
+                        <a href="/checkout">update</a>
+                        <p class="checkout-subtotal">prints: ${it.basket.printPriceString}</p>
+                        <p class="checkout-subtotal">shipping: ${it.basket.shippingPriceString}</p>
+                        <p class="checkout-total">Total: ${it.basket.totalPriceString}</p>
+                    </div>
+                </div>
+                
+                <c:if test="${it.basket.environment.sandbox}">
+                    <div style="background-color: #cfc">
+                        <h4>Hey there beta tester!</h4>
+                        <p>This is currently set in sandbox mode so no real payments are possible
+                        and no photos are ever printed or posted.
+                        You can even go right through the checkout with your paypal or google sandbox buyer account (<a href="https://developers.google.com/checkout/developer/Google_Checkout_Basic_HTML_Sandbox#Create_Sandbox_Accounts" target="_blank"><i>more info</i></a>).</p>
+                        <p>Want the real experience? 
+                            <a href="/checkout/environment/live" data-ajax="false">Switch this basket live.</a>
+                        </p>
+                    </div>
+                </c:if>
+        
+                <div>
+                    <div class="text-align-right">
+                    <p><a href="/purchase/google" data-ajax="false"><img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=${it.merchantId}&w=180&h=46&style=trans&variant=text&loc=en_GB" alt="Proceed to Google Checkout"/></a></p>
+                    <c:if test="${it.userIsAdmin}">
+                        <p><a href="/purchase/paypal" data-ajax="false"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Proceed to PayPal checkout"/></a></p>
+                    </c:if>
+                    </div>
+                  </div>
+              </c:otherwise>
+          </c:choose>
+    </div>
+    
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
 
 </div>
 
 
 <script type="text/javascript">
-
 $(document).ready(function() {    
     $( ".quantity-input" ).bind( "change", function(event, ui) {
-    	var id = event.target.id;
-    	var basketItemId = id.split('-')[1];
-    	window.location.href = "/checkout/update/" + basketItemId + "/" + event.target.value;
-   	});
+        var id = event.target.id;
+        var basketItemId = id.split('-')[1];
+        window.location.href = "/checkout/update/" + basketItemId + "/" + event.target.value;
+    });
 });
 </script>
 </body>

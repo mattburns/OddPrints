@@ -18,6 +18,7 @@ package com.oddprints.servlets;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +29,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.checkout.sdk.commands.ApiContext;
 import com.google.checkout.sdk.commands.CartPoster.CheckoutShoppingCartBuilder;
 import com.google.checkout.sdk.domain.AnyMultiple;
@@ -39,22 +39,26 @@ import com.google.checkout.sdk.domain.FlatRateShipping;
 import com.google.checkout.sdk.domain.FlatRateShipping.Price;
 import com.google.checkout.sdk.domain.MerchantCheckoutFlowSupport;
 import com.google.checkout.sdk.domain.MerchantCheckoutFlowSupport.ShippingMethods;
+import com.google.common.collect.Maps;
 import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.State;
 import com.oddprints.dao.BasketItem;
+import com.sun.jersey.api.view.Viewable;
 
 @Path("/purchase")
 public class Purchase {
 
     @GET
+    @Path("/google")
     @Produces(MediaType.TEXT_HTML)
-    public Response view(@Context HttpServletRequest req)
+    public Response google(@Context HttpServletRequest req)
             throws URISyntaxException {
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Basket basket = Basket.fromSession(req, pm);
-        ApiContext apiContext = basket.getEnvironment().getCheckoutAPIContext();
+        ApiContext apiContext = basket.getEnvironment()
+                .getGoogleCheckoutAPIContext();
 
         CheckoutShoppingCartBuilder cartBuilder = apiContext.cartPoster()
                 .makeCart();
@@ -86,17 +90,36 @@ public class Purchase {
         cart.setCheckoutFlowSupport(flowSupport);
 
         MerchantData md = new MerchantData();
-        md.addString(KeyFactory.keyToString(basket.getId()));
+        md.addString(basket.getIdString());
         cart.getShoppingCart().setMerchantPrivateData(md);
 
         CheckoutRedirect redirect = apiContext.cartPoster().postCart(cart);
 
-        String googleOrderNumber = redirect.getSerialNumber();
-        persistOrder(basket, googleOrderNumber, pm);
+        updateBasketState(basket, pm);
         pm.close();
 
         return Response.temporaryRedirect(new URI(redirect.getRedirectUrl()))
                 .build();
+    }
+
+    @GET
+    @Path("/paypal")
+    @Produces(MediaType.TEXT_HTML)
+    public Viewable paypal(@Context HttpServletRequest req)
+            throws URISyntaxException {
+
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        Basket basket = Basket.fromSession(req, pm);
+        updateBasketState(basket, pm);
+        // close and re-fetch to persist updated state
+        pm.close();
+        pm = PMF.get().getPersistenceManager();
+        basket = Basket.fromSession(req, pm);
+
+        Map<String, Object> it = Maps.newHashMap();
+        it.put("basket", basket);
+
+        return new Viewable("/paypalcheckout", it);
     }
 
     private class MerchantData extends AnyMultiple {
@@ -105,8 +128,7 @@ public class Purchase {
         }
     }
 
-    private void persistOrder(Basket basket, String googleOrderNumber,
-            PersistenceManager pm) {
+    private void updateBasketState(Basket basket, PersistenceManager pm) {
         basket.setState(State.awaiting_payment);
         pm.makePersistent(basket);
     }

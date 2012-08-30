@@ -50,7 +50,7 @@ limitations under the License.
         
         <p>The sirens are going off at OddPrints towers waking all the nerds from their afternoon naps.</p>
         <p>We shall track down the cause of the problem and
-        fire whoever was responsible (unless it was me, than it was probably an honest mistake).</p>
+        fire whoever was responsible (unless it was me, then it was probably an honest mistake).</p>
         
         <p>If you've tried a few times and you keep getting this error, <a href="/contact">get in touch</a>
         and we will help you out.</p>

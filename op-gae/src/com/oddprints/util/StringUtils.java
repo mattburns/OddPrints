@@ -18,6 +18,10 @@ package com.oddprints.util;
 public class StringUtils {
 
     public static String formatMoney(int pennies) {
-        return "&pound;" + String.format("%.2f", ((double) pennies / 100));
+        return "&pound;" + formatMoneyNoSymbol(pennies);
+    }
+
+    public static String formatMoneyNoSymbol(int pennies) {
+        return String.format("%.2f", ((double) pennies / 100));
     }
 }

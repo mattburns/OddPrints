@@ -36,6 +36,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
+import com.oddprints.dao.Basket.CheckoutSystem;
 import com.oddprints.dao.Basket.State;
 import com.oddprints.util.EmailSender;
 import com.oddprints.util.EmailTemplates;
@@ -141,7 +142,7 @@ public class Orders {
             // TODO: Ultimately, I want to handle this better, but for now,
             // lets just see what the common problems are (if any).
             String msg = "Error submitting to pwinty: "
-                    + basket.getGoogleOrderNumber();
+                    + basket.getCheckoutSystemOrderNumber();
             EmailSender.INSTANCE.sendToAdmin(msg, msg);
         }
 
@@ -160,20 +161,23 @@ public class Orders {
             Order pwintyOrder = basket.getPwintyOrderEL();
             if (pwintyOrder != null
                     && pwintyOrder.getStatus() == Status.Complete) {
-                // charge and ship
-                ApiContext apiContext = basket.getEnvironment()
-                        .getCheckoutAPIContext();
-                apiContext.orderCommands(basket.getGoogleOrderNumber())
-                        .chargeAndShipOrder();
+                if (basket.getCheckoutSystem() == CheckoutSystem.google) {
+                    // charge and ship
+                    ApiContext apiContext = basket.getEnvironment()
+                            .getGoogleCheckoutAPIContext();
+                    apiContext.orderCommands(
+                            basket.getCheckoutSystemOrderNumber())
+                            .chargeAndShipOrder();
+                }
                 basket.setState(State.dispatched_from_lab);
-                String googleOrderNumber = basket.getGoogleOrderNumber();
+                String checkoutSystemOrderNumber = basket
+                        .getCheckoutSystemOrderNumber();
 
                 String subject = "OddPrints Dispatched Order #"
-                        + googleOrderNumber;
-                String msg = EmailTemplates.shippedOrder(googleOrderNumber,
-                        basket.getUrl());
-                EmailSender.INSTANCE.send(basket.getGoogleOrderSummary()
-                        .getBuyerShippingAddress().getEmail(), msg, subject);
+                        + checkoutSystemOrderNumber;
+                String msg = EmailTemplates.shippedOrder(
+                        checkoutSystemOrderNumber, basket.getUrl());
+                EmailSender.INSTANCE.send(basket.getBuyerEmail(), msg, subject);
             }
         }
 
