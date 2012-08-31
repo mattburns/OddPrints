@@ -65,7 +65,8 @@ public class GoogleCheckoutNotificationHandlerTest {
         Mockito.when(cart.getMerchantPrivateData()).thenReturn(am);
 
         Address address = Mockito.mock(Address.class);
-        address.setEmail("fred@test.com");
+        Mockito.when(address.getEmail()).thenReturn("fred@test.com");
+        Mockito.when(address.getContactName()).thenReturn("junit google");
         Mockito.when(orderSummary.getBuyerShippingAddress())
                 .thenReturn(address);
 
