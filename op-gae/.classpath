@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-client-1.12.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-client-1.12.jar" sourcepath="/home/matt/.m2/repository/com/sun/jersey/jersey-client/1.12/jersey-client-1.12-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-core-1.12.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-multipart-1.12.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-server-1.12.jar"/>
