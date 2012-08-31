@@ -78,7 +78,7 @@ public class CheckoutNotificationHandler {
         String msg = EmailTemplates.newOrder(checkoutSystemOrderNumber,
                 basket.getUrl());
         EmailSender.INSTANCE.send(buyerEmail, msg, subject);
-
+        pm.makePersistent(basket);
         pm.close();
     };
 

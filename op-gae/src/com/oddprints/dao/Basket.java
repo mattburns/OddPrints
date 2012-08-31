@@ -86,7 +86,7 @@ public class Basket {
     @Persistent
     private String buyerEmail;
 
-    public static final int LATEST_VERSION = 1;
+    public static final int LATEST_VERSION = 2;
     public static int FLAT_RATE_SHIPPING = 299;
 
     public enum State {
