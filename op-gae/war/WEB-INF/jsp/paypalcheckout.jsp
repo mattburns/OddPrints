@@ -31,11 +31,11 @@ limitations under the License.
     <c:choose>                       
         <c:when test="${it.basket.environment.sandbox}">
             <c:set var="paypalurl" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
-            <c:set var="notifyurl" value="http://5.oddprints.appspot.com/checkoutnotification/paypal/sandbox"/>
+            <c:set var="notifyurl" value="http://www.oddprints.com/checkoutnotification/paypal/sandbox"/>
         </c:when>
         <c:otherwise>
             <c:set var="paypalurl" value="https://www.paypal.com/cgi-bin/webscr"/>
-            <c:set var="notifyurl" value="http://5.oddprints.appspot.com/checkoutnotification/paypal/live"/>
+            <c:set var="notifyurl" value="http://www.oddprints.com/checkoutnotification/paypal/live"/>
         </c:otherwise>
     </c:choose>
     
