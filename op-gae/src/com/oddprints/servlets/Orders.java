@@ -145,6 +145,8 @@ public class Orders {
                     + basket.getCheckoutSystemOrderNumber();
             EmailSender.INSTANCE.sendToAdmin(msg, msg);
         }
+        pm.makePersistent(basket);
+        pm.close();
 
         return Response.ok().build();
     }

@@ -21,11 +21,11 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mockito-all-1.9.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gson-2.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api-labs.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/impl/appengine-api-stubs.jar"/>
 	<classpathentry kind="var" path="GAE_SDK/lib/testing/appengine-testing.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/pwinty-java-sdk-1.2.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

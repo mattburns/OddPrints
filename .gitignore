@@ -1,3 +1,5 @@
+*~
 op-gae/war/WEB-INF/classes
 op-gae/war/WEB-INF/appengine-generated
+op-gae/test-results
 op-gae/test/com/oddprints/test-settings.properties
