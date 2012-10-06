@@ -39,7 +39,9 @@ limitations under the License.
         
         <p>Browser not supported.</p>
         
-        <p>I know, it's seriously not cool. I feel your pain.</p>
+        <p>I know, it's seriously not cool. I feel your pain.
+        I know it's no consolation, but if you're using iOS 5,
+        everything should be ok in iOS 6.</p>
         
         <p>If you want to shout at someone, <a href="/contact">shout at us</a>, it'll make you feel better.</p>
     </div>
