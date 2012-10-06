@@ -42,7 +42,7 @@ limitations under the License.
         <h2>Step 1: Upload a photo</h2>
         <p>Picking your favourite is the hard part.</p>
         <h2>Step 2: Enter the size of your frame</h2>
-        <p>This is the size in real inches (or centimetres) you would like your photo printed.</p>
+        <p>This is the real size you would like your photo printed.</p>
         <h2>Step 3: Print your photo</h2>
         <p>Your print will ready for you to cut at just the right size.</p>
 

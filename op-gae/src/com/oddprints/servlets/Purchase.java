@@ -39,6 +39,9 @@ import com.google.checkout.sdk.domain.FlatRateShipping;
 import com.google.checkout.sdk.domain.FlatRateShipping.Price;
 import com.google.checkout.sdk.domain.MerchantCheckoutFlowSupport;
 import com.google.checkout.sdk.domain.MerchantCheckoutFlowSupport.ShippingMethods;
+import com.google.checkout.sdk.domain.ShippingRestrictions;
+import com.google.checkout.sdk.domain.ShippingRestrictions.AllowedAreas;
+import com.google.checkout.sdk.domain.WorldArea;
 import com.google.common.collect.Maps;
 import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
@@ -79,6 +82,14 @@ public class Purchase {
         sm.getFlatRateShippingOrMerchantCalculatedShippingOrPickup();
         FlatRateShipping frs = new FlatRateShipping();
         frs.setName("flat rate");
+
+        ShippingRestrictions shippingRestrictions = new ShippingRestrictions();
+        AllowedAreas allowedAreas = new AllowedAreas();
+        allowedAreas.getUsStateAreaOrUsZipAreaOrUsCountryArea().add(
+                new WorldArea());
+        shippingRestrictions.setAllowedAreas(allowedAreas);
+        frs.setShippingRestrictions(shippingRestrictions);
+
         Price frsprice = new Price();
         frsprice.setValue(BigDecimal.valueOf((double) basket.getShipping() / 100));
         frsprice.setCurrency("GBP");
