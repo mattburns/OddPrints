@@ -41,7 +41,7 @@ limitations under the License.
         </p>
     
         <p>Twitter: <a 
-        href="http://twitter.com/oddprints" target="_blank">@oddprints</a>
+        href="http://twitter.com/oddprints" target="_blank">@OddPrints</a>
         </p>
     </div>
     

@@ -35,6 +35,11 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.7 - 2012/10/09</h2>
+        <ul>
+            <li>Redesigned homepage.</li>
+        </ul>
+        
         <h2>v.6 - 2012/10/05</h2>
         <ul>
             <li>Ensure basket is updated to submitted state after submitting.</li>
