@@ -40,7 +40,7 @@ limitations under the License.
       Just upload your photo and choose the preset for your country. Easy!</p>
         <p>Unlike other online services, OddPrints is free and the image has no watermark or
         any other nonsense. Just download the generated image and print it at 6"×4".</p>
-        <a class="get-started" data-ajax="false" href="/upload/basic"><img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.jpg"/></a>
+        <a class="get-started" data-ajax="false" href="/upload/basic"><img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.png"/></a>
         
         <div class="supported-browser">
             <p>Want to save money? <a href="/upload/basic" class="get-started" data-ajax="false">Get started</a>.</p>
