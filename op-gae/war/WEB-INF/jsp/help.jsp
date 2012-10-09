@@ -49,10 +49,10 @@ limitations under the License.
         <h2>How long will my prints take to arrive?</h2>
         <p>
         <ul>
-	        <li>UK: 1-2 days</li>
-	        <li>Western Europe: 3-4 days</li>
-	        <li>Eastern Europe: 5-6 days</li>
-	        <li>Rest of world: 7 days (though major cities are likely to be faster)</li>
+            <li>UK: 1-2 days</li>
+            <li>Western Europe: 3-4 days</li>
+            <li>Eastern Europe: 5-6 days</li>
+            <li>Rest of world: 7 days (though major cities are likely to be faster)</li>
         </ul>
         </p>
 
