@@ -93,6 +93,7 @@ public class Upload {
             try {
                 env = Environment.getDefault();
             } catch (NullPointerException npe) {
+                npe.printStackTrace();
                 return Response.status(Status.INTERNAL_SERVER_ERROR).build();
             }
             basket = new Basket(env);

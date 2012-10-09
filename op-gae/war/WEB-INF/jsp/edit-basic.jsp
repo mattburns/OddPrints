@@ -218,10 +218,10 @@ function uploadImage() {
             }
     )
     .error(
-    		function() { 
-    		    window.location.href = "/error?message=Failed+to+upload+original+image.";
-		    }
-	);
+            function() { 
+                window.location.href = "/error?message=Failed+to+upload+original+image.";
+            }
+    );
 }
 
 </script>

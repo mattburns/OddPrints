@@ -38,14 +38,14 @@ limitations under the License.
         <h2>Oh fudgecakes.</h2>
         
         <p><em>
-	        <c:choose>
-		        <c:when test="${empty it.message}">
-		           Something went wrong.
-		        </c:when>
-		        <c:otherwise>
-		           ${it.message}
-		        </c:otherwise>
-	        </c:choose>
+            <c:choose>
+                <c:when test="${empty it.message}">
+                   Something went wrong.
+                </c:when>
+                <c:otherwise>
+                   ${it.message}
+                </c:otherwise>
+            </c:choose>
         </em></p>
         
         <p>The sirens are going off at OddPrints towers waking all the nerds from their afternoon naps.</p>

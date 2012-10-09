@@ -57,6 +57,9 @@ limitations under the License.
         </div>
         
         <a id="add-setting-link" data-ajax="false" href=""></a>
+        
+        <h3>Initialize the dev database</h3>
+        Use the file in your dropbox (maybe <a data-ajax="false" href="file:///media/data/Dropbox/OddPrints-Keys-and-DB-init.html">here</a>).
     </div>    
     
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
@@ -66,16 +69,16 @@ limitations under the License.
 <script type="text/javascript">
 $(document).ready(function() {  
     $("input").bind( "change", function(event, ui) {
-    	var url = "";
-    	var key = $("#key").val();
-    	var value = $("#value").val();
-    	
-    	if (key.length > 0 && value.length > 0) {
-    	    url = "/admin/settings/put/" + key + "/" + value;
-    	}
-    	
-    	$("#add-setting-link").attr("href", url);
-    	$("#add-setting-link").html(url);
+        var url = "";
+        var key = $("#key").val();
+        var value = $("#value").val();
+        
+        if (key.length > 0 && value.length > 0) {
+            url = "/admin/settings/put/" + key + "/" + value;
+        }
+        
+        $("#add-setting-link").attr("href", url);
+        $("#add-setting-link").html(url);
     });
 });
 </script>

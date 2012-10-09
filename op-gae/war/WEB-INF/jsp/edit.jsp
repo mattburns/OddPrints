@@ -250,22 +250,22 @@ function handleFileSelect(evt) {
 }
 
 function fileChooser() {
-	$("#choose-a-file").show();
+    $("#choose-a-file").show();
     $("#file-chosen").hide();
 }
 function fileChosen() {
-	$("#choose-a-file").hide();
+    $("#choose-a-file").hide();
     $("#file-chosen").show();
 }
 
 function loadSample() {
-	loadFileUrl("images/sample.jpg");
+    loadFileUrl("images/sample.jpg");
 }
 
 function loadFile(file) {
     var reader = new FileReader();
     reader.onload = function (event) {
-    	loadFileUrl(event.target.result);
+        loadFileUrl(event.target.result);
     };
     reader.readAsDataURL(file);
 }
@@ -277,7 +277,7 @@ function loadFileUrl(url) {
 
 function drawImage(settings) {
     if (getZooming() == 'TILE') {
-    	drawTiledImage(settings);
+        drawTiledImage(settings);
     } else {
         ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth, settings.destinationHeight);
     }
@@ -286,11 +286,11 @@ function drawImage(settings) {
 function drawTiledImage(settings) {
     var tempFrameY = settings.tileMargin;
     while ((tempFrameY + (settings.frameHeightPx - 1)) < settings.canvasHeight) {
-	    var tempFrameX = settings.tileMargin;
-	    while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
-	        ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, tempFrameX, tempFrameY, settings.destinationWidth, settings.destinationHeight);
-	        tempFrameX += (settings.frameWidthPx - 1) + settings.tileMargin;
-	    }
+        var tempFrameX = settings.tileMargin;
+        while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
+            ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, tempFrameX, tempFrameY, settings.destinationWidth, settings.destinationHeight);
+            tempFrameX += (settings.frameWidthPx - 1) + settings.tileMargin;
+        }
         tempFrameY += (settings.frameHeightPx - 1) + settings.tileMargin;
     }
 }
@@ -311,21 +311,21 @@ function drawGuidelines(settings) {
 }
 
 function drawTiledGuidelines(settings) {
-	var tempFrameY = settings.tileMargin;
-	while ((tempFrameY + (settings.frameHeightPx - 1)) < settings.canvasHeight) {
-		drawHorizontalLine(tempFrameY, settings);
-		tempFrameY += (settings.frameHeightPx - 1);
-		drawHorizontalLine(tempFrameY, settings);
-		tempFrameY += settings.tileMargin;
-	}
+    var tempFrameY = settings.tileMargin;
+    while ((tempFrameY + (settings.frameHeightPx - 1)) < settings.canvasHeight) {
+        drawHorizontalLine(tempFrameY, settings);
+        tempFrameY += (settings.frameHeightPx - 1);
+        drawHorizontalLine(tempFrameY, settings);
+        tempFrameY += settings.tileMargin;
+    }
 
-	var tempFrameX = settings.tileMargin;
-	while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
-		drawVerticalLine(tempFrameX, settings);
-		tempFrameX += (settings.frameWidthPx - 1);
-		drawVerticalLine(tempFrameX, settings);
-		tempFrameX += settings.tileMargin;
-	}
+    var tempFrameX = settings.tileMargin;
+    while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
+        drawVerticalLine(tempFrameX, settings);
+        tempFrameX += (settings.frameWidthPx - 1);
+        drawVerticalLine(tempFrameX, settings);
+        tempFrameX += settings.tileMargin;
+    }
 }
 
 function drawVerticalLine(x, settings) {
@@ -407,8 +407,8 @@ function calculateSettings(dpi) {
 }
 
 function uploadImage() {
-	$.mobile.showPageLoadingMsg();
-	var t=setTimeout("uploadImageImpl()", 50);
+    $.mobile.showPageLoadingMsg();
+    var t=setTimeout("uploadImageImpl()", 50);
 }
 
 function uploadImageImpl() {
@@ -423,14 +423,14 @@ function uploadImageImpl() {
     )
     .success(
             function() { 
-            	window.location.href = "/checkout";
+                window.location.href = "/checkout";
             }
     )
     .error(
-    		function() { 
-    			window.location.href = "/error?message=Failed+to+upload+image.";
-		    }
-	);
+            function() { 
+                window.location.href = "/error?message=Failed+to+upload+image.";
+            }
+    );
     
 }
 
