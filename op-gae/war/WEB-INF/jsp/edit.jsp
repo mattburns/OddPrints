@@ -68,10 +68,10 @@ limitations under the License.
                 
                     <select name="select-preset" id="select-preset" >
                         <option value="custom" selected>Custom</option>
-                        <option value="canada" >Passport - Canada (50mm x 70mm)</option>
-                        <option value="india" >Passport - India (35mm x 35mm)</option>
-                        <option value="uk" >Passport - UK (35mm x 45mm)</option>
-                        <option value="us" >Passport - US (2" x 2")</option>
+                        <option value="canada" >Passport - Canada (50mm × 70mm)</option>
+                        <option value="india" >Passport - India (35mm × 35mm)</option>
+                        <option value="uk" >Passport - UK (35mm × 45mm)</option>
+                        <option value="us" >Passport - US (2" × 2")</option>
                     </select>
                 </div>
                 
