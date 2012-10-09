@@ -37,7 +37,7 @@ limitations under the License.
     <div data-role="content">
         <h2>Contact</h2>
         <p>Email: <a 
-        href="mailto:matt@oddprints.com">matt@oddprints.com</a>.
+        href="mailto:matt@oddprints.com">matt@oddprints.com</a>
         </p>
     
         <p>Twitter: <a 

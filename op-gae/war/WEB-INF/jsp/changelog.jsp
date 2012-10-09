@@ -38,6 +38,7 @@ limitations under the License.
         <h2>v.7 - 2012/10/09</h2>
         <ul>
             <li>Redesigned homepage.</li>
+            <li>Reshuffled help page and added shipping times.</li>
         </ul>
         
         <h2>v.6 - 2012/10/05</h2>
