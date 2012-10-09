@@ -43,7 +43,7 @@ limitations under the License.
 
         <h2>Can I order prints from you?</h2>
         <p>Sure thing. Instead of downloading your image, just click the link below the 
-        download button to order prints from us. A 6"x4" print costs just £0.50 plus worldwide shipping at £2.99
+        download button to order prints from us. A 6"×4" print costs just £0.50 plus worldwide shipping at £2.99
         regardless of order size. Simple.</p>
         
         <h2>How long will my prints take to arrive?</h2>

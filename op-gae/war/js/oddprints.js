@@ -186,7 +186,7 @@ function frameSizeString() {
     var frameWidth = getFrameWidthString();
     var frameHeight = getFrameHeightString();
     var isInches = $("#radio-inches").attr('checked');
-    return frameWidth + (isInches? '"' : '') + 'x' + frameHeight + (isInches? '"' : 'cm');
+    return frameWidth + (isInches? '"' : '') + '×' + frameHeight + (isInches? '"' : 'cm');
 }
 
 function getFrameUnits() {
@@ -295,7 +295,7 @@ function queueRenderPreview() {
 function updateTextAndControls() {
     updateFrameHeader();
     var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
-    $("#print-size-text").html("Print at " + settings.printWidth + "\"x" + settings.printHeight + "\"");
+    $("#print-size-text").html("Download and print at <span class='output-size'>" + settings.printWidth + "\"×" + settings.printHeight + "\"</span>");
     restrictSliders();
 }
 

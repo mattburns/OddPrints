@@ -49,7 +49,7 @@ public enum PrintSize {
 
     @Override
     public String toString() {
-        return height + "\"x" + width + "\"";
+        return height + "\"×" + width + "\"";
     }
 
     public String getDisplayString() {

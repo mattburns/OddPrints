@@ -37,6 +37,10 @@ input.quantity-input {
     vertical-align: middle;
 }
 
+.output-size {
+    border-bottom: 5px solid #8FBCF5;
+}
+
 .checkout-subtotal,.checkout-total {
     
 }

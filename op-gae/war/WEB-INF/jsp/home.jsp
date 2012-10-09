@@ -81,15 +81,15 @@ limitations under the License.
         <div class="after-fold">
             <div class="thin-column">
                 <h3>How it works</h3>
-                <p>Photo labs only offer printing at standard sizes such as 6"x4" or 7"x5" but
+                <p>Photo labs only offer printing at standard sizes such as 6"×4" or 7"×5" but
                 sometimes you want to print your photos at different dimensions or ratios.</p>
                 
                 <p>With OddPrints you can choose any size you like. We then generate a new image
                 to print at a standard size which is ready to be cut down to the size you want.</p>
                 
-                <p>For example, if you want to print a photo for a 2"x2" frame you simply upload
-                your photo and select a frame size of 2"x2". You can then either order prints from
-                us, or just download the new image ready to print yourself at 6"x4".
+                <p>For example, if you want to print a photo for a 2"×2" frame you simply upload
+                your photo and select a frame size of 2"×2". You can then either order prints from
+                us, or just download the new image ready to print yourself at 6"×4".
                 The print will have the correct border around your image so that you can cut it
                 down to the correct size.
                 <img src="/images/workflow.png" /></p>
@@ -98,7 +98,7 @@ limitations under the License.
                 <p>Did you know you can use OddPrints to print your own passport photos?
                 Just upload your photo and choose the preset for your country. Easy!</p>
                 <p>Unlike other online services, OddPrints is free and the image has no watermark or
-                any other nonsense. Just download the generated image and print it at 6"x4".</p>
+                any other nonsense. Just download the generated image and print it at 6"×4".</p>
                 <img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.png"/>
                 
                 <img class="osi-logo" src="/images/osi_standard_logo.png"/>

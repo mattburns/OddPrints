@@ -39,7 +39,7 @@ limitations under the License.
         <p>Did you know you can use OddPrints to print your own passport photos?
       Just upload your photo and choose the preset for your country. Easy!</p>
         <p>Unlike other online services, OddPrints is free and the image has no watermark or
-        any other nonsense. Just download the generated image and print it at 6"x4".</p>
+        any other nonsense. Just download the generated image and print it at 6"×4".</p>
         <a class="get-started" data-ajax="false" href="/upload/basic"><img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.jpg"/></a>
         
         <div class="supported-browser">
