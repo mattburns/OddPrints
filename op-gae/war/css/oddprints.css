@@ -29,10 +29,6 @@ html {
     width: 67px;
 }
 
-input.quantity-input {
-    width: 30px;
-}
-
 .ui-field-contain label.ui-slider {
     vertical-align: middle;
 }
