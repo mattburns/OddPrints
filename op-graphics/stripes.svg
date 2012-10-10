@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="600"
+   height="912"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   inkscape:export-filename="/home/matt/gitrepos/OddPrints/op-gae/war/images/stripes.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   sodipodi:docname="stripes.svg">
+  <defs
+     id="defs4">
+    <pattern
+       inkscape:stockid="Stripes 1:2"
+       id="Strips1_2"
+       patternTransform="translate(0,0) scale(10,10)"
+       height="1"
+       width="3"
+       patternUnits="userSpaceOnUse"
+       inkscape:collect="always">
+      <rect
+         id="rect4486"
+         height="2"
+         width="1"
+         y="-0.5"
+         x="0"
+         style="fill:black;stroke:none" />
+    </pattern>
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="1620.9892"
+       height="1620.9655"
+       patternTransform="translate(-517.77933,-213.26143)"
+       id="pattern4610">
+      <path
+         transform="matrix(0.75913442,0.75913442,-0.75913442,0.75913442,1379.4659,1434.4319)"
+         d="m -252.16628,497.33877 -1067.09602,0 0,-1067.09603 1067.09602,-10e-6 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="1.5707963"
+         sodipodi:arg1="0.78539816"
+         sodipodi:r2="533.54797"
+         sodipodi:r1="754.55084"
+         sodipodi:cy="-36.209248"
+         sodipodi:cx="-785.71429"
+         sodipodi:sides="4"
+         id="path5238"
+         style="opacity:0.03292182;fill:url(#Strips1_2);fill-opacity:1;stroke:#4d4d4d;stroke-width:1.08448291;stroke-linecap:square;stroke-miterlimit:0;stroke-opacity:0.42922375;stroke-dasharray:none;stroke-dashoffset:0"
+         sodipodi:type="star" />
+    </pattern>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath4641">
+      <rect
+         style="opacity:0.03292182;fill:#4d4d4d;fill-opacity:1;stroke:#4d4d4d;stroke-width:0.2;stroke-linecap:square;stroke-miterlimit:0;stroke-opacity:0.42922375;stroke-dasharray:none;stroke-dashoffset:0"
+         id="rect4643"
+         width="600"
+         height="912"
+         x="0"
+         y="140.36218" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.92872807"
+     inkscape:cx="300"
+     inkscape:cy="456"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1615"
+     inkscape:window-height="1026"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-140.36218)">
+    <rect
+       style="stroke:none;fill:url(#pattern4610);stroke-width:0.2;stroke-miterlimit:0;stroke-dasharray:none"
+       width="1620.9892"
+       height="1620.9655"
+       x="-517.77933"
+       y="-213.26143"
+       id="rect4613"
+       clip-path="url(#clipPath4641)" />
+  </g>
+</svg>

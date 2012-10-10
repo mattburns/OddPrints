@@ -40,7 +40,7 @@ limitations under the License.
     
             <h1>Easy printing for tricky frames</h1>
             
-            <p>The simple way to print photos
+            <p>The <strong>free</strong> and <strong>simple</strong> way to print photos
             for your unusual picture frames or passport.
             </p>
         
@@ -49,12 +49,10 @@ limitations under the License.
                     <ul class="overview">
                         <li>
                             <div class="step-number">1</div>
-                            <img src="/images/sample-small.png"/>
                             <h2>Upload a photo</h2>
                         </li>
                         <li>
                             <div class="step-number">2</div>
-                            <img src="/images/frame-size.png"/>
                             <h2>Enter the size of your frame</h2>
                             <p>Or for passport photos, select your country.</p>
                         </li>
@@ -82,23 +80,16 @@ limitations under the License.
             <div class="thin-column">
                 <h3>How it works</h3>
                 <p>Photo labs only offer printing at standard sizes such as 6"×4" or 7"×5" but
-                sometimes you want to print your photos at different dimensions or ratios.</p>
-                
-                <p>With OddPrints you can choose any size you like. We then generate a new image
+                sometimes you want to print your photos at different dimensions or ratios. With OddPrints you can choose any size you like. We then generate a new image
                 to print at a standard size which is ready to be cut down to the size you want.</p>
                 
-                <p>For example, if you want to print a photo for a 2"×2" frame you simply upload
-                your photo and select a frame size of 2"×2". You can then either order prints from
-                us, or just download the new image ready to print yourself at 6"×4".
-                The print will have the correct border around your image so that you can cut it
-                down to the correct size.
-                <img src="/images/workflow.png" /></p>
-                
+                <img src="/images/workflow.png" />
+               
                 <h3>Print your own passport photos</h3>
-                <p>Did you know you can use OddPrints to print your own passport photos?
-                Just upload your photo and choose the preset for your country. Easy!</p>
-                <p>Unlike other online services, OddPrints is free and the image has no watermark or
-                any other nonsense. Just download the generated image and print it at 6"×4".</p>
+                <p>Just choose the preset for your country. Easy!
+                Unlike other online services, OddPrints is free and the image has
+                no watermark or any other nonsense. Just download the generated image
+                and print it at 6"×4".</p>
                 <img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.png"/>
                 
                 <img class="osi-logo" src="/images/osi_standard_logo.png"/>
@@ -110,6 +101,10 @@ limitations under the License.
                 <p>If you want to support this site, you can order your prints directly from us.
                 </p>
                 <p>Or not. It's up to you. :)</p>
+                
+                <div class="supported-browser">
+                    <p><a href="/upload/basic" class="get-started" data-ajax="false">Get started</a></p>
+                </div>
             </div>
         </div>
     </div>
