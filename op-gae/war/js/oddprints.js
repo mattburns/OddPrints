@@ -104,7 +104,7 @@ function forceNewHeight(height, imageWidth, imageHeight, settings) {
     return settings;
 }
 
-function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, frameY, imageWidth, imageHeight, settings) {
+function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, frameY, imageWidth, imageHeight, horizontalOffset, verticalOffset, settings) {
     if (!settings) {
         settings = new Object();
     }
@@ -126,8 +126,13 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
             settings.sourceY = 0;
             settings.sourceWidth = imageWidth;
             settings.sourceHeight = imageHeight;
+            
+            settings.destinationX += horizontalOffset;
+            settings.destinationY += verticalOffset;
+            
             break;
         case ('FILL') :
+        case ('CROP') :
             if (frameHasWiderRatioThanImage) {
                 settings = forceNewWidth(frameWidthPx, imageWidth, imageHeight, settings);
                 settings.destinationY = Math.floor(frameY - ((settings.destinationHeight - frameHeightPx) / 2));
@@ -141,8 +146,11 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
             settings.sourceY = 0;
             settings.sourceWidth = imageWidth;
             settings.sourceHeight = imageHeight;
+            
+            settings.destinationX += horizontalOffset;
+            settings.destinationY += verticalOffset;
+            
             break;
-        case ('CROP') :
         case ('TILE') :
             if (frameHasWiderRatioThanImage) {
                 settings.sourceWidth = imageWidth;
@@ -159,7 +167,29 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
             settings.destinationWidth = frameWidthPx;
             settings.destinationX = frameX;
             settings.destinationY = frameY;
+                        
+            settings.sourceX -= horizontalOffset*2;
+            settings.sourceY -= verticalOffset*2;
             
+            if (settings.sourceX < 0) {
+                settings.destinationX -= settings.sourceX/2;
+                settings.sourceX = 0;
+            }
+            if (settings.sourceY < 0) {
+                settings.destinationY -= settings.sourceY/2;
+                settings.sourceY = 0;
+            }
+            var extraX = imageWidth - settings.sourceWidth;
+            if (settings.sourceX > extraX) {
+                settings.destinationX -= (settings.sourceX - extraX)/2;
+                settings.sourceX = extraX;
+            }
+            var extraY = imageHeight - settings.sourceHeight;
+            if (settings.sourceY > extraY) {
+                settings.destinationY -= (settings.sourceY - extraY)/2;
+                settings.sourceY = extraY;
+            }
+
             break;
     }
     
@@ -195,6 +225,14 @@ function getFrameUnits() {
 
 function updateFrameHeader() {
     $("#frame-size-text").html('Enter your frame size (' + getFrameUnits() + ')');
+}
+
+function getHorizontalOffset() {
+    return parseFloat($("#horizontal-offset").val());
+}
+
+function getVerticalOffset() {
+    return parseFloat($("#vertical-offset").val());
 }
 
 function getFrameWidth() {

@@ -72,7 +72,7 @@ limitations under the License.
             </div>
         
             <div class="supported-browser">
-                <p><a href="/upload/basic" id="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right"  data-ajax="false">Get Started!</a></p>
+                <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right"  data-ajax="false">Get Started!</a></p>
             </div>
         </div>
 
@@ -117,9 +117,9 @@ limitations under the License.
 $(document).ready(function() {
     var basicModeVar = ${not empty basicMode and basicMode};
     if (isSupportedBrowser() && !basicModeVar) {
-        $("#get-started").attr("href", "/edit");
+        $(".get-started").attr("href", "/edit");
     } else if (!isFileInputSupported()) {
-        $("#get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
+        $(".get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
     } else {
         // stick with basic upload
     }

@@ -2,7 +2,7 @@
                     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <script src="js/jquery-1.7.1.min.js"></script>
+  <script src="js/jquery-1.8.2.min.js"></script>
   <link rel="stylesheet" href="css/qunit.css" type="text/css" media="screen" />
   <script type="text/javascript" src="js/qunit.js"></script>
   <script type="text/javascript" src="js/oddprints.js"></script>
@@ -127,7 +127,8 @@
         });
         
         test("image position on canvas (fit)", function() {
-            settings = calculateDestination('FIT', 4, 4, 2, 2, 4, 8);
+            // zooming, frameWidthPx, frameHeightPx, frameX, frameY, imageWidth, imageHeight, horizontalOffset, verticalOffset
+            settings = calculateDestination('FIT', 4, 4, 2, 2, 4, 8, 0, 0);
             assertEquals(2, settings.destinationWidth);
             assertEquals(4, settings.destinationHeight);
             assertEquals(3, settings.destinationX);
@@ -137,7 +138,7 @@
             assertEquals(0, settings.sourceX);
             assertEquals(0, settings.sourceY);
             
-            settings = calculateDestination('FIT', 4, 4, 2, 2, 8, 4);
+            settings = calculateDestination('FIT', 4, 4, 2, 2, 8, 4, 0, 0);
             assertEquals(4, settings.destinationWidth);
             assertEquals(2, settings.destinationHeight);
             assertEquals(2, settings.destinationX);
@@ -148,8 +149,31 @@
             assertEquals(0, settings.sourceY);
         });
         
+        test("image position on canvas (fit) with offset", function() {
+            // zooming, frameWidthPx, frameHeightPx, frameX, frameY, imageWidth, imageHeight, horizontalOffset, verticalOffset
+            settings = calculateDestination('FIT', 4, 4, 2, 2, 4, 8, 1, 1);
+            assertEquals(2, settings.destinationWidth);
+            assertEquals(4, settings.destinationHeight);
+            assertEquals(4, settings.destinationX);
+            assertEquals(3, settings.destinationY);
+            assertEquals(4, settings.sourceWidth);
+            assertEquals(8, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+            
+            settings = calculateDestination('FIT', 4, 4, 2, 2, 8, 4, -2, -3);
+            assertEquals(4, settings.destinationWidth);
+            assertEquals(2, settings.destinationHeight);
+            assertEquals(0, settings.destinationX);
+            assertEquals(0, settings.destinationY);
+            assertEquals(8, settings.sourceWidth);
+            assertEquals(4, settings.sourceHeight);
+            assertEquals(0, settings.sourceX);
+            assertEquals(0, settings.sourceY);
+        });
+        
         test("image position on canvas (fill)", function() {
-            settings = calculateDestination('FILL', 4, 4, 2, 2, 4, 8);
+            settings = calculateDestination('FILL', 4, 4, 2, 2, 4, 8, 0, 0);
             assertEquals(4, settings.destinationWidth);
             assertEquals(8, settings.destinationHeight);
             assertEquals(2, settings.destinationX);
@@ -159,7 +183,7 @@
             assertEquals(0, settings.sourceX);
             assertEquals(0, settings.sourceY);
             
-            settings = calculateDestination('FILL', 4, 4, 2, 2, 8, 4);
+            settings = calculateDestination('FILL', 4, 4, 2, 2, 8, 4, 0, 0);
             assertEquals(8, settings.destinationWidth);
             assertEquals(4, settings.destinationHeight);
             assertEquals(0, settings.destinationX);
@@ -169,7 +193,7 @@
             assertEquals(0, settings.sourceX);
             assertEquals(0, settings.sourceY);
             
-            settings = calculateDestination('FILL', 4, 4, 3, 3, 8, 4);
+            settings = calculateDestination('FILL', 4, 4, 3, 3, 8, 4, 0, 0);
             assertEquals(8, settings.destinationWidth);
             assertEquals(4, settings.destinationHeight);
             assertEquals(1, settings.destinationX);
@@ -179,7 +203,7 @@
             assertEquals(0, settings.sourceX);
             assertEquals(0, settings.sourceY);
             
-            settings = calculateDestination('FILL', 3, 2, 2, 1, 6, 4);
+            settings = calculateDestination('FILL', 3, 2, 2, 1, 6, 4, 0, 0);
             assertEquals(3, settings.destinationWidth);
             assertEquals(2, settings.destinationHeight);
             assertEquals(2, settings.destinationX);
@@ -190,44 +214,14 @@
             assertEquals(0, settings.sourceY);
         });
         
-        test("image position on canvas (crop)", function() {
-            settings = calculateDestination('CROP', 4, 4, 2, 2, 4, 8);
+        test("image position on canvas (fill) with offset", function() {
+            settings = calculateDestination('FILL', 4, 4, 2, 2, 4, 8, 1, 1);
             assertEquals(4, settings.destinationWidth);
-            assertEquals(4, settings.destinationHeight);
-            assertEquals(2, settings.destinationX);
-            assertEquals(2, settings.destinationY);
-            assertEquals(4, settings.sourceWidth);
-            assertEquals(4, settings.sourceHeight);
-            assertEquals(0, settings.sourceX);
-            assertEquals(2, settings.sourceY);
-            
-            settings = calculateDestination('CROP', 4, 4, 2, 2, 8, 4);
-            assertEquals(4, settings.destinationWidth);
-            assertEquals(4, settings.destinationHeight);
-            assertEquals(2, settings.destinationX);
-            assertEquals(2, settings.destinationY);
-            assertEquals(4, settings.sourceWidth);
-            assertEquals(4, settings.sourceHeight);
-            assertEquals(2, settings.sourceX);
-            assertEquals(0, settings.sourceY);
-            
-            settings = calculateDestination('CROP', 4, 4, 3, 3, 8, 4);
-            assertEquals(4, settings.destinationWidth);
-            assertEquals(4, settings.destinationHeight);
+            assertEquals(8, settings.destinationHeight);
             assertEquals(3, settings.destinationX);
-            assertEquals(3, settings.destinationY);
-            assertEquals(4, settings.sourceWidth);
-            assertEquals(4, settings.sourceHeight);
-            assertEquals(2, settings.sourceX);
-            assertEquals(0, settings.sourceY);
-            
-            settings = calculateDestination('CROP', 3, 2, 2, 1, 6, 4);
-            assertEquals(3, settings.destinationWidth);
-            assertEquals(2, settings.destinationHeight);
-            assertEquals(2, settings.destinationX);
             assertEquals(1, settings.destinationY);
-            assertEquals(6, settings.sourceWidth);
-            assertEquals(4, settings.sourceHeight);
+            assertEquals(4, settings.sourceWidth);
+            assertEquals(8, settings.sourceHeight);
             assertEquals(0, settings.sourceX);
             assertEquals(0, settings.sourceY);
         });
@@ -243,7 +237,7 @@
         });
         
         test("source coordinates are correct", function() {
-            settings = calculateDestination('CROP', 500, 300, 50, 50, 830, 554);
+            settings = calculateDestination('TILE', 500, 300, 50, 50, 830, 554, 0, 0);
             assertEquals(500, settings.destinationWidth);
             assertEquals(300, settings.destinationHeight);
             assertEquals(50, settings.destinationX);

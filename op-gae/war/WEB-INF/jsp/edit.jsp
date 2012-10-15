@@ -54,7 +54,6 @@ limitations under the License.
     
             <form action="#" method="get">
                 <div data-role="fieldcontain" title="Width of picture frame">
-                    <h2 id="frame-size-text"></h2>
                     <label for="frame-width">Width:</label>
                     <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="10" data-highlight="true"/></span>
                 </div>
@@ -75,7 +74,13 @@ limitations under the License.
                     </select>
                 </div>
                 
-                <img id="img-preview" src="" />
+                <div class="img-preview" id="img-preview">
+                    <img id="bg-img-preview" src="" />
+                    <img id="img-img-preview" src="" />
+                    <img id="crop-img-preview" src="" />
+                    <img id="line-img-preview" src="" />
+                </div>
+                
                 <div class="text-align-right">
                     <a id="change-picture-link" href="/edit">change picture</a>
                 </div>
@@ -125,14 +130,9 @@ limitations under the License.
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Show guidelines:</legend>
                             
-                            <input type="radio" name="radio-guides" id="radio-guides-on-top" value="guides-on-top" checked="checked" />
-                            <label for="radio-guides-on-top" title="Guidelines are drawn on top of the image">
-                                Top
-                            </label>
-    
-                            <input type="radio" name="radio-guides" id="radio-guides-on-bottom" value="guides-on-bottom"  />
-                            <label for="radio-guides-on-bottom" title="Guidelines are drawn underneath the image">
-                                Bottom
+                            <input type="radio" name="radio-guides" id="radio-guides-on" value="guides-on" checked="checked" />
+                            <label for="radio-guides-on" title="Guidelines are drawn on top of the image">
+                                On
                             </label>
                             
                             <input type="radio" name="radio-guides" id="radio-guides-off" value="guides-off"  />
@@ -158,6 +158,12 @@ limitations under the License.
                             <label for="radio-orient-landscape">Landscape</label>
                         </fieldset>
                     </div>
+                    <div data-role="fieldcontain" title="Image offset">
+                        <label for="horizontal-offset">Horizontal offset:</label>
+                        <span class="span-slider"><input data-mini="true" type="range" name="slider" id="horizontal-offset" value="0" step="1" min="-300" max="300" data-highlight="true"/></span>
+                        <label for="vertical-offset">Vertical offset:</label>
+                        <span class="span-slider"><input data-mini="true" type="range" name="slider" id="vertical-offset" value="0" step="1" min="-200" max="200" data-highlight="true"/></span>
+                    </div>
                 </div>
                 
                 <c:choose>
@@ -178,8 +184,21 @@ limitations under the License.
                 
                 <p>View <a href="test.html">test results</a>.</p>
                 
-                <canvas id="myCanvas" width="100" height="100" style="border:5px solid red;">
-                Your browser does not support the canvas element.
+                <p>Background:</p>
+                <canvas id="bgCanvas" width="100" height="100" >
+                    Your browser does not support the canvas element.
+                </canvas>
+                <p>Image:</p>
+                <canvas id="imgCanvas" width="100" height="100" >
+                </canvas>
+                <p>Cropping mask:</p>
+                <canvas id="cropCanvas" width="100" height="100">
+                </canvas>
+                <p>Guidelines:</p>
+                <canvas id="lineCanvas" width="100" height="100">
+                </canvas>
+                <p>Merged image:</p>
+                <canvas id="mergedCanvas" width="100" height="100">
                 </canvas>
                 
             </div>
@@ -191,11 +210,22 @@ limitations under the License.
 
 <script type="text/javascript">
 
-var myCanvas = document.getElementById("myCanvas");
-var ctx;
+var bgCanvas = document.getElementById("bgCanvas");
+var imgCanvas = document.getElementById("imgCanvas");
+var cropCanvas = document.getElementById("cropCanvas");
+var lineCanvas = document.getElementById("lineCanvas");
+var mergedCanvas = document.getElementById("mergedCanvas");
+var bgCtx;
+var cropCtx;
+var imgCtx;
+var lineCtx;
+var mergedCtx;
+
 var img = new Image();
 var frameSize = "";
 var tileMargin = 10;
+var horizontalOffset = 0;
+var verticalOffset = 0;
     
 $(document).ready(function() {
     fileChooser();
@@ -207,7 +237,11 @@ $(document).ready(function() {
     
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     
-    ctx = myCanvas.getContext("2d");
+    bgCtx = bgCanvas.getContext("2d");
+    imgCtx = imgCanvas.getContext("2d");
+    cropCtx = cropCanvas.getContext("2d");
+    lineCtx = lineCanvas.getContext("2d");
+    mergedCtx = mergedCanvas.getContext("2d");
     
     $("#sample-photo-link").click(function(e) {
         e.preventDefault();
@@ -225,9 +259,8 @@ $(document).ready(function() {
     };
 
     $("input").click(queueRenderPreview);
-    $("input").change(queueRenderPreview);
+    $("input, .span-slider").change(queueRenderPreview);
     $("input").keyup(queueRenderPreview);
-    $(".span-slider").change(queueRenderPreview);
     $("#radio-cm, #radio-inches").change(renderPreview);
     
     $("#img-upload").click(uploadImage);
@@ -239,7 +272,51 @@ $(document).ready(function() {
         $('#debugging').show();
     }
     
+    $("#radio-fill,#radio-fit,#radio-crop,#radio-tile,#select-preset,#frame-width,#frame-height").change(resetOffsets);
+    
+    $("#img-img-preview").draggable({ 
+        start: function(e, ui) {
+            $("div.img-preview").css("width", $("#bg-img-preview").width() + "px");
+            horizontalOffset = parseInt($('#horizontal-offset').val());
+            verticalOffset = parseInt($('#vertical-offset').val());
+        },
+        drag: function(e, ui) {
+            var topDelta = ui.position.top - ui.originalPosition.top;
+            var leftDelta = ui.position.left - ui.originalPosition.left;
+            var dragScale = parseInt($("#imgCanvas").attr("height")) / $("#img-img-preview").height();
+            topDelta *= dragScale;
+            leftDelta *= dragScale;
+            $('#horizontal-offset').val(horizontalOffset + leftDelta);
+            $('#vertical-offset').val(verticalOffset + topDelta);
+        },
+        stop: function(e, ui) {
+            var topDelta = ui.position.top - ui.originalPosition.top;
+            var leftDelta = ui.position.left - ui.originalPosition.left;
+            
+            var dragScale = parseInt($("#imgCanvas").attr("height")) / $("#img-img-preview").height();
+            topDelta *= dragScale;
+            leftDelta *= dragScale;
+            
+            horizontalOffset += leftDelta;
+            verticalOffset += topDelta;
+            
+            $('#horizontal-offset').val(horizontalOffset);
+            $('#vertical-offset').val(verticalOffset);
+            $('#horizontal-offset, #vertical-offset').slider('refresh');
+        }
+    });
+    
+    $(window).resize(function() {
+        queueRenderPreview();
+    });
+    
 });
+
+function resetOffsets() {
+    $('#horizontal-offset').val(0);
+    $('#vertical-offset').val(0);
+    $('#horizontal-offset, #vertical-offset').slider('refresh');
+}
 
 function handleFileSelect(evt) {
     var files = evt.target.files; // FileList object
@@ -279,7 +356,7 @@ function drawImage(settings) {
     if (getZooming() == 'TILE') {
         drawTiledImage(settings);
     } else {
-        ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth, settings.destinationHeight);
+        imgCtx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth, settings.destinationHeight);
     }
 }
 
@@ -288,7 +365,7 @@ function drawTiledImage(settings) {
     while ((tempFrameY + (settings.frameHeightPx - 1)) < settings.canvasHeight) {
         var tempFrameX = settings.tileMargin;
         while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
-            ctx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, tempFrameX, tempFrameY, settings.destinationWidth, settings.destinationHeight);
+            imgCtx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, tempFrameX, tempFrameY, settings.destinationWidth, settings.destinationHeight);
             tempFrameX += (settings.frameWidthPx - 1) + settings.tileMargin;
         }
         tempFrameY += (settings.frameHeightPx - 1) + settings.tileMargin;
@@ -337,19 +414,26 @@ function drawHorizontalLine(y, settings) {
 }
 
 function drawLine(x1, y1, x2, y2) {
-    ctx.moveTo(x1 + 0.5, y1 + 0.5);
-    ctx.lineTo(x2 + 0.5, y2 + 0.5);
-    ctx.stroke();
+    lineCtx.moveTo(x1 + 0.5, y1 + 0.5);
+    lineCtx.lineTo(x2 + 0.5, y2 + 0.5);
+    lineCtx.stroke();
+}
+
+function drawCropMask(canvasWidth, canvasHeight, x1, y1, windowWidth, windowHeight) {
+    cropCtx.fillStyle="#dddddd";
+    cropCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+    
+    // Cutout rectangle
+    cropCtx.clearRect(x1, y1, windowWidth, windowHeight);
 }
 
 function renderPreview() {
     var jpegData = calculate(dpiRender);
-    $("#img-preview").attr("src", jpegData);
+    return jpegData;
 }
 
 function renderFull() {
     var jpegData = calculate(dpiFull);
-    $("#img-preview").attr("src", jpegData);
     $.mobile.showPageLoadingMsg();
     return jpegData;
 }
@@ -367,41 +451,101 @@ function downloadImpl() {
 
 function calculate(dpi) {
     $.mobile.showPageLoadingMsg();
+    var previousWidth = parseInt($("#bg-img-preview").width()); 
     updateTextAndControls();
     
     var settings = calculateSettings(dpi);
     $("canvas").attr("width", settings.canvasWidth);
     $("canvas").attr("height", settings.canvasHeight);
       
-    ctx.fillStyle="#dddddd";
-    ctx.fillRect(0, 0, settings.canvasWidth, settings.canvasHeight);
+    bgCtx.fillStyle="#dddddd";
+    bgCtx.fillRect(0, 0, settings.canvasWidth, settings.canvasHeight);
     
     var drawGuides = !$("#radio-guides-off").attr('checked');
-    var guidesOnTop = drawGuides && $("#radio-guides-on-top").attr('checked');
-    var guidesOnBottom = drawGuides && $("#radio-guides-on-bottom").attr('checked');
     
-    if (guidesOnBottom) {
+    if (drawGuides) {
         drawGuidelines(settings);
     }
     drawImage(settings);
-    if (guidesOnTop) {
-        drawGuidelines(settings);
-    }
-
-    var jpegData = myCanvas.toDataURL('image/jpeg');
+    drawCropMask(settings.canvasWidth, settings.canvasHeight, settings.frameX, settings.frameY, settings.frameWidthPx, settings.frameHeightPx);
     
-    $("#img-preview").attr("src", jpegData);
+    mergedCtx.drawImage(bgCanvas,0,0);
+
+    mergedCtx.drawImage(imgCanvas,0,0);
+    if (getZooming() == 'CROP') {
+        if ($("#crop-img-preview").next()[0] == $("#img-img-preview")[0]) {
+            // only swap layers and repaint if necessary
+            $("#crop-img-preview").before($("#img-img-preview"));
+            repositionImages();
+        }
+        mergedCtx.drawImage(cropCanvas,0,0);
+    } else {
+        if ($("#img-img-preview").next()[0] == $("#crop-img-preview")[0]) {
+            // only swap layers and repaint if necessary
+            $("#img-img-preview").before($("#crop-img-preview"));
+            repositionImages();
+        }
+    }
+    if (drawGuides) {
+        mergedCtx.drawImage(lineCanvas,0,0);
+    }
+    var mergedJpegData = mergedCanvas.toDataURL('image/jpeg');
+    
+    $("#bg-img-preview").attr("src", bgCanvas.toDataURL('image/png'));
+    
+
+    
+    updateImgPreviewSize();
+    $('#bg-img-preview').load(function() {
+        updateImgPreviewSize();
+    });
+    
+    $("#img-img-preview").attr("src", imgCanvas.toDataURL('image/png'));
+    $("#crop-img-preview").attr("src", cropCanvas.toDataURL('image/png'));
+    $("#line-img-preview").attr("src", lineCanvas.toDataURL('image/png'));
+
+    $('#img-img-preview, #crop-img-preview, #line-img-preview').load(repositionImages);
+    
+    $("#horizontal-offset").attr("max", $("#bg-img-preview").width());
+    $("#horizontal-offset").attr("min", -$("#bg-img-preview").width());
+    $("#vertical-offset").attr("max", $("#bg-img-preview").height());
+    $("#vertical-offset").attr("min", -$("#bg-img-preview").height());
+    
     $.mobile.hidePageLoadingMsg();
-    return jpegData;
+    
+    // TODO: Not sure this hack is needed anymore...
+    var currentWidth = parseInt($("#bg-img-preview").width());
+    if (previousWidth != currentWidth) {
+        queueRenderPreview();
+    }
+    
+    return mergedJpegData;
+}
+
+function updateImgPreviewSize() {
+    $("div.img-preview").css("width", "100%");
+    $("div.img-preview").css("height", $("#bg-img-preview").height() + "px");
+}
+
+function repositionImages() {
+    $("#img-img-preview, #crop-img-preview, #line-img-preview").position({
+      my: "left top",
+      at: "left top",
+      of: "#bg-img-preview"
+    });
 }
 
 function calculateSettings(dpi) {
+    var dpiFactor = (dpi/100);
+    var hOffset = getHorizontalOffset() * dpiFactor;
+    var vOffset = getVerticalOffset() * dpiFactor;
+
     var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
-    settings.tileMargin = tileMargin * (dpi/100);
+    settings.tileMargin = tileMargin * dpiFactor;
     settings = calculateCanvasSize(settings.printWidth, settings.printHeight, dpi, settings);
     settings = calculateFramePixelSize(getFrameWidthInInches(), getFrameHeightInInches(), dpi, settings);
     settings = calculateFrameXY(settings.canvasWidth, settings.canvasHeight, settings.frameWidthPx, settings.frameHeightPx, settings);
-    settings = calculateDestination(getZooming(), settings.frameWidthPx, settings.frameHeightPx, settings.frameX, settings.frameY, img.width, img.height, settings);
+    settings = calculateDestination(getZooming(), settings.frameWidthPx, settings.frameHeightPx, settings.frameX, settings.frameY, img.width, img.height, hOffset, vOffset, settings);
 
     return settings;
 }
@@ -431,7 +575,6 @@ function uploadImageImpl() {
                 window.location.href = "/error?message=Failed+to+upload+image.";
             }
     );
-    
 }
 
 function uploadDownloadImage() {

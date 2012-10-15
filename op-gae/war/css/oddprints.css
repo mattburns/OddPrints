@@ -85,10 +85,23 @@ table * {
     padding-right: 0px;
 }
 
-#img-preview {
-    max-width: 600px;
+img {
     max-width: 100%;
-    border: 1px solid #999;
+}
+
+div.img-preview {
+    overflow: hidden;
+}
+
+.img-preview img {
+    max-width: 100%;
+    position: relative;
+}
+
+#bg-img-preview,
+#crop-img-preview,
+#line-img-preview {
+    pointer-events:none;
 }
 
 .order-details {
@@ -136,14 +149,13 @@ dt {
 }
 
 #slider-code {
-    min-height: 165px;
     overflow: hidden;
 }
 
 #slider-code .viewport {
     float: left;
     width: 100%;
-    min-height: 140px;
+    min-height: 165px;
     overflow: hidden;
     position: relative;
 }
@@ -175,7 +187,7 @@ dt {
     float: left;
     margin: 0px 40px 0px 0px;
     padding: 1px;
-    min-height: 121px;
+    min-height: 152px;
     border: 5px solid #dcdcdc;
     border-left: 0px;
     border-right: 0px;
@@ -184,6 +196,12 @@ dt {
 #slider-code .overview li img {
     float: right;
     margin-top: 20px;
+}
+
+#slider-code .overview li p
+{
+    /* Bit of a hack to indent text when line wraps on mobile screens */
+    padding-left: 71px; 
 }
 
 #slider-code .pager {
@@ -215,3 +233,4 @@ dt {
     color: #fff;
     background-color: #555555;
 }
+
