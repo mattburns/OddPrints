@@ -290,7 +290,6 @@ $(document).ready(function() {
     $("#radio-fill,#radio-fit,#radio-crop,#radio-tile,#select-preset,#frame-width,#frame-height").change(resetOffsets);
 
     $('#img-img-preview').mousewheel(function(event, delta, deltaX, deltaY) {
-        console.log(delta, deltaX, deltaY);
         switch (delta) {
             case (-1) :
                 zoomOut();
@@ -304,26 +303,31 @@ $(document).ready(function() {
     });
     
     $(document).keydown(function(e){
-        switch(e.which) {
-            case 37: // left
-                pan(-1, 0);
-            break;
-
-            case 38: // up
-                pan(0, -1);
-            break;
-
-            case 39: // right
-                pan(1, 0);
-            break;
-
-            case 40: // down
-                pan(0, 1);
-            break;
-
-            default: return; // exit this handler for other keys
+        console.log($( document.activeElement )); 
+        if ($(document.activeElement).is(".ui-input-text,input")) {
+            return;
+        } else {
+	        switch(e.which) {
+	            case $.ui.keyCode.LEFT:
+	                pan(-1, 0);
+	            break;
+	
+	            case $.ui.keyCode.UP:
+	                pan(0, -1);
+	            break;
+	
+	            case $.ui.keyCode.RIGHT:
+	                pan(1, 0);
+	            break;
+	
+	            case $.ui.keyCode.DOWN:
+	                pan(0, 1);
+	            break;
+	
+	            default: return; // exit this handler for other keys
+	        }
+	        e.preventDefault();
         }
-        e.preventDefault();
     });
     
     $("#img-img-preview").draggable({ 
