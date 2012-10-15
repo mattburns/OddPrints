@@ -35,7 +35,7 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>v.8 - <em>in progress</em></h2>
+        <h2>v.8 - 2012/10/15</h2>
         <ul>
             <li>Image panning and zooming.</li>
         </ul>
