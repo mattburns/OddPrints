@@ -307,26 +307,26 @@ $(document).ready(function() {
         if ($(document.activeElement).is(".ui-input-text,input")) {
             return;
         } else {
-	        switch(e.which) {
-	            case $.ui.keyCode.LEFT:
-	                pan(-1, 0);
-	            break;
-	
-	            case $.ui.keyCode.UP:
-	                pan(0, -1);
-	            break;
-	
-	            case $.ui.keyCode.RIGHT:
-	                pan(1, 0);
-	            break;
-	
-	            case $.ui.keyCode.DOWN:
-	                pan(0, 1);
-	            break;
-	
-	            default: return; // exit this handler for other keys
-	        }
-	        e.preventDefault();
+            switch(e.which) {
+                case $.ui.keyCode.LEFT:
+                    pan(-1, 0);
+                break;
+    
+                case $.ui.keyCode.UP:
+                    pan(0, -1);
+                break;
+    
+                case $.ui.keyCode.RIGHT:
+                    pan(1, 0);
+                break;
+    
+                case $.ui.keyCode.DOWN:
+                    pan(0, 1);
+                break;
+    
+                default: return; // exit this handler for other keys
+            }
+            e.preventDefault();
         }
     });
     
