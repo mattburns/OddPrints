@@ -30,6 +30,8 @@ limitations under the License.
 </jsp:include>
 <body>
 
+<script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
+
 <div data-role="page" id="page-upload">
 
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
@@ -260,18 +262,10 @@ $(document).ready(function() {
     });
     
     $(".zoom-in-button").click(function(e) {
-        var zoomFactor = getZoomFactor();
-        zoomFactor += 0.1;
-        $('#zoom-factor').val(zoomFactor.toFixed(1));
-        $('#zoom-factor').slider('refresh');
-        queueRenderPreview();
+        zoomIn();
     });
     $(".zoom-out-button").click(function(e) {
-        var zoomFactor = getZoomFactor();
-        zoomFactor -= 0.1;
-        $('#zoom-factor').val(zoomFactor.toFixed(1));
-        $('#zoom-factor').slider('refresh');
-        queueRenderPreview();
+        zoomOut();
     });
     
     img.src = "images/grey.jpg";
@@ -295,11 +289,48 @@ $(document).ready(function() {
     
     $("#radio-fill,#radio-fit,#radio-crop,#radio-tile,#select-preset,#frame-width,#frame-height").change(resetOffsets);
 
+    $('#img-img-preview').mousewheel(function(event, delta, deltaX, deltaY) {
+        console.log(delta, deltaX, deltaY);
+        switch (delta) {
+            case (-1) :
+                zoomOut();
+                break;
+            case (1) :
+                zoomIn();
+                break;
+        }
+        event.stopPropagation();
+        event.preventDefault();
+    });
+    
+    $(document).keydown(function(e){
+        switch(e.which) {
+            case 37: // left
+                pan(-1, 0);
+            break;
+
+            case 38: // up
+                pan(0, -1);
+            break;
+
+            case 39: // right
+                pan(1, 0);
+            break;
+
+            case 40: // down
+                pan(0, 1);
+            break;
+
+            default: return; // exit this handler for other keys
+        }
+        e.preventDefault();
+    });
+    
     $("#img-img-preview").draggable({ 
         start: function(e, ui) {
             $("div.img-preview").css("width", $("#bg-img-preview").width() + "px");
-            horizontalOffset = parseInt($('#horizontal-offset').val());
-            verticalOffset = parseInt($('#vertical-offset').val());
+            horizontalOffset = getHorizontalOffset();
+            verticalOffset = getVerticalOffset();
         },
         drag: function(e, ui) {
             var topDelta = ui.position.top - ui.originalPosition.top;
@@ -333,6 +364,26 @@ $(document).ready(function() {
     });
     
 });
+
+function zoomIn() {
+    zoom(0.1);
+}
+function zoomOut() {
+    zoom(-0.1);
+}
+function zoom(delta) {
+	var zoomFactor = getZoomFactor();
+	zoomFactor += delta;
+	$('#zoom-factor').val(zoomFactor.toFixed(1));
+	$('#zoom-factor').slider('refresh');
+	queueRenderPreview();
+}
+
+function pan(xDelta, yDelta) {
+	$('#horizontal-offset').val(getHorizontalOffset() + xDelta);
+	$('#vertical-offset').val(getVerticalOffset() + yDelta);
+	$('#horizontal-offset, #vertical-offset').slider('refresh');
+}
 
 function resetOffsets() {
     $('#horizontal-offset').val(0);
