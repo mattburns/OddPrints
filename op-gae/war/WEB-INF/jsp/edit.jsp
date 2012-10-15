@@ -372,17 +372,17 @@ function zoomOut() {
     zoom(-0.1);
 }
 function zoom(delta) {
-	var zoomFactor = getZoomFactor();
-	zoomFactor += delta;
-	$('#zoom-factor').val(zoomFactor.toFixed(1));
-	$('#zoom-factor').slider('refresh');
-	queueRenderPreview();
+    var zoomFactor = getZoomFactor();
+    zoomFactor += delta;
+    $('#zoom-factor').val(zoomFactor.toFixed(1));
+    $('#zoom-factor').slider('refresh');
+    queueRenderPreview();
 }
 
 function pan(xDelta, yDelta) {
-	$('#horizontal-offset').val(getHorizontalOffset() + xDelta);
-	$('#vertical-offset').val(getVerticalOffset() + yDelta);
-	$('#horizontal-offset, #vertical-offset').slider('refresh');
+    $('#horizontal-offset').val(getHorizontalOffset() + xDelta);
+    $('#vertical-offset').val(getVerticalOffset() + yDelta);
+    $('#horizontal-offset, #vertical-offset').slider('refresh');
 }
 
 function resetOffsets() {
