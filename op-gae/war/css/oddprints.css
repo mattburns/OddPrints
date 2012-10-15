@@ -104,6 +104,25 @@ div.img-preview {
     pointer-events:none;
 }
 
+.zoom-in-button {
+    background: url("/images/zoom-in.png") no-repeat 0 0;
+}
+.zoom-out-button {
+    background: url("/images/zoom-out.png") no-repeat 0 0;
+}
+
+.zoom-in-button, .zoom-out-button {
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    position: relative;
+}
+
+.zoom-off {
+    background-position: 0 100%;
+    cursor: default;
+}
+
 .order-details {
     line-height: 22px;
 }

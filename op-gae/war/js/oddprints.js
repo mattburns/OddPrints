@@ -168,26 +168,42 @@ function calculateDestination(zooming, frameWidthPx, frameHeightPx, frameX, fram
             settings.destinationX = frameX;
             settings.destinationY = frameY;
                         
-            settings.sourceX -= horizontalOffset*2;
-            settings.sourceY -= verticalOffset*2;
+            var scaleRatio = (settings.sourceWidth / settings.destinationWidth) / getZoomFactor();
+            settings.sourceX -= horizontalOffset * scaleRatio;
+            settings.sourceY -= verticalOffset * scaleRatio;
+
+            settings.sourceWidth = settings.sourceWidth / getZoomFactor();
+            settings.sourceHeight = settings.sourceHeight / getZoomFactor();
             
             if (settings.sourceX < 0) {
-                settings.destinationX -= settings.sourceX/2;
+                var excess = settings.sourceX / scaleRatio;
+                $('#horizontal-offset').val(horizontalOffset + excess);
+                settings.destinationX -= excess;
                 settings.sourceX = 0;
+                repositionImages();
             }
             if (settings.sourceY < 0) {
-                settings.destinationY -= settings.sourceY/2;
+                var excess = settings.sourceY / scaleRatio;
+                $('#vertical-offset').val(verticalOffset + excess);
+                settings.destinationY -= excess;
                 settings.sourceY = 0;
+                repositionImages();
             }
             var extraX = imageWidth - settings.sourceWidth;
             if (settings.sourceX > extraX) {
-                settings.destinationX -= (settings.sourceX - extraX)/2;
+                var excess = (settings.sourceX - extraX) / scaleRatio;
+                $('#horizontal-offset').val(horizontalOffset + excess);
+                settings.destinationX -= excess;
                 settings.sourceX = extraX;
+                repositionImages();
             }
             var extraY = imageHeight - settings.sourceHeight;
             if (settings.sourceY > extraY) {
-                settings.destinationY -= (settings.sourceY - extraY)/2;
+                var excess = (settings.sourceY - extraY) / scaleRatio;
+                $('#vertical-offset').val(verticalOffset + excess);
+                settings.destinationY -= excess;
                 settings.sourceY = extraY;
+                repositionImages();
             }
 
             break;
@@ -233,6 +249,10 @@ function getHorizontalOffset() {
 
 function getVerticalOffset() {
     return parseFloat($("#vertical-offset").val());
+}
+
+function getZoomFactor() {
+    return parseFloat($("#zoom-factor").val()) || 1;
 }
 
 function getFrameWidth() {
@@ -395,7 +415,7 @@ function handlePresetSelect(evt) {
             $('#radio-inches').attr('checked', true);
             $('#radio-fill').attr('checked', true);
             $('#radio-orient-auto').attr('checked', true);
-            $('#radio-guides-top').attr('checked', true);
+            $('#radio-guides-on').attr('checked', true);
             $("input[type='radio']").checkboxradio("refresh");
             tileMargin = 11;
             break;

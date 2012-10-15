@@ -79,6 +79,8 @@ limitations under the License.
                     <img id="img-img-preview" src="" />
                     <img id="crop-img-preview" src="" />
                     <img id="line-img-preview" src="" />
+                    <div class="zoom-in-button"></div>
+                    <div class="zoom-out-button"></div>
                 </div>
                 
                 <div class="text-align-right">
@@ -163,6 +165,10 @@ limitations under the License.
                         <span class="span-slider"><input data-mini="true" type="range" name="slider" id="horizontal-offset" value="0" step="1" min="-300" max="300" data-highlight="true"/></span>
                         <label for="vertical-offset">Vertical offset:</label>
                         <span class="span-slider"><input data-mini="true" type="range" name="slider" id="vertical-offset" value="0" step="1" min="-200" max="200" data-highlight="true"/></span>
+                    </div>
+                    <div data-role="fieldcontain" title="Zoom factor">
+                        <label for="zoom-factor">Zoom factor:</label>
+                        <span class="span-slider"><input data-mini="true" type="range" name="slider" id="zoom-factor" value="1" step="0.1" min="0.1" max="10" data-highlight="true"/></span>
                     </div>
                 </div>
                 
@@ -252,10 +258,25 @@ $(document).ready(function() {
         e.preventDefault();
         fileChooser();
     });
-
+    
+    $(".zoom-in-button").click(function(e) {
+        var zoomFactor = getZoomFactor();
+        zoomFactor += 0.1;
+        $('#zoom-factor').val(zoomFactor.toFixed(1));
+        $('#zoom-factor').slider('refresh');
+        queueRenderPreview();
+    });
+    $(".zoom-out-button").click(function(e) {
+        var zoomFactor = getZoomFactor();
+        zoomFactor -= 0.1;
+        $('#zoom-factor').val(zoomFactor.toFixed(1));
+        $('#zoom-factor').slider('refresh');
+        queueRenderPreview();
+    });
+    
     img.src = "images/grey.jpg";
-    img.onload = function(){
-        queueRenderPreview();  
+    img.onload = function() {
+        queueRenderPreview();
     };
 
     $("input").click(queueRenderPreview);
@@ -273,7 +294,7 @@ $(document).ready(function() {
     }
     
     $("#radio-fill,#radio-fit,#radio-crop,#radio-tile,#select-preset,#frame-width,#frame-height").change(resetOffsets);
-    
+
     $("#img-img-preview").draggable({ 
         start: function(e, ui) {
             $("div.img-preview").css("width", $("#bg-img-preview").width() + "px");
@@ -308,6 +329,7 @@ $(document).ready(function() {
     
     $(window).resize(function() {
         queueRenderPreview();
+        repositionImages();
     });
     
 });
@@ -315,7 +337,8 @@ $(document).ready(function() {
 function resetOffsets() {
     $('#horizontal-offset').val(0);
     $('#vertical-offset').val(0);
-    $('#horizontal-offset, #vertical-offset').slider('refresh');
+    $('#zoom-factor').val(1);
+    $('#horizontal-offset, #vertical-offset, #zoom-factor').slider('refresh');
 }
 
 function handleFileSelect(evt) {
@@ -350,13 +373,14 @@ function loadFile(file) {
 function loadFileUrl(url) {
     img.src = url;
     fileChosen();
+    resetOffsets();
 }
 
 function drawImage(settings) {
     if (getZooming() == 'TILE') {
         drawTiledImage(settings);
     } else {
-        imgCtx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth, settings.destinationHeight);
+        imgCtx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth * getZoomFactor(), settings.destinationHeight * getZoomFactor());
     }
 }
 
@@ -427,6 +451,22 @@ function drawCropMask(canvasWidth, canvasHeight, x1, y1, windowWidth, windowHeig
     cropCtx.clearRect(x1, y1, windowWidth, windowHeight);
 }
 
+function drawTiledCropMask(canvasWidth, canvasHeight, settings) {
+    cropCtx.fillStyle="#dddddd";
+    cropCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+    
+    var tempFrameY = settings.tileMargin;
+    while ((tempFrameY + (settings.frameHeightPx - 1)) < settings.canvasHeight) {
+        var tempFrameX = settings.tileMargin;
+        while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
+            // Cutout rectangle
+            cropCtx.clearRect(tempFrameX, tempFrameY, settings.destinationWidth, settings.destinationHeight);
+            tempFrameX += (settings.frameWidthPx - 1) + settings.tileMargin;
+        }
+        tempFrameY += (settings.frameHeightPx - 1) + settings.tileMargin;
+    }
+}
+
 function renderPreview() {
     var jpegData = calculate(dpiRender);
     return jpegData;
@@ -451,7 +491,6 @@ function downloadImpl() {
 
 function calculate(dpi) {
     $.mobile.showPageLoadingMsg();
-    var previousWidth = parseInt($("#bg-img-preview").width()); 
     updateTextAndControls();
     
     var settings = calculateSettings(dpi);
@@ -467,12 +506,29 @@ function calculate(dpi) {
         drawGuidelines(settings);
     }
     drawImage(settings);
-    drawCropMask(settings.canvasWidth, settings.canvasHeight, settings.frameX, settings.frameY, settings.frameWidthPx, settings.frameHeightPx);
+    if (getZooming() == 'TILE') {
+        drawTiledCropMask(settings.canvasWidth, settings.canvasHeight, settings);
+        $("#zoom-factor").attr("min", "1");
+    } else {
+        drawCropMask(settings.canvasWidth, settings.canvasHeight, settings.frameX, settings.frameY, settings.frameWidthPx, settings.frameHeightPx);
+        $("#zoom-factor").attr("min", "0.1");        
+    }
+    
+    if ($("#zoom-factor").attr("min") == getZoomFactor()) {
+        $(".zoom-out-button").addClass("zoom-off");
+    } else {
+        $(".zoom-out-button").removeClass("zoom-off");
+    }
+    if ($("#zoom-factor").attr("max") == $("#zoom-factor").val()) {
+        $(".zoom-in-button").addClass("zoom-off");
+    } else {
+        $(".zoom-in-button").removeClass("zoom-off");
+    }
     
     mergedCtx.drawImage(bgCanvas,0,0);
 
     mergedCtx.drawImage(imgCanvas,0,0);
-    if (getZooming() == 'CROP') {
+    if (getZooming() == 'CROP' || getZooming() == 'TILE') {
         if ($("#crop-img-preview").next()[0] == $("#img-img-preview")[0]) {
             // only swap layers and repaint if necessary
             $("#crop-img-preview").before($("#img-img-preview"));
@@ -493,8 +549,6 @@ function calculate(dpi) {
     
     $("#bg-img-preview").attr("src", bgCanvas.toDataURL('image/png'));
     
-
-    
     updateImgPreviewSize();
     $('#bg-img-preview').load(function() {
         updateImgPreviewSize();
@@ -506,18 +560,12 @@ function calculate(dpi) {
 
     $('#img-img-preview, #crop-img-preview, #line-img-preview').load(repositionImages);
     
-    $("#horizontal-offset").attr("max", $("#bg-img-preview").width());
-    $("#horizontal-offset").attr("min", -$("#bg-img-preview").width());
-    $("#vertical-offset").attr("max", $("#bg-img-preview").height());
-    $("#vertical-offset").attr("min", -$("#bg-img-preview").height());
+    $("#horizontal-offset").attr("max", $("#bg-img-preview").width() * getZoomFactor());
+    $("#horizontal-offset").attr("min", -$("#bg-img-preview").width() * getZoomFactor());
+    $("#vertical-offset").attr("max", $("#bg-img-preview").height() * getZoomFactor());
+    $("#vertical-offset").attr("min", -$("#bg-img-preview").height() * getZoomFactor());
     
     $.mobile.hidePageLoadingMsg();
-    
-    // TODO: Not sure this hack is needed anymore...
-    var currentWidth = parseInt($("#bg-img-preview").width());
-    if (previousWidth != currentWidth) {
-        queueRenderPreview();
-    }
     
     return mergedJpegData;
 }
@@ -532,6 +580,22 @@ function repositionImages() {
       my: "left top",
       at: "left top",
       of: "#bg-img-preview"
+    });
+    repositionZoomControls();
+}
+
+function repositionZoomControls() {
+    $(".zoom-in-button").position({
+        my: "left+10px top+10px",
+        at: "left top",
+        of: "#img-preview",
+        within: "#img-preview"
+    });
+    $(".zoom-out-button").position({
+        my: "left top+10px",
+        at: "left bottom",
+        of: ".zoom-in-button",
+        within: "#img-preview"
     });
 }
 
