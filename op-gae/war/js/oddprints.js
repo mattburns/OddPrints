@@ -368,7 +368,7 @@ function isFileInputSupported() {
 }
 
 function handlePresetSelect(evt) {
-    switch (evt.srcElement.value) {
+    switch ($("#select-preset option:selected").val()) {
         case ('canada') :
             $('#frame-width').val("5");
             $('#frame-height').val("7");
