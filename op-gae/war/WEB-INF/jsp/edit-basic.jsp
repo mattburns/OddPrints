@@ -201,7 +201,7 @@ function renderPreview() {
 
     var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95/" + $("#background").val().replace("#", "");
     var previewImageUrl = "/transformer/" + dpiRender + urlEnding + "/" + tileMargin;
-    var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "/" + (tileMargin*3) + "?download=true";
+    var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "/" + parseInt(tileMargin*(dpiFull/dpiRender)) + "?download=true";
     
     $("#img-preview").attr("src", previewImageUrl);
     $("#img-download").attr("href", finalImageUrl);
@@ -231,7 +231,7 @@ function uploadImage() {
          outputEncoding: 'JPEG',
          quality: 95,
          backgroundColor: $("#background").val().replace("#",""),
-         tileMargin: tileMargin*3,
+         tileMargin: parseInt(tileMargin*(dpiFull/dpiRender)),
          frameSize: frameSizeString(),
          printWidth: settings.printWidth,
          printHeight: settings.printHeight

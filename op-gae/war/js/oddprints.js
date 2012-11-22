@@ -412,7 +412,7 @@ function handlePresetSelect(evt) {
             $('#radio-orient-landscape').attr('checked', true);
             $('#radio-guides-off').attr('checked', true);
             $("input[type='radio']").checkboxradio("refresh");
-            t$('#tile-margin').val("11");
+            $('#tile-margin').val("11");
             break;
         case ('us') :
             $('#frame-width').val("2");

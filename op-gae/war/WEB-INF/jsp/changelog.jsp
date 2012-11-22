@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.10 - 2012/11/22</h2>
+        <ul>
+            <li>Fixed bug with margin on UK passport photos in basic mode.</li>
+        </ul>
         <h2>v.9 - 2012/11/22</h2>
         <ul>
             <li>Fixed bug that sometimes corrupted images > 1MB in basic bode.</li>
