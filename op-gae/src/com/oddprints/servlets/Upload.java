@@ -126,6 +126,7 @@ public class Upload {
             @FormParam("orientation") Orientation orientation,
             @FormParam("outputEncoding") OutputEncoding outputEncoding,
             @FormParam("quality") int quality,
+            @FormParam("backgroundColor") String backgroundColor,
             @FormParam("tileMargin") int tileMargin,
             @FormParam("frameSize") String frameSize,
             @FormParam("printWidth") int printWidth,
@@ -140,7 +141,7 @@ public class Upload {
         ImageTransformer it = new ImageTransformer();
         Image image = it.generateOddPrint(blobKeyString, blobSize, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation,
-                outputEncoding, quality, tileMargin);
+                outputEncoding, quality, backgroundColor, tileMargin);
 
         byte[] bytes = image.getImageData();
         BlobKey oddPrintBlobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);

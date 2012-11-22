@@ -45,7 +45,7 @@ public enum ImageBlobStore {
                     BlobstoreService.MAX_BLOB_FETCH_SIZE - 1, amountLeftToRead);
 
             byte[] chunkOfBytes = blobStoreService.fetchData(blobKey,
-                    startIndex, startIndex + amountToReadNow);
+                    startIndex, startIndex + amountToReadNow - 1);
 
             allTheBytes = ArrayUtils.addAll(allTheBytes, chunkOfBytes);
 

@@ -18,19 +18,22 @@ package com.oddprints;
 import uk.co.mattburns.pwinty.Photo;
 
 public enum PrintSize {
-    _4x6(4, 6, 50, Photo.Type._4x6), _5x7(5, 7, 140, Photo.Type._5x7), _8x10(8,
-            10, 300, Photo.Type._8x10);
+    _4x6(50), _5x7(140), _8x10(300), _8x12(300), _4x18(400);
 
     private final int height;
     private final int width;
     private final int price;
     private final Photo.Type pwintyType;
 
-    private PrintSize(int height, int width, int price, Photo.Type pwintyType) {
-        this.height = height;
-        this.width = width;
+    private PrintSize(int price) {
+        // Parse the name of this enum to get dimensions
+        String[] heightAndWidth = this.name().replaceFirst("_", "").split("x");
+
+        height = Integer.parseInt(heightAndWidth[0]);
+        width = Integer.parseInt(heightAndWidth[1]);
         this.price = price;
-        this.pwintyType = pwintyType;
+        // Enum name must match pwinty enum name
+        pwintyType = Photo.Type.valueOf(this.name());
     }
 
     public static PrintSize toPrintSize(int width, int height) {

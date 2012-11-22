@@ -92,6 +92,12 @@ limitations under the License.
                 and print it at 6"×4".</p>
                 <img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.png"/>
                 
+                <h3>Print stunning panoramas</h3>
+                <p>OddPrints now supports printing of panoramic photos.
+                If you choose to print with us, we offer printing at 18"×4",
+                the perfect ratio for iPhone photos, for just ${panoPrice}.</p>
+                <img style="box-shadow: 0px 0px 15px #222222;" src="/images/pano.jpg"/>
+                
                 <img class="osi-logo" src="/images/osi_standard_logo.png"/>
                 <h3>Free</h3>
                 <p>We believe in freedom. This site is free to use and the images you

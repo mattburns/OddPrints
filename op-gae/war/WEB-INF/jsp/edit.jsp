@@ -57,11 +57,17 @@ limitations under the License.
             <form action="#" method="get">
                 <div data-role="fieldcontain" title="Width of picture frame">
                     <label for="frame-width">Width:</label>
-                    <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="10" data-highlight="true"/></span>
+                    <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
                 </div>
                 <div data-role="fieldcontain" title="Height of picture frame">
                     <label for="frame-height">Height:</label>
-                    <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="8" data-highlight="true"/></span>
+                    <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
+                </div>
+                <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorInches">
+                    <p class="error-text">Frame too big. Maximum sizes are 18"×4", or 12"×8"</p>
+                </div>
+                <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorCm">
+                    <p class="error-text">Frame too big. Maximum sizes are 45cm×10cm, or 30cm×20cm</p>
                 </div>
                 
                 <div data-role="fieldcontain" title="Preset">
@@ -73,6 +79,16 @@ limitations under the License.
                         <option value="india" >Passport - India (35mm × 35mm)</option>
                         <option value="uk" >Passport - UK (35mm × 45mm)</option>
                         <option value="us" >Passport - US (2" × 2")</option>
+                        <option value="6x4" >Standard - 6"×4"</option>
+                        <option value="4x6" >Standard - 4"×6"</option>
+                        <option value="7x5" >Standard - 7"×5"</option>
+                        <option value="5x7" >Standard - 5"×7"</option>
+                        <option value="10x8" >Standard - 10"×8"</option>
+                        <option value="8x10" >Standard - 8"×10"</option>
+                        <option value="12x8" >Standard - 12"×8"</option>
+                        <option value="8x12" >Standard - 8"×12"</option>
+                        <option value="18x4" >Panoramic - 18"×4" (perfect for iPhone)</option>
+                        <option value="4x18" >Supertall - 4"×18" (perfect for iPhone)</option>
                     </select>
                 </div>
                 
@@ -164,13 +180,21 @@ limitations under the License.
                     </div>
                     <div data-role="fieldcontain" title="Image offset">
                         <label for="horizontal-offset">Horizontal offset:</label>
-                        <span class="span-slider"><input data-mini="true" type="range" name="slider" id="horizontal-offset" value="0" step="1" min="-300" max="300" data-highlight="true"/></span>
+                        <input data-mini="true" type="number" id="horizontal-offset" value="0" step="1" data-highlight="true"/>
                         <label for="vertical-offset">Vertical offset:</label>
-                        <span class="span-slider"><input data-mini="true" type="range" name="slider" id="vertical-offset" value="0" step="1" min="-200" max="200" data-highlight="true"/></span>
+                        <input data-mini="true" type="number" id="vertical-offset" value="0" step="1" data-highlight="true"/>
+                    </div>
+                    <div data-role="fieldcontain" title="Tile margin">
+                        <label for="tile-margin">Tile margin:</label>
+                        <span class="span-slider"><input data-mini="true" type="range" name="slider" id="tile-margin" value="0" step="1" min="0" max="200" data-highlight="true"/></span>
                     </div>
                     <div data-role="fieldcontain" title="Zoom factor">
                         <label for="zoom-factor">Zoom factor:</label>
                         <span class="span-slider"><input data-mini="true" type="range" name="slider" id="zoom-factor" value="1" step="0.1" min="0.1" max="10" data-highlight="true"/></span>
+                    </div>
+                    <div data-role="fieldcontain" title="Background">
+                        <label for="background">Background:</label>
+                        <input type="text" class="gray" id="background" value="#dddddd" data-highlight="true"/>
                     </div>
                 </div>
                 
@@ -231,11 +255,11 @@ var mergedCtx;
 
 var img = new Image();
 var frameSize = "";
-var tileMargin = 10;
 var horizontalOffset = 0;
 var verticalOffset = 0;
     
 $(document).ready(function() {
+    init();
     fileChooser();
     
     if (!isSupportedBrowser()) {
@@ -342,23 +366,11 @@ $(document).ready(function() {
             var dragScale = parseInt($("#imgCanvas").attr("height")) / $("#img-img-preview").height();
             topDelta *= dragScale;
             leftDelta *= dragScale;
-            $('#horizontal-offset').val(horizontalOffset + leftDelta);
-            $('#vertical-offset').val(verticalOffset + topDelta);
+            $('#horizontal-offset').val(parseInt(horizontalOffset + leftDelta));
+            $('#vertical-offset').val(parseInt(verticalOffset + topDelta));
         },
         stop: function(e, ui) {
-            var topDelta = ui.position.top - ui.originalPosition.top;
-            var leftDelta = ui.position.left - ui.originalPosition.left;
-            
-            var dragScale = parseInt($("#imgCanvas").attr("height")) / $("#img-img-preview").height();
-            topDelta *= dragScale;
-            leftDelta *= dragScale;
-            
-            horizontalOffset += leftDelta;
-            verticalOffset += topDelta;
-            
-            $('#horizontal-offset').val(horizontalOffset);
-            $('#vertical-offset').val(verticalOffset);
-            $('#horizontal-offset, #vertical-offset').slider('refresh');
+            queueRenderPreview();
         }
     });
     
@@ -386,14 +398,13 @@ function zoom(delta) {
 function pan(xDelta, yDelta) {
     $('#horizontal-offset').val(getHorizontalOffset() + xDelta);
     $('#vertical-offset').val(getVerticalOffset() + yDelta);
-    $('#horizontal-offset, #vertical-offset').slider('refresh');
 }
 
 function resetOffsets() {
     $('#horizontal-offset').val(0);
     $('#vertical-offset').val(0);
     $('#zoom-factor').val(1);
-    $('#horizontal-offset, #vertical-offset, #zoom-factor').slider('refresh');
+    $('#zoom-factor').slider('refresh');
 }
 
 function handleFileSelect(evt) {
@@ -499,7 +510,7 @@ function drawLine(x1, y1, x2, y2) {
 }
 
 function drawCropMask(canvasWidth, canvasHeight, x1, y1, windowWidth, windowHeight) {
-    cropCtx.fillStyle="#dddddd";
+    cropCtx.fillStyle = $("#background").val();
     cropCtx.fillRect(0, 0, canvasWidth, canvasHeight);
     
     // Cutout rectangle
@@ -507,7 +518,7 @@ function drawCropMask(canvasWidth, canvasHeight, x1, y1, windowWidth, windowHeig
 }
 
 function drawTiledCropMask(canvasWidth, canvasHeight, settings) {
-    cropCtx.fillStyle="#dddddd";
+    cropCtx.fillStyle = $("#background").val();;
     cropCtx.fillRect(0, 0, canvasWidth, canvasHeight);
     
     var tempFrameY = settings.tileMargin;
@@ -552,7 +563,7 @@ function calculate(dpi) {
     $("canvas").attr("width", settings.canvasWidth);
     $("canvas").attr("height", settings.canvasHeight);
       
-    bgCtx.fillStyle="#dddddd";
+    bgCtx.fillStyle = $("#background").val();
     bgCtx.fillRect(0, 0, settings.canvasWidth, settings.canvasHeight);
     
     var drawGuides = !$("#radio-guides-off").attr('checked');
@@ -615,11 +626,6 @@ function calculate(dpi) {
 
     $('#img-img-preview, #crop-img-preview, #line-img-preview').load(repositionImages);
     
-    $("#horizontal-offset").attr("max", $("#bg-img-preview").width() * getZoomFactor());
-    $("#horizontal-offset").attr("min", -$("#bg-img-preview").width() * getZoomFactor());
-    $("#vertical-offset").attr("max", $("#bg-img-preview").height() * getZoomFactor());
-    $("#vertical-offset").attr("min", -$("#bg-img-preview").height() * getZoomFactor());
-    
     $.mobile.hidePageLoadingMsg();
     
     return mergedJpegData;
@@ -660,7 +666,7 @@ function calculateSettings(dpi) {
     var vOffset = getVerticalOffset() * dpiFactor;
 
     var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
-    settings.tileMargin = tileMargin * dpiFactor;
+    settings.tileMargin = $("#tile-margin").val() * dpiFactor;
     settings = calculateCanvasSize(settings.printWidth, settings.printHeight, dpi, settings);
     settings = calculateFramePixelSize(getFrameWidthInInches(), getFrameHeightInInches(), dpi, settings);
     settings = calculateFrameXY(settings.canvasWidth, settings.canvasHeight, settings.frameWidthPx, settings.frameHeightPx, settings);

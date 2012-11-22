@@ -93,11 +93,9 @@ public class Edit {
         FileItemIterator iter = upload.getItemIterator(req);
         FileItemStream imageItem = iter.next();
         InputStream imgStream = imageItem.openStream();
-
         byte[] bytes = IOUtils.toByteArray(imgStream);
 
         BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
-
         req.getSession().setAttribute("blobKeyString", blobKey.getKeyString());
         req.getSession().setAttribute("blobSize", bytes.length + "");
         req.getSession().setAttribute("basicMode", Boolean.TRUE);

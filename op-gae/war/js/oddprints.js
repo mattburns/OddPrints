@@ -1,7 +1,22 @@
 var cmToInches = 0.393700787;
 // if you change these, consider tileMargin...
 var dpiRender = 100;
+// this is overridden in edit-basic due to max image constraints
 var dpiFull = 300;
+
+var availableSizes = [{w:6, h:4},
+                      {w:7, h:5},
+                      {w:10, h:8},
+                      {w:12, h:8},
+                      {w:18, h:4}];
+
+function init() {
+    $("#background").miniColors({
+        change: function(hex, rgba) {
+            queueRenderPreview();
+        }
+    });
+}
 
 function calculatePrintSize(frameWidthInInches, frameHeightInInches, orientation) {
     var settings = new Object();
@@ -13,36 +28,19 @@ function calculatePrintSize(frameWidthInInches, frameHeightInInches, orientation
             orientation = "LANDSCAPE";
         }
     }
-    
-    if (orientation === "PORTRAIT") {
-        settings.printWidth = 4;
-        settings.printHeight = 6;
-        if (frameWidthInInches > settings.printWidth || frameHeightInInches > settings.printHeight) {
-            settings.printWidth = 5;
-            settings.printHeight = 7;
+
+    for (var i = 0 ; i < availableSizes.length ; i++) {
+        var w = availableSizes[i].w;
+        var h = availableSizes[i].h;
+        if (orientation === "PORTRAIT") { // swap 'em
+            w = availableSizes[i].h;
+            h = availableSizes[i].w;
         }
-        if (frameWidthInInches > settings.printWidth || frameHeightInInches > settings.printHeight) {
-            settings.printWidth = 8;
-            settings.printHeight = 10;
-        }
-        if (frameWidthInInches > settings.printWidth || frameHeightInInches > settings.printHeight) {
-            settings.printWidth = 8;
-            settings.printHeight = 12;
-        }
-    } else {
-        settings.printWidth = 6;
-        settings.printHeight = 4;
-        if (frameWidthInInches > settings.printWidth || frameHeightInInches > settings.printHeight) {
-            settings.printWidth = 7;
-            settings.printHeight = 5;
-        }
-        if (frameWidthInInches > settings.printWidth || frameHeightInInches > settings.printHeight) {
-            settings.printWidth = 10;
-            settings.printHeight = 8;
-        }
-        if (frameWidthInInches > settings.printWidth || frameHeightInInches > settings.printHeight) {
-            settings.printWidth = 12;
-            settings.printHeight = 8;
+        if (frameWidthInInches <= w && frameHeightInInches <= h) {
+            // we done
+            settings.printWidth = w;
+            settings.printHeight = h;
+            break;
         }
     }
 
@@ -304,30 +302,44 @@ function isImageCurrentlyPortrait() {
     var height = img.clientHeight;
 }
 
+function checkPrintsizeAvailable(frameWidthInInches, frameHeightInInches, orientation) {
+    
+    var settings = calculatePrintSize(frameWidthInInches, frameHeightInInches, orientation);
+    
+    if (!settings.printWidth) {
+        if (getFrameUnits() === "cm") {
+            $("#PrintsizeErrorCm").show();
+        } else {
+            $("#PrintsizeErrorInches").show();
+        }
+    } else {
+        $("#PrintsizeErrorInches").hide();
+        $("#PrintsizeErrorCm").hide();
+    }
+}
+
 function restrictSliders() {
-    var maxFrameWidth = 10;
-    var maxFrameHeight = 8;
-    if (isImageCurrentlyPortrait()) {
-        maxFrameWidth = 8;
-        maxFrameHeight = 10;
+    var max = 0;
+
+    for (var i = 0 ; i < availableSizes.length ; i++) {
+        max = Math.max(max, availableSizes[i].h);
+        max = Math.max(max, availableSizes[i].w);
     }
     
-    var visibleMaxFrameWidth = maxFrameWidth;
-    var visibleMaxFrameHeight = maxFrameHeight;
+    var visibleMax = max;
     
     if (getFrameUnits() === "cm") {
-        visibleMaxFrameWidth = toCm(maxFrameWidth);
-        visibleMaxFrameHeight = toCm(maxFrameHeight);
+        visibleMax = toCm(max);
     }
     
-    $("#frame-width").attr("max", visibleMaxFrameWidth);
-    $("#frame-height").attr("max", visibleMaxFrameHeight);
+    $("#frame-width").attr("max", visibleMax);
+    $("#frame-height").attr("max", visibleMax);
     
-    if (getFrameWidth() > visibleMaxFrameWidth) {
-        $("#frame-width").val(visibleMaxFrameWidth);
+    if (getFrameWidth() > visibleMax) {
+        $("#frame-width").val(visibleMax);
     }
-    if (getFrameHeight() > visibleMaxFrameHeight) {
-        $("#frame-height").val(visibleMaxFrameHeight);
+    if (getFrameHeight() > visibleMax) {
+        $("#frame-height").val(visibleMax);
     }
 }
 
@@ -338,7 +350,7 @@ var renderTimeoutId = 0;
 function queueRenderPreview() {
     $.mobile.showPageLoadingMsg();
     $("#error-loading-preview").hide();
-    updateFrameHeader();
+    updateFrameHeader();    
     restrictSliders();
     clearTimeout(renderTimeoutId);
     
@@ -353,7 +365,10 @@ function queueRenderPreview() {
 function updateTextAndControls() {
     updateFrameHeader();
     var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
-    $("#print-size-text").html("Download and print at <span class='output-size'>" + settings.printWidth + "\"×" + settings.printHeight + "\"</span>");
+    if (settings.printWidth) {
+        $("#print-size-text").html("Download and print at <span class='output-size'>" + settings.printWidth + "\"×" + settings.printHeight + "\"</span>");
+    }
+    checkPrintsizeAvailable(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
     restrictSliders();
 }
 
@@ -377,7 +392,7 @@ function handlePresetSelect(evt) {
             $('#radio-orient-landscape').attr('checked', true);
             $('#radio-guides-off').attr('checked', true);
             $("input[type='radio']").checkboxradio("refresh");
-            tileMargin = 50;
+            $('#tile-margin').val("50");
             break;
         case ('india') :
             $('#frame-width').val("3.5");
@@ -387,7 +402,7 @@ function handlePresetSelect(evt) {
             $('#radio-orient-landscape').attr('checked', true);
             $('#radio-guides-off').attr('checked', true);
             $("input[type='radio']").checkboxradio("refresh");
-            tileMargin = 11;
+            $('#tile-margin').val("11");
             break;
         case ('uk') :
             $('#frame-width').val("3.5");
@@ -397,7 +412,7 @@ function handlePresetSelect(evt) {
             $('#radio-orient-landscape').attr('checked', true);
             $('#radio-guides-off').attr('checked', true);
             $("input[type='radio']").checkboxradio("refresh");
-            tileMargin = 11;
+            t$('#tile-margin').val("11");
             break;
         case ('us') :
             $('#frame-width').val("2");
@@ -407,7 +422,7 @@ function handlePresetSelect(evt) {
             $('#radio-orient-landscape').attr('checked', true);
             $('#radio-guides-off').attr('checked', true);
             $("input[type='radio']").checkboxradio("refresh");
-            tileMargin = 65;
+            $('#tile-margin').val("65");
             break;
         case ('custom') :
             $('#frame-width').val("4");
@@ -417,10 +432,24 @@ function handlePresetSelect(evt) {
             $('#radio-orient-auto').attr('checked', true);
             $('#radio-guides-on').attr('checked', true);
             $("input[type='radio']").checkboxradio("refresh");
-            tileMargin = 11;
+            $('#tile-margin').val("0");
             break;
         default :
-            
+            // handle options of form: "6x4"
+            var wh = $("#select-preset option:selected").val().split("x");
+            $('#frame-width').val(wh[0]);
+            $('#frame-height').val(wh[1]);
+            standardPrintDefaults();
+            break;
     }
-    renderPreview();
+    $("#frame-width, #frame-height").slider("refresh"); // this will also trigger render
+}
+
+function standardPrintDefaults() {
+    $('#radio-inches').attr('checked', true);
+    $('#radio-fill').attr('checked', true);
+    $('#radio-orient-auto').attr('checked', true);
+    $('#radio-guides-off').attr('checked', true);
+    $("input[type='radio']").checkboxradio("refresh");
+    $('#tile-margin').val("0");
 }

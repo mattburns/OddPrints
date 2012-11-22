@@ -22,6 +22,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.oddprints.PrintSize;
+import com.oddprints.util.StringUtils;
 import com.sun.jersey.api.view.Viewable;
 
 @Path("/")
@@ -30,6 +32,8 @@ public class Home {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Viewable view(@Context HttpServletRequest req) {
+        req.getSession().setAttribute("panoPrice",
+                StringUtils.formatMoney(PrintSize._4x18.getPrice()));
         return new Viewable("/home");
     }
 

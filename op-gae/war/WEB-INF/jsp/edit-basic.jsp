@@ -45,11 +45,17 @@ limitations under the License.
             <div data-role="fieldcontain" title="Width of picture frame">
                 <h2 id="frame-size-text"></h2>
                 <label for="frame-width" id="width-label">Width:</label>
-                <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="10" data-highlight="true"/></span>
+                <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
             </div>
             <div data-role="fieldcontain" title="Height of picture frame">
                 <label for="frame-height" id="height-label">Height:</label>
-                <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="8" data-highlight="true"/></span>
+                <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
+            </div>
+            <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorInches">
+                <p class="error-text">Frame too big. Maximum sizes are 18"×4", or 12"×8"</p>
+            </div>
+            <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorCm">
+                <p class="error-text">Frame too big. Maximum sizes are 45cm×10cm, or 30cm×20cm</p>
             </div>
             
             <div data-role="fieldcontain" title="Preset">
@@ -61,6 +67,16 @@ limitations under the License.
                     <option value="india" >Passport - India (35mm × 35mm)</option>
                     <option value="uk" >Passport - UK (35mm × 45mm)</option>
                     <option value="us" >Passport - US (2" × 2")</option>
+                    <option value="6x4" >Standard - 6"×4"</option>
+                    <option value="4x6" >Standard - 4"×6"</option>
+                    <option value="7x5" >Standard - 7"×5"</option>
+                    <option value="5x7" >Standard - 5"×7"</option>
+                    <option value="10x8" >Standard - 10"×8"</option>
+                    <option value="8x10" >Standard - 8"×10"</option>
+                    <option value="12x8" >Standard - 12"×8"</option>
+                    <option value="8x12" >Standard - 8"×12"</option>
+                    <option value="18x4" >Panoramic - 18"×4" (perfect for iPhone)</option>
+                    <option value="4x18" >Supertall - 4"×18" (perfect for iPhone)</option>
                 </select>
             </div>
         
@@ -129,6 +145,10 @@ limitations under the License.
                         <label for="radio-orient-landscape">Landscape</label>
                     </fieldset>
                 </div>
+                <div data-role="fieldcontain" title="Background">
+                    <label for="background">Background:</label>
+                    <input type="text" class="gray" id="background" value="#dddddd" data-highlight="true"/>
+                </div>
             </div>
             
             <c:choose>
@@ -153,6 +173,10 @@ var frameSize = "";
 var tileMargin = 10;
 
 $(document).ready(function() {
+    init();
+    // override max dpi so that we can scale image to 18" without exceeding 4000
+    // max width in app engine
+    dpiFull = 215;
     $("#error-loading-preview").hide();
     $("input").click(queueRenderPreview);
     $("input").change(queueRenderPreview);
@@ -171,11 +195,11 @@ $(document).ready(function() {
     renderPreview();
 });
 
-function renderPreview() {
+function renderPreview() {        
     $.mobile.showPageLoadingMsg();
     updateTextAndControls();
 
-    var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95";
+    var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95/" + $("#background").val().replace("#", "");
     var previewImageUrl = "/transformer/" + dpiRender + urlEnding + "/" + tileMargin;
     var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "/" + (tileMargin*3) + "?download=true";
     
@@ -206,6 +230,7 @@ function uploadImage() {
          orientation: getOrientation(),
          outputEncoding: 'JPEG',
          quality: 95,
+         backgroundColor: $("#background").val().replace("#",""),
          tileMargin: tileMargin*3,
          frameSize: frameSizeString(),
          printWidth: settings.printWidth,

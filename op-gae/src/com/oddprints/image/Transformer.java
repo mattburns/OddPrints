@@ -36,6 +36,9 @@ public class Transformer {
     TransformSettings calculatePrintSize(double frameWidthInInches,
             double frameHeightInInches, Orientation orientation) {
 
+        int printWidth = 0;
+        int printHeight = 0;
+
         if (orientation == Orientation.AUTO) {
             if (frameWidthInInches < frameHeightInInches) {
                 orientation = Orientation.PORTRAIT;
@@ -44,44 +47,21 @@ public class Transformer {
             }
         }
 
-        int printWidth;
-        int printHeight;
-
-        if (orientation == Orientation.PORTRAIT) {
-            printWidth = 4;
-            printHeight = 6;
-            if (frameWidthInInches > printWidth
-                    || frameHeightInInches > printHeight) {
-                printWidth = 5;
-                printHeight = 7;
+        for (PrintSize size : PrintSize.values()) {
+            int w;
+            int h;
+            if (orientation == Orientation.PORTRAIT) { // swap 'em
+                w = size.getHeight();
+                h = size.getWidth();
+            } else {
+                w = size.getWidth();
+                h = size.getHeight();
             }
-            if (frameWidthInInches > printWidth
-                    || frameHeightInInches > printHeight) {
-                printWidth = 8;
-                printHeight = 10;
-            }
-            if (frameWidthInInches > printWidth
-                    || frameHeightInInches > printHeight) {
-                printWidth = 8;
-                printHeight = 12;
-            }
-        } else {
-            printWidth = 6;
-            printHeight = 4;
-            if (frameWidthInInches > printWidth
-                    || frameHeightInInches > printHeight) {
-                printWidth = 7;
-                printHeight = 5;
-            }
-            if (frameWidthInInches > printWidth
-                    || frameHeightInInches > printHeight) {
-                printWidth = 10;
-                printHeight = 8;
-            }
-            if (frameWidthInInches > printWidth
-                    || frameHeightInInches > printHeight) {
-                printWidth = 12;
-                printHeight = 8;
+            if (frameWidthInInches <= w && frameHeightInInches <= h) {
+                // we done
+                printWidth = w;
+                printHeight = h;
+                break;
             }
         }
 

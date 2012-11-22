@@ -51,7 +51,7 @@ import com.sun.jersey.core.header.ContentDisposition;
 public class ImageTransformer {
 
     @GET
-    @Path("/{dpi}/{frameWidthInInches}/{frameHeightInInches}/{zooming}/{orientation}/{outputEncoding}/{quality}/{tileMargin}")
+    @Path("/{dpi}/{frameWidthInInches}/{frameHeightInInches}/{zooming}/{orientation}/{outputEncoding}/{quality}/{backgroundColor}/{tileMargin}")
     @Produces("image/jpeg")
     public Response get(@PathParam("dpi") int dpi,
             @PathParam("frameWidthInInches") double frameWidthInInches,
@@ -60,6 +60,7 @@ public class ImageTransformer {
             @PathParam("orientation") Orientation orientation,
             @PathParam("outputEncoding") OutputEncoding outputEncoding,
             @PathParam("quality") int quality,
+            @PathParam("backgroundColor") String backgroundColor,
             @PathParam("tileMargin") int tileMargin,
             @QueryParam("download") boolean download,
             @Context HttpServletRequest req) throws IOException {
@@ -75,7 +76,7 @@ public class ImageTransformer {
 
         Image finalImage = generateOddPrint(blobKeyString, blobSize, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation,
-                outputEncoding, quality, tileMargin);
+                outputEncoding, quality, backgroundColor, tileMargin);
         ResponseBuilder rb = Response.ok(finalImage.getImageData());
 
         if (download) {
@@ -89,7 +90,8 @@ public class ImageTransformer {
     Image generateOddPrint(String blobKeyString, long blobSize, int dpi,
             double frameWidthInInches, double frameHeightInInches,
             Zooming zooming, Orientation orientation,
-            OutputEncoding outputEncoding, int quality, int tileMargin) {
+            OutputEncoding outputEncoding, int quality, String backgroundColor,
+            int tileMargin) {
 
         if (SystemProperty.environment.value() == Value.Development) {
             outputEncoding = OutputEncoding.PNG;
@@ -143,7 +145,8 @@ public class ImageTransformer {
         OutputSettings outputSettings = new OutputSettings(outputEncoding);
         outputSettings.setQuality(quality);
         Image finalImage = is.composite(composites, settings.getCanvasWidth(),
-                settings.getCanvasHeight(), 0xffddddddL, outputSettings);
+                settings.getCanvasHeight(),
+                Long.parseLong("ff" + backgroundColor, 16), outputSettings);
         return finalImage;
     }
 }

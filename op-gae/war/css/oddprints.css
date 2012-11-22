@@ -253,3 +253,14 @@ dt {
     background-color: #555555;
 }
 
+.error-text {
+    color: #D00;
+    font-weight: bold;
+    text-align: center;
+}
+
+#background {
+    width: 90px;
+    margin-right: 10px;
+}
+
