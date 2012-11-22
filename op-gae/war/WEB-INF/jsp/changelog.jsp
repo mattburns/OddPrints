@@ -39,6 +39,8 @@ limitations under the License.
         <ul>
             <li>Fixed bug that sometimes corrupted images > 1MB in basic bode.</li>
             <li>Added panoramic print support.</li>
+            <li>Configurable background color.</li>
+            <li>Configurable margin in Tile mode.</li>
         </ul>
         
         <h2>v.8 - 2012/10/15</h2>
