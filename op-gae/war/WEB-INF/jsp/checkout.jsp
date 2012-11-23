@@ -60,8 +60,16 @@ limitations under the License.
                                     <a href="/image/basket/${basketItemNumber.index}" data-ajax="false" title="Preview"><img class="checkout-thumb" style="background:url(/image/basket/thumb/${basketItemNumber.index}) no-repeat center;" src="/images/mag.png" alt="" /></a>
                                 </td>
                                 <td>
-                                    ${basketItem.printSize.displayString} print / ${basketItem.frameSize} frame
-                                    (<a href="/checkout/delete/${basketItemNumber.index}" data-mini="true" data-inline="true" data-ajax="false">remove</a>)
+                                    <c:choose>
+                                        <c:when test="${basketItem.printSize eq '_2x4'}">
+                                            ${basketItem.frameSize}
+                                            <c:set var="hasSticker" value="true"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${basketItem.printSize.displayString} print / ${basketItem.frameSize} frame
+                                        </c:otherwise>
+                                    </c:choose>
+                                    (<a href="/checkout/delete/${basketItemNumber.index}" data-ajax="false">remove</a>)
                                 </td>
                                 <td>
                                     <input type="number" name="quantity" class="quantity-input" id="quantity-${basketItemNumber.index}" data-mini="true" pattern="[0-9]*" min="1" value="${basketItem.quantity}">
@@ -74,6 +82,11 @@ limitations under the License.
                 <p>
                     <a href="${it.editurl}" data-ajax="false" data-role="button" data-theme="b" data-icon="plus" data-inline="true" data-mini="true">Upload more</a>
                 </p>
+                <c:if test="${not hasSticker}">
+                    <p>
+                        Is this a gift? Make it personal and <a href="${it.editstickerurl}" data-ajax="false">upload a photo</a> for us to stick on the envelope!
+                    </p>
+                </c:if>
                   
                 <div>
                     <div class="text-align-right">

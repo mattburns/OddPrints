@@ -16,6 +16,19 @@ function init() {
             queueRenderPreview();
         }
     });
+    
+    if (stickerMode()) {
+        availableSizes = [{w:4, h:2}];
+        $(".not-sticker-mode").hide();
+        $('#frame-width').val("4");
+        $('#frame-height').val("2");
+        $('#radio-iches').attr('checked', true);
+        $('#radio-fill').attr('checked', true);
+        $('#radio-orient-landscape').attr('checked', true);
+        $('#radio-guides-off').attr('checked', true);
+        $("input[type='radio']").checkboxradio("refresh");
+        $('#tile-margin').val("0");
+    }
 }
 
 function calculatePrintSize(frameWidthInInches, frameHeightInInches, orientation) {

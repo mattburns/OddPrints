@@ -53,6 +53,7 @@ public class Upload {
             @FormParam("frameSize") String frameSize,
             @FormParam("printWidth") int printWidth,
             @FormParam("printHeight") int printHeight,
+            @FormParam("stickerMode") boolean stickerMode,
             @Context HttpServletRequest req) throws IOException,
             URISyntaxException {
 
@@ -62,8 +63,12 @@ public class Upload {
         byte[] bytes = Base64.decode(rawImageData);
         BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
 
-        return addToBasket(frameSize, printWidth, printHeight, req, blobKey,
-                bytes.length);
+        if (stickerMode) {
+            return updateSticker(req, blobKey, bytes.length);
+        } else {
+            return addToBasket(frameSize, printWidth, printHeight, req,
+                    blobKey, bytes.length);
+        }
     }
 
     @POST
@@ -87,6 +92,21 @@ public class Upload {
             long blobSize) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
+        Basket basket = getOrCreateBasket(req, pm);
+        if (basket == null) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        PrintSize printSize = PrintSize.toPrintSize(printWidth, printHeight);
+        basket.addItem(blobKey, blobSize, frameSize, printSize);
+
+        pm.makePersistent(basket);
+        pm.close();
+        return Response.ok().build();
+    }
+
+    private Basket getOrCreateBasket(HttpServletRequest req,
+            PersistenceManager pm) {
         Basket basket = Basket.fromSession(req, pm);
         if (basket == null) {
             Environment env = null;
@@ -94,16 +114,26 @@ public class Upload {
                 env = Environment.getDefault();
             } catch (NullPointerException npe) {
                 npe.printStackTrace();
-                return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+                return null;
             }
             basket = new Basket(env);
             pm.makePersistent(basket);
             String basketKeyString = KeyFactory.keyToString(basket.getId());
             req.getSession().setAttribute("basketKeyString", basketKeyString);
         }
+        return basket;
+    }
 
-        PrintSize printSize = PrintSize.toPrintSize(printWidth, printHeight);
-        basket.addItem(blobKey, blobSize, frameSize, printSize);// ,
+    private Response updateSticker(HttpServletRequest req, BlobKey blobKey,
+            long blobSize) {
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+
+        Basket basket = getOrCreateBasket(req, pm);
+        if (basket == null) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        basket.updateSticker(blobKey, blobSize);
 
         pm.makePersistent(basket);
         pm.close();
@@ -117,6 +147,13 @@ public class Upload {
         return new Viewable("/upload-basic");
     }
 
+    @GET
+    @Path("/basicsticker")
+    public Viewable viewBasicSticker(@Context HttpServletRequest req) {
+        req.setAttribute("stickerMode", Boolean.TRUE);
+        return viewBasic(req);
+    }
+
     @POST
     @Path("/basic")
     public Response postBasic(@FormParam("dpi") int dpi,
@@ -127,6 +164,7 @@ public class Upload {
             @FormParam("outputEncoding") OutputEncoding outputEncoding,
             @FormParam("quality") int quality,
             @FormParam("backgroundColor") String backgroundColor,
+            @FormParam("stickerMode") boolean stickerMode,
             @FormParam("tileMargin") int tileMargin,
             @FormParam("frameSize") String frameSize,
             @FormParam("printWidth") int printWidth,
@@ -141,12 +179,17 @@ public class Upload {
         ImageTransformer it = new ImageTransformer();
         Image image = it.generateOddPrint(blobKeyString, blobSize, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation,
-                outputEncoding, quality, backgroundColor, tileMargin);
+                outputEncoding, quality, backgroundColor, tileMargin,
+                stickerMode);
 
         byte[] bytes = image.getImageData();
         BlobKey oddPrintBlobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
         req.getSession().setAttribute("basicMode", Boolean.TRUE);
-        return addToBasket(frameSize, printWidth, printHeight, req,
-                oddPrintBlobKey, bytes.length);
+        if (stickerMode) {
+            return updateSticker(req, oddPrintBlobKey, bytes.length);
+        } else {
+            return addToBasket(frameSize, printWidth, printHeight, req,
+                    oddPrintBlobKey, bytes.length);
+        }
     }
 }

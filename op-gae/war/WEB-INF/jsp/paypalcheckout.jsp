@@ -35,37 +35,37 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
     
     <div data-role="content" class="">
-	    <c:choose>                       
-	        <c:when test="${it.basket.environment.sandbox}">
-	            <c:set var="paypalurl" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
-	            <c:set var="notifyurl" value="http://www.oddprints.com/checkoutnotification/paypal/sandbox"/>
-	        </c:when>
-	        <c:otherwise>
-	            <c:set var="paypalurl" value="https://www.paypal.com/cgi-bin/webscr"/>
-	            <c:set var="notifyurl" value="http://www.oddprints.com/checkoutnotification/paypal/live"/>
-	        </c:otherwise>
-	    </c:choose>
-	    
-	    <p>Redirecting to PayPal...</p>
-	    
-	    <form action="${paypalurl}" method="post" id="paypal-form">  
-	        <input type="hidden" name="cmd" value="_cart"> 
-	        <input type="hidden" name="upload" value="1"> 
-	        <input type="hidden" name="shipping_1" value="2.99"> 
-	        <input type="hidden" name="business" value="matt@mattburns.co.uk"> 
-	        <input type="hidden" name="currency_code" value="GBP"> 
-	        <input type="hidden" name="no_shipping" value="2"> 
-	        <input type="hidden" name="custom" value="${it.basket.idString}"> 
-	        <input type="hidden" name="notify_url" value="${notifyurl}"> 
-	        
-	        <c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">
-	            <input type="hidden" name="item_name_${basketItemNumber.index + 1}" value="Image ${basketItemNumber.index + 1}"> 
-	            <input type="hidden" name="amount_${basketItemNumber.index + 1}" value="${basketItem.unitPriceStringNoSymbol}">
-	            <input type="hidden" name="quantity_${basketItemNumber.index + 1}" value="${basketItem.quantity}">
-	        </c:forEach>
-	        
-	        <input data-role="none" type="hidden" name="submit-paypal"> 
-	    </form>
+        <c:choose>                       
+            <c:when test="${it.basket.environment.sandbox}">
+                <c:set var="paypalurl" value="https://www.sandbox.paypal.com/cgi-bin/webscr"/>
+                <c:set var="notifyurl" value="http://www.oddprints.com/checkoutnotification/paypal/sandbox"/>
+            </c:when>
+            <c:otherwise>
+                <c:set var="paypalurl" value="https://www.paypal.com/cgi-bin/webscr"/>
+                <c:set var="notifyurl" value="http://www.oddprints.com/checkoutnotification/paypal/live"/>
+            </c:otherwise>
+        </c:choose>
+        
+        <p>Redirecting to PayPal...</p>
+        
+        <form action="${paypalurl}" method="post" id="paypal-form">  
+            <input type="hidden" name="cmd" value="_cart"> 
+            <input type="hidden" name="upload" value="1"> 
+            <input type="hidden" name="shipping_1" value="2.99"> 
+            <input type="hidden" name="business" value="matt@mattburns.co.uk"> 
+            <input type="hidden" name="currency_code" value="GBP"> 
+            <input type="hidden" name="no_shipping" value="2"> 
+            <input type="hidden" name="custom" value="${it.basket.idString}"> 
+            <input type="hidden" name="notify_url" value="${notifyurl}"> 
+            
+            <c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">
+                <input type="hidden" name="item_name_${basketItemNumber.index + 1}" value="Image ${basketItemNumber.index + 1}"> 
+                <input type="hidden" name="amount_${basketItemNumber.index + 1}" value="${basketItem.unitPriceStringNoSymbol}">
+                <input type="hidden" name="quantity_${basketItemNumber.index + 1}" value="${basketItem.quantity}">
+            </c:forEach>
+            
+            <input data-role="none" type="hidden" name="submit-paypal"> 
+        </form>
     </div>
     
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />

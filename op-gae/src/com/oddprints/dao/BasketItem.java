@@ -168,7 +168,7 @@ public class BasketItem {
             String version = System
                     .getProperty("com.google.appengine.application.version");
             hostUrl = "http://" + version + "." + applicationId
-                    + ".appspot.com/";
+                    + ".appspot.com";
         } else {
             hostUrl = "http://localhost:8888";
         }

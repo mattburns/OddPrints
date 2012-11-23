@@ -51,7 +51,7 @@ import com.sun.jersey.core.header.ContentDisposition;
 public class ImageTransformer {
 
     @GET
-    @Path("/{dpi}/{frameWidthInInches}/{frameHeightInInches}/{zooming}/{orientation}/{outputEncoding}/{quality}/{backgroundColor}/{tileMargin}")
+    @Path("/{dpi}/{frameWidthInInches}/{frameHeightInInches}/{zooming}/{orientation}/{outputEncoding}/{quality}/{backgroundColor}/{stickerMode}/{tileMargin}")
     @Produces("image/jpeg")
     public Response get(@PathParam("dpi") int dpi,
             @PathParam("frameWidthInInches") double frameWidthInInches,
@@ -61,6 +61,7 @@ public class ImageTransformer {
             @PathParam("outputEncoding") OutputEncoding outputEncoding,
             @PathParam("quality") int quality,
             @PathParam("backgroundColor") String backgroundColor,
+            @PathParam("stickerMode") boolean stickerMode,
             @PathParam("tileMargin") int tileMargin,
             @QueryParam("download") boolean download,
             @Context HttpServletRequest req) throws IOException {
@@ -76,7 +77,8 @@ public class ImageTransformer {
 
         Image finalImage = generateOddPrint(blobKeyString, blobSize, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation,
-                outputEncoding, quality, backgroundColor, tileMargin);
+                outputEncoding, quality, backgroundColor, tileMargin,
+                stickerMode);
         ResponseBuilder rb = Response.ok(finalImage.getImageData());
 
         if (download) {
@@ -91,7 +93,7 @@ public class ImageTransformer {
             double frameWidthInInches, double frameHeightInInches,
             Zooming zooming, Orientation orientation,
             OutputEncoding outputEncoding, int quality, String backgroundColor,
-            int tileMargin) {
+            int tileMargin, boolean stickerMode) {
 
         if (SystemProperty.environment.value() == Value.Development) {
             outputEncoding = OutputEncoding.PNG;
@@ -104,7 +106,8 @@ public class ImageTransformer {
 
         Transformer t = new Transformer();
         TransformSettings settings = t.calculateSettings(image, dpi,
-                frameWidthInInches, frameHeightInInches, zooming, orientation);
+                frameWidthInInches, frameHeightInInches, zooming, orientation,
+                stickerMode);
 
         if (zooming == Zooming.CROP || zooming == Zooming.TILE) {
             double xTrim = (double) settings.getSourceX() / image.getWidth();

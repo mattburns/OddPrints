@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.oddprints.checkout;
 
+import java.io.ByteArrayInputStream;
+import java.net.URL;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -23,7 +25,9 @@ import uk.co.mattburns.pwinty.Order;
 import uk.co.mattburns.pwinty.Photo.Sizing;
 import uk.co.mattburns.pwinty.Pwinty;
 
+import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.oddprints.PMF;
+import com.oddprints.PrintSize;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.CheckoutSystem;
 import com.oddprints.dao.Basket.State;
@@ -98,11 +102,57 @@ public class CheckoutNotificationHandler {
 
         List<BasketItem> basketItems = basket.getItems();
 
+        boolean stickerAdded = false;
+
         for (BasketItem item : basketItems) {
-            newOrder.addPhoto(item.getFullImageUrl(), item.getPrintSize()
-                    .toPwintyType(), item.getQuantity(), Sizing.Crop);
+            if (item.getPrintSize() != PrintSize._2x4) {
+                newOrder.addPhoto(item.getFullImageUrl(), item.getPrintSize()
+                        .toPwintyType(), item.getQuantity(), Sizing.Crop);
+            } else {
+                ByteArrayInputStream imageStream = new ByteArrayInputStream(
+                        item.getImage().getImageData());
+                newOrder.addSticker("sticker.jpg", imageStream);
+                stickerAdded = true;
+            }
+        }
+
+        if (!stickerAdded) {
+            addDefaultSticker(newOrder);
         }
 
         basket.setPwintyOrderNumber(newOrder.getId());
+    }
+
+    private void addDefaultSticker(Order order) {
+        String imageUrl = getHostUrl() + "/images/sticker.jpg";
+
+        byte[] bytes = null;
+        try {
+            bytes = URLFetchServiceFactory.getURLFetchService()
+                    .fetch(new URL(imageUrl)).getContent();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (bytes != null) {
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(bytes);
+            order.addSticker("sticker.jpg", imageStream);
+        }
+    }
+
+    private String getHostUrl() {
+        String hostUrl;
+        String environment = System
+                .getProperty("com.google.appengine.runtime.environment");
+        if ("production".toLowerCase().equals(environment)) {
+            String applicationId = System
+                    .getProperty("com.google.appengine.application.id");
+            String version = System
+                    .getProperty("com.google.appengine.application.version");
+            hostUrl = "http://" + version + "." + applicationId
+                    + ".appspot.com";
+        } else {
+            hostUrl = "http://localhost:8888";
+        }
+        return hostUrl;
     }
 }

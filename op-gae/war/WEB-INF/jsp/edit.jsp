@@ -44,7 +44,7 @@ limitations under the License.
                 <input type="file" id="files" name="files[]" />
                 <output id="list"></output>
             </div>
-            <p>Or just play with the <a id="sample-photo-link" href="/edit">sample photo</a>.</p>
+            <p class="not-sticker-mode">Or just play with the <a id="sample-photo-link" href="/edit">sample photo</a>.</p>
         </div>
  
         <div id="file-chosen">
@@ -53,43 +53,52 @@ limitations under the License.
                     <a href="/checkout">basket (${it.basket.size})</a>
                 </div>
             </c:if>
+            
+            <c:if test="${stickerMode}">
+                <h2>Custom Sticker</h2>
+                <p>We will print this photo at 2"×4" and stick it to the envelope!
+                Be creative and make it fun. No invoices are posted (it's all online)
+                so you can the prints send directly.</p>
+            </c:if>
     
             <form action="#" method="get">
-                <div data-role="fieldcontain" title="Width of picture frame">
-                    <label for="frame-width">Width:</label>
-                    <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
-                </div>
-                <div data-role="fieldcontain" title="Height of picture frame">
-                    <label for="frame-height">Height:</label>
-                    <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
-                </div>
-                <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorInches">
-                    <p class="error-text">Frame too big. Maximum sizes are 18"×4", or 12"×8"</p>
-                </div>
-                <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorCm">
-                    <p class="error-text">Frame too big. Maximum sizes are 45cm×10cm, or 30cm×20cm</p>
-                </div>
-                
-                <div data-role="fieldcontain" title="Preset">
-                    <label for="select-preset">Or use a preset:</label>
-                
-                    <select name="select-preset" id="select-preset" >
-                        <option value="custom" selected>Custom</option>
-                        <option value="canada" >Passport - Canada (50mm × 70mm)</option>
-                        <option value="india" >Passport - India (35mm × 35mm)</option>
-                        <option value="uk" >Passport - UK (35mm × 45mm)</option>
-                        <option value="us" >Passport - US (2" × 2")</option>
-                        <option value="6x4" >Standard - 6"×4"</option>
-                        <option value="4x6" >Standard - 4"×6"</option>
-                        <option value="7x5" >Standard - 7"×5"</option>
-                        <option value="5x7" >Standard - 5"×7"</option>
-                        <option value="10x8" >Standard - 10"×8"</option>
-                        <option value="8x10" >Standard - 8"×10"</option>
-                        <option value="12x8" >Standard - 12"×8"</option>
-                        <option value="8x12" >Standard - 8"×12"</option>
-                        <option value="18x4" >Panoramic - 18"×4" (perfect for iPhone)</option>
-                        <option value="4x18" >Supertall - 4"×18" (perfect for iPhone)</option>
-                    </select>
+                <div class="not-sticker-mode">
+                    <div data-role="fieldcontain" title="Width of picture frame">
+                        <label for="frame-width">Width:</label>
+                        <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
+                    </div>
+                    <div data-role="fieldcontain" title="Height of picture frame">
+                        <label for="frame-height">Height:</label>
+                        <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
+                    </div>
+                    <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorInches">
+                        <p class="error-text">Frame too big. Maximum sizes are 18"×4", or 12"×8"</p>
+                    </div>
+                    <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorCm">
+                        <p class="error-text">Frame too big. Maximum sizes are 45cm×10cm, or 30cm×20cm</p>
+                    </div>
+                    
+                    <div data-role="fieldcontain" title="Preset">
+                        <label for="select-preset">Or use a preset:</label>
+                    
+                        <select name="select-preset" id="select-preset" >
+                            <option value="custom" selected>Custom</option>
+                            <option value="canada" >Passport - Canada (50mm × 70mm)</option>
+                            <option value="india" >Passport - India (35mm × 35mm)</option>
+                            <option value="uk" >Passport - UK (35mm × 45mm)</option>
+                            <option value="us" >Passport - US (2" × 2")</option>
+                            <option value="6x4" >Standard - 6"×4"</option>
+                            <option value="4x6" >Standard - 4"×6"</option>
+                            <option value="7x5" >Standard - 7"×5"</option>
+                            <option value="5x7" >Standard - 5"×7"</option>
+                            <option value="10x8" >Standard - 10"×8"</option>
+                            <option value="8x10" >Standard - 8"×10"</option>
+                            <option value="12x8" >Standard - 12"×8"</option>
+                            <option value="8x12" >Standard - 8"×12"</option>
+                            <option value="18x4" >Panoramic - 18"×4" (perfect for iPhone)</option>
+                            <option value="4x18" >Supertall - 4"×18" (perfect for iPhone)</option>
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="img-preview" id="img-preview">
@@ -101,14 +110,14 @@ limitations under the License.
                     <div class="zoom-out-button"></div>
                 </div>
                 
-                <div class="text-align-right">
+                <div class="text-align-right not-sticker-mode">
                     <a id="change-picture-link" href="/edit">change picture</a>
                 </div>
 
                 <div data-role="collapsible" data-collapsed="true"  data-content-theme="c" >
                     <h3 title="Advanced control of the generated image">Extra options</h3>
                     
-                    <div data-role="fieldcontain" >    
+                    <div data-role="fieldcontain" class="not-sticker-mode">    
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Units:</legend>                    
     
@@ -133,20 +142,22 @@ limitations under the License.
                             <label for="radio-fit" title="Ensure the picture fits in the frame, however, some margin may be visible in the frame">
                                 Fit
                             </label>
-                                                    
-                            <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP" />
-                            <label for="radio-crop" title="Crop parts of the image that are outside the frame">
-                                Crop
-                            </label>
-
-                            <input type="radio" name="radio-crop-fit" id="radio-tile" value="TILE" />
-                            <label for="radio-tile" title="Tile the image">
-                                Tile
-                            </label>
+                            
+                            <c:if test="${not stickerMode}">
+                                <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP"/>
+                                <label for="radio-crop" title="Crop parts of the image that are outside the frame" class="not-sticker-mode">
+                                    Crop
+                                </label>
+    
+                                <input type="radio" name="radio-crop-fit" id="radio-tile" value="TILE"/>
+                                <label for="radio-tile" title="Tile the image"  class="not-sticker-mode">
+                                    Tile
+                                </label>
+                            </c:if>
                         </fieldset>
                     </div>
                     
-                    <div data-role="fieldcontain">
+                    <div data-role="fieldcontain" class="not-sticker-mode">
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Show guidelines:</legend>
                             
@@ -162,7 +173,7 @@ limitations under the License.
                         </fieldset>
                     </div>
                     
-                    <div data-role="fieldcontain">
+                    <div data-role="fieldcontain" class="not-sticker-mode">
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Print orientation:</legend>
                             
@@ -184,7 +195,7 @@ limitations under the License.
                         <label for="vertical-offset">Vertical offset:</label>
                         <input data-mini="true" type="number" id="vertical-offset" value="0" step="1" data-highlight="true"/>
                     </div>
-                    <div data-role="fieldcontain" title="Tile margin">
+                    <div data-role="fieldcontain" title="Tile margin" class="not-sticker-mode">
                         <label for="tile-margin">Tile margin:</label>
                         <span class="span-slider"><input data-mini="true" type="range" name="slider" id="tile-margin" value="0" step="1" min="0" max="200" data-highlight="true"/></span>
                     </div>
@@ -203,7 +214,7 @@ limitations under the License.
                         <a href="#" id="img-upload" data-role="button" data-theme="b">Add to basket</a>
                     </c:when>
                     <c:otherwise>
-                        <h2 id="print-size-text"></h2>
+                        <h2 id="print-size-text" class="not-sticker-mode"></h2>
                         <a href="#" id="img-download" data-role="button" data-theme="b">Download</a>
                         Or just <a href="#" id="img-upload" data-theme="b">order prints from us</a>.
                     </c:otherwise>
@@ -260,6 +271,7 @@ var verticalOffset = 0;
     
 $(document).ready(function() {
     init();
+
     fileChooser();
     
     if (!isSupportedBrowser()) {
@@ -380,6 +392,10 @@ $(document).ready(function() {
     });
     
 });
+
+function stickerMode() {
+    return "${stickerMode}" == "true";
+}
 
 function zoomIn() {
     zoom(0.1);
@@ -687,7 +703,8 @@ function uploadImageImpl() {
        { imageData: renderFull(),
          frameSize: frameSizeString(),
          printWidth: settings.printWidth,
-         printHeight: settings.printHeight
+         printHeight: settings.printHeight,
+         stickerMode: stickerMode()
        }
     )
     .success(

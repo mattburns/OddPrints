@@ -28,7 +28,7 @@ limitations under the License.
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
     <jsp:param name="titleText" value=" - Upload" />
     <jsp:param name="descriptionText" value="Basic photo upload page for older browsers." />
-</jsp:include>ad.jsp" />
+</jsp:include>
 <body>
 
 <div data-role="page" id="page-upload">
@@ -39,10 +39,18 @@ limitations under the License.
         <div id="choose-a-file">
             <h2>Upload a photo</h2>
             
-            <form action="/edit/basic" data-ajax="false" method="POST" id="file-form" enctype="multipart/form-data">
+            <c:set var="formAction" value ="/edit/basic"/>
+            <c:if test="${stickerMode}">
+                <c:set var="formAction" value ="/editsticker/basic"/>
+            </c:if>
+            
+            
+            <form action="${formAction}" data-ajax="false" method="POST" id="file-form" enctype="multipart/form-data">
                 <input type="file" id="file-chooser" name="myFile" >
             </form>
-            <p>Or just play with the <a id="sample-photo-link" data-ajax="false" href="/edit/basic/sample">sample photo</a>.</p>
+            <c:if test="${not stickerMode}">
+                <p>Or just play with the <a id="sample-photo-link" data-ajax="false" href="/edit/basic/sample">sample photo</a>.</p>
+            </c:if>
         </div>
     </div>
        

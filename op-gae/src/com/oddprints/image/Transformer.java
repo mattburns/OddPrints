@@ -10,9 +10,17 @@ public class Transformer {
 
     public TransformSettings calculateSettings(Image image, int dpi,
             double frameWidthInInches, double frameHeightInInches,
-            Zooming zooming, Orientation orientation) {
-        TransformSettings settings = calculatePrintSize(frameWidthInInches,
-                frameHeightInInches, orientation);
+            Zooming zooming, Orientation orientation, boolean stickerMode) {
+        TransformSettings settings;
+
+        if (stickerMode) {
+            settings = new Builder().printSize(PrintSize._2x4)
+                    .orientation(Orientation.LANDSCAPE).build();
+        } else {
+            settings = calculatePrintSize(frameWidthInInches,
+                    frameHeightInInches, orientation);
+        }
+
         settings = calculateCanvasSize(settings.getPrintWidth(),
                 settings.getPrintHeight(), dpi, settings);
         settings = calculateFramePixelSize(frameWidthInInches,
@@ -47,7 +55,7 @@ public class Transformer {
             }
         }
 
-        for (PrintSize size : PrintSize.values()) {
+        for (PrintSize size : PrintSize.printableSizes()) {
             int w;
             int h;
             if (orientation == Orientation.PORTRAIT) { // swap 'em
