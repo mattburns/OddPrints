@@ -34,6 +34,7 @@ import com.oddprints.dao.Basket.State;
 import com.oddprints.dao.BasketItem;
 import com.oddprints.util.EmailSender;
 import com.oddprints.util.EmailTemplates;
+import com.oddprints.util.ServerUtils;
 
 public class CheckoutNotificationHandler {
 
@@ -124,7 +125,8 @@ public class CheckoutNotificationHandler {
     }
 
     private void addDefaultSticker(Order order) {
-        String imageUrl = getHostUrl() + "/images/sticker.jpg";
+        String imageUrl = ServerUtils.getAppspotHostUrl()
+                + "/images/sticker.jpg";
 
         byte[] bytes = null;
         try {
@@ -142,22 +144,5 @@ public class CheckoutNotificationHandler {
             EmailSender.INSTANCE.sendToAdmin("No bytes read from sticker jpeg",
                     "Error adding default sticker");
         }
-    }
-
-    private String getHostUrl() {
-        String hostUrl;
-        String environment = System
-                .getProperty("com.google.appengine.runtime.environment");
-        if ("production".toLowerCase().equals(environment)) {
-            String applicationId = System
-                    .getProperty("com.google.appengine.application.id");
-            String version = System
-                    .getProperty("com.google.appengine.application.version");
-            hostUrl = "http://" + version + "." + applicationId
-                    + ".appspot.com";
-        } else {
-            hostUrl = "http://localhost:8888";
-        }
-        return hostUrl;
     }
 }

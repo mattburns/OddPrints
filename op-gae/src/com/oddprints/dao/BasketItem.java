@@ -37,6 +37,7 @@ import com.google.appengine.api.images.Transform;
 import com.oddprints.PrintSize;
 import com.oddprints.dao.Basket.State;
 import com.oddprints.util.ImageBlobStore;
+import com.oddprints.util.ServerUtils;
 import com.oddprints.util.StringUtils;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -159,19 +160,7 @@ public class BasketItem {
     }
 
     private URL getImageUrl(ImageSize size) {
-        String hostUrl;
-        String environment = System
-                .getProperty("com.google.appengine.runtime.environment");
-        if ("Production".equals(environment)) {
-            String applicationId = System
-                    .getProperty("com.google.appengine.application.id");
-            String version = System
-                    .getProperty("com.google.appengine.application.version");
-            hostUrl = "http://" + version + "." + applicationId
-                    + ".appspot.com";
-        } else {
-            hostUrl = "http://localhost:8888";
-        }
+        String hostUrl = ServerUtils.getAppspotHostUrl();
 
         try {
             return new URL(hostUrl + "/image/"

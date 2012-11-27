@@ -40,6 +40,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.oddprints.Environment;
 import com.oddprints.PrintSize;
+import com.oddprints.util.ServerUtils;
 import com.oddprints.util.StringUtils;
 import com.sun.jersey.api.client.ClientHandlerException;
 
@@ -380,18 +381,9 @@ public class Basket {
     }
 
     private URL getUrlWithPath(String path) {
-        String hostUrl;
-        String environment = System
-                .getProperty("com.google.appengine.runtime.environment");
-        if ("Production".equals(environment)) {
-            hostUrl = "http://www.oddprints.com";
-        } else {
-            hostUrl = "http://localhost:8888";
-        }
-
         try {
-            return new URL(hostUrl + path + getSecret() + "/"
-                    + KeyFactory.keyToString(id));
+            return new URL(ServerUtils.getCleanHostUrl() + path + getSecret()
+                    + "/" + KeyFactory.keyToString(id));
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

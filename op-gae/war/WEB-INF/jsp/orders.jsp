@@ -80,6 +80,7 @@ limitations under the License.
                         <dt>Country:</dt> <dd>${pwintyOrder.country}&nbsp;</dd>
                         
                         <c:if test="${it.userIsAdmin}">
+                            <dt>Pwinty id:</dt> <dd>${pwintyOrder.id}&nbsp;</dd>
                             <dt>Pwinty status:</dt> <dd>${pwintyOrder.status}&nbsp;</dd>
                         </c:if>
                         
@@ -138,14 +139,13 @@ limitations under the License.
             
             <c:if test="${it.userIsAdmin}">
                 <div class="temp-admin-thing" style="background-color: #cfc">
-                    <p>This is just a temporary block to check the pwinty errors and warnings are appearing correctly.</p>
                     <c:if test="${not empty order.pwintyOrderEL}">
                         <c:forEach var="photoStatus" items="${order.pwintyOrderEL.submissionStatus.photos}">
                             <c:forEach var="photoError" items="${photoStatus.errors}">
-                                <b>Error:</b> ${photoError}<br/>
+                                <b>Pwinty Error:</b> ${photoError}<br/>
                             </c:forEach>
                             <c:forEach var="photoWarning" items="${photoStatus.warnings}">
-                                <b>Warning:</b> ${photoWarning}<br/>
+                                <b>Pwinty Warning:</b> ${photoWarning}<br/>
                             </c:forEach>
                         </c:forEach>
                     </c:if>
