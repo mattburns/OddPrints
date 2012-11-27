@@ -131,11 +131,16 @@ public class CheckoutNotificationHandler {
             bytes = URLFetchServiceFactory.getURLFetchService()
                     .fetch(new URL(imageUrl)).getContent();
         } catch (Exception e) {
+            EmailSender.INSTANCE.sendToAdmin(e.getMessage(),
+                    "Error adding default sticker");
             e.printStackTrace();
         }
         if (bytes != null) {
             ByteArrayInputStream imageStream = new ByteArrayInputStream(bytes);
             order.addSticker("sticker.jpg", imageStream);
+        } else {
+            EmailSender.INSTANCE.sendToAdmin("No bytes read from sticker jpeg",
+                    "Error adding default sticker");
         }
     }
 
