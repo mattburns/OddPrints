@@ -35,6 +35,11 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.12 - 2012/12/07</h2>
+        <ul>
+            <li>Made the order button more prominent.</li>
+            <li>Added thanks page.</li>
+        </ul>
         <h2>v.11 - 2012/11/23</h2>
         <ul>
             <li>Users can choose a custom sticker for the envelope.</li>

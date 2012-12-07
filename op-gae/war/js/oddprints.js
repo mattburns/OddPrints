@@ -379,7 +379,7 @@ function updateTextAndControls() {
     updateFrameHeader();
     var settings = calculatePrintSize(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
     if (settings.printWidth) {
-        $("#print-size-text").html("Download and print at <span class='output-size'>" + settings.printWidth + "\"×" + settings.printHeight + "\"</span>");
+        $("#print-size-text").html(" and print yourself at <span class='output-size'>" + settings.printWidth + "\"×" + settings.printHeight + "\"</span>");
     }
     checkPrintsizeAvailable(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
     restrictSliders();

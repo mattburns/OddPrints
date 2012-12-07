@@ -77,6 +77,8 @@ public class Purchase {
 
         CheckoutFlowSupport flowSupport = new CheckoutFlowSupport();
         MerchantCheckoutFlowSupport merchantflowSupport = new MerchantCheckoutFlowSupport();
+        merchantflowSupport
+                .setContinueShoppingUrl("http://www.oddprints.com/thanks");
         flowSupport.setMerchantCheckoutFlowSupport(merchantflowSupport);
         ShippingMethods sm = new ShippingMethods();
         sm.getFlatRateShippingOrMerchantCalculatedShippingOrPickup();

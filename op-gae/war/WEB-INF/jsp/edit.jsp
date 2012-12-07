@@ -214,9 +214,11 @@ limitations under the License.
                         <a href="#" id="img-upload" data-role="button" data-theme="b">Add to basket</a>
                     </c:when>
                     <c:otherwise>
-                        <h2 id="print-size-text" class="not-sticker-mode"></h2>
-                        <a href="#" id="img-download" data-role="button" data-theme="b">Download</a>
-                        Or just <a href="#" id="img-upload" data-theme="b">order prints from us</a>.
+                        <div class="text-align-right">
+	                        <a href="#" id="img-download" data-inline="true" data-mini="true">Download</a>
+	                        <span id="print-size-text" class="not-sticker-mode"></span>
+	                        or simply <a href="#" id="img-upload" data-role="button" data-inline="true" data-theme="b">Order prints</a>
+                        </div>
                     </c:otherwise>
                 </c:choose>
             </form>
