@@ -35,13 +35,15 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>Panoramic Prints</h2>
-        <p>Did you know you can use OddPrints to print panoramic photos?</p>
-        
+        <h2>Stunning Panoramic Prints</h2>
+                
         <jsp:include page="/WEB-INF/jsp/parts/part-panoramic.jsp"/>
         
+      
         <div class="supported-browser">
-            <p><a href="/upload/basic" class="get-started" data-ajax="false">Get started</a>.</p>
+	        <div class="text-align-right">
+	            <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-inline="true" data-ajax="false">Get started</a></p>
+            </div>
         </div>
     </div>
     

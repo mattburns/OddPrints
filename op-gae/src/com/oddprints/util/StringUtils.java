@@ -24,4 +24,14 @@ public class StringUtils {
     public static String formatMoneyNoSymbol(int pennies) {
         return String.format("%.2f", ((double) pennies / 100));
     }
+
+    // Don't show pennies if rounds to whole pounds
+    public static String formatMoneyShort(int pennies) {
+        if (pennies % 100 == 0) {
+            return "&pound;" + (pennies / 100);
+        } else {
+            // revert to normal way
+            return formatMoney(pennies);
+        }
+    }
 }

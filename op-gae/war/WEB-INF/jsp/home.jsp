@@ -72,7 +72,7 @@ limitations under the License.
             </div>
         
             <div class="supported-browser">
-                <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right"  data-ajax="false">Get Started!</a></p>
+                <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-ajax="false">Get Started!</a></p>
             </div>
         </div>
 

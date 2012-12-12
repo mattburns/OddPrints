@@ -31,8 +31,14 @@ public class Panoramic {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Viewable get(@Context HttpServletRequest req) {
+        setPanoParams(req);
+        return new Viewable("/panoramic");
+    }
+
+    public static void setPanoParams(HttpServletRequest req) {
         req.getSession().setAttribute("panoPrice",
                 StringUtils.formatMoney(PrintSize._4x18.getPrice()));
-        return new Viewable("/panoramic");
+        req.getSession().setAttribute("panoPriceSticker",
+                StringUtils.formatMoneyShort(PrintSize._4x18.getPrice()));
     }
 }
