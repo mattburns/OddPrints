@@ -86,17 +86,11 @@ limitations under the License.
                 <img src="/images/workflow.png" />
                
                 <h3>Print your own passport photos</h3>
-                <p>Just choose the preset for your country. Easy!
-                Unlike other online services, OddPrints is free and the image has
-                no watermark or any other nonsense. Just download the generated image
-                and print it at 6"×4".</p>
-                <img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.png"/>
+                <jsp:include page="/WEB-INF/jsp/parts/part-passport.jsp"/>
+                
                 
                 <h3>Print stunning panoramas</h3>
-                <p>OddPrints now supports printing of panoramic photos.
-                If you choose to print with us, we offer printing at 18"×4",
-                the perfect ratio for iPhone photos, for just ${panoPrice}.</p>
-                <img style="box-shadow: 0px 0px 15px #222222;" src="/images/pano.jpg"/>
+                <jsp:include page="/WEB-INF/jsp/parts/part-panoramic.jsp"/>
                 
                 <img class="osi-logo" src="/images/osi_standard_logo.png"/>
                 <h3>Free</h3>

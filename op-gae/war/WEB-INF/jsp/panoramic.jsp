@@ -25,23 +25,23 @@ limitations under the License.
       xmlns:c="http://java.sun.com/jsp/jstl/core">
       
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
-    <jsp:param name="titleText" value=" - Passport Photos" />
-    <jsp:param name="descriptionText" value="Use OddPrints to print your own passport photos for free. Also handy if you have unwilling subjects like small children." />
+    <jsp:param name="titleText" value=" - Panoramic Prints" />
+    <jsp:param name="descriptionText" value="Use OddPrints to print stunning panoramas." />
 </jsp:include>
 <body>
 
-<div data-role="page" id="page-passport">
+<div data-role="page" id="page-panoramic">
 
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>Print your own passport photos</h2>
-        <p>Did you know you can use OddPrints to print your own passport photos?</p>
+        <h2>Panoramic Prints</h2>
+        <p>Did you know you can use OddPrints to print panoramic photos?</p>
         
-        <jsp:include page="/WEB-INF/jsp/parts/part-passport.jsp"/>
+        <jsp:include page="/WEB-INF/jsp/parts/part-panoramic.jsp"/>
         
         <div class="supported-browser">
-            <p>Want to save money? <a href="/upload/basic" class="get-started" data-ajax="false">Get started</a>.</p>
+            <p><a href="/upload/basic" class="get-started" data-ajax="false">Get started</a>.</p>
         </div>
     </div>
     
