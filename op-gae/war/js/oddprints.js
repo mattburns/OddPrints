@@ -29,6 +29,9 @@ function init() {
         $("input[type='radio']").checkboxradio("refresh");
         $('#tile-margin').val("0");
     }
+    if (panoMode()) {
+        $("#select-preset").val('18x4').change();
+    }
 }
 
 function calculatePrintSize(frameWidthInInches, frameHeightInInches, orientation) {

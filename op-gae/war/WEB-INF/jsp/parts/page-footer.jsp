@@ -16,7 +16,7 @@
                     basic | <a href="/edit" data-ajax="false">turbo</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="/upload/basic" data-ajax="false">basic</a> | turbo
+                    <a class="force-basic" href="/upload/basic" data-ajax="false">basic</a> | turbo
                 </c:otherwise>
             </c:choose>
         </div>
@@ -37,6 +37,19 @@ $(document).ready(function() {
         // don't give unsupported browsers the choice
         $("#mode-chooser").hide();
     }
+
+    var basicModeVar = ${not empty basicMode and basicMode};
+    if (isSupportedBrowser() && !basicModeVar) {
+        $("a[href='/upload/basic']").attr("href", "/edit");
+        $("a[href='/upload/basicpano']").attr("href", "/editpano");
+        $("a[href='/upload/basicsticker']").attr("href", "/editsticker");
+        // oops, shouldn't change this one, change back!
+        $(".force-basic").attr("href", "/upload/basic");
+    } else if (!isFileInputSupported()) {
+        $(".get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
+    } else {
+        // stick with basic upload
+       }
 });
 
   var _gaq = _gaq || [];

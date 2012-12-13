@@ -186,7 +186,7 @@ var frameSize = "";
 var tileMargin = 10;
 
 $(document).ready(function() {
-    init();
+    
     // override max dpi so that we can scale image to 18" without exceeding 4000
     // max width in app engine
     dpiFull = 215;
@@ -205,12 +205,15 @@ $(document).ready(function() {
     if (sURL.indexOf("showCanvas") > 0) {
         $('#debugging').show();
     }
-    
+    init();
     renderPreview();
 });
 
 function stickerMode() {
     return "${stickerMode}" == "true";
+}
+function panoMode() {
+    return "${panoMode}" == "true";
 }
 
 function renderPreview() {        

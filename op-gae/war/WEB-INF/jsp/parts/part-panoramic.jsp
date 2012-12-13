@@ -19,7 +19,7 @@ the perfect ratio for iPhone photos, for just <strong>${panoPrice}</strong>.</p>
     </div>
     <div id="pano-text">← 18" →</div>
     <div id="pano-img">
-	    <img style="box-shadow: 0px 0px 15px #222222;" src="/images/pano.jpg"/>
+	    <a href="/upload/basicpano" data-ajax="false"><img style="box-shadow: 0px 0px 15px #222222;" src="/images/pano.jpg"/></a>
     </div>
 </div>
 <p>Of course you can also print panoramas taken with an Android

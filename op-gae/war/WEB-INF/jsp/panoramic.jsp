@@ -42,7 +42,7 @@ limitations under the License.
       
         <div class="supported-browser">
             <div class="text-align-right">
-                <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-inline="true" data-ajax="false">Get started</a></p>
+                <p><a href="/upload/basicpano" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-inline="true" data-ajax="false">Get started</a></p>
             </div>
         </div>
     </div>
@@ -50,19 +50,6 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
 
 </div>
-
-<script type="text/javascript">
-$(document).ready(function() {
-    var basicModeVar = ${not empty basicMode and basicMode};
-    if (isSupportedBrowser() && !basicModeVar) {
-        $(".get-started").attr("href", "/edit");
-    } else if (!isFileInputSupported()) {
-        $(".get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
-    } else {
-        // stick with basic upload
-    }
-});
-</script>
 
 </body>
 </html>

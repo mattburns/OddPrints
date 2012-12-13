@@ -17,6 +17,7 @@ package com.oddprints.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
@@ -109,23 +110,28 @@ public class Edit {
     public Viewable loadBasicSample(@Context HttpServletRequest req)
             throws FileUploadException, IOException, URISyntaxException {
 
-        String blobKeyString = ApplicationSetting
-                .getSetting(Settings.SAMPLE_PHOTO_BLOB_KEY);
+        return viewSampleImage(req, Settings.SAMPLE_PHOTO_BLOB_KEY,
+                Settings.SAMPLE_PHOTO_BLOB_SIZE, new URL(
+                        "http://www.oddprints.com/images/sample.jpg"));
+
+    }
+
+    Viewable viewSampleImage(HttpServletRequest req, Settings blobKeySetting,
+            Settings blobSizeSetting, URL image) throws MalformedURLException,
+            IOException {
+        String blobKeyString = ApplicationSetting.getSetting(blobKeySetting);
         if (blobKeyString == null) {
-            URL url = new URL("http://www.oddprints.com/images/sample.jpg");
-            InputStream imgStream = url.openStream();
+
+            InputStream imgStream = image.openStream();
 
             byte[] bytes = IOUtils.toByteArray(imgStream);
 
             BlobKey blobKey = ImageBlobStore.INSTANCE.writeImageData(bytes);
             blobKeyString = blobKey.getKeyString();
-            ApplicationSetting.putSetting(Settings.SAMPLE_PHOTO_BLOB_KEY,
-                    blobKeyString);
-            ApplicationSetting.putSetting(Settings.SAMPLE_PHOTO_BLOB_SIZE, ""
-                    + bytes.length);
+            ApplicationSetting.putSetting(blobKeySetting, blobKeyString);
+            ApplicationSetting.putSetting(blobSizeSetting, "" + bytes.length);
         }
-        String blobSize = ApplicationSetting
-                .getSetting(Settings.SAMPLE_PHOTO_BLOB_SIZE);
+        String blobSize = ApplicationSetting.getSetting(blobSizeSetting);
 
         req.getSession().setAttribute("blobKeyString", blobKeyString);
         req.getSession().setAttribute("blobSize", blobSize);

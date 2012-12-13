@@ -44,7 +44,7 @@ limitations under the License.
                 <input type="file" id="files" name="files[]" />
                 <output id="list"></output>
             </div>
-            <p class="not-sticker-mode">Or just play with the <a id="sample-photo-link" href="/edit">sample photo</a>.</p>
+            <p class="not-sticker-mode">Or just play with the <a id="sample-photo-link" href="#">sample photo</a>.</p>
         </div>
  
         <div id="file-chosen">
@@ -272,8 +272,6 @@ var horizontalOffset = 0;
 var verticalOffset = 0;
     
 $(document).ready(function() {
-    init();
-
     fileChooser();
     
     if (!isSupportedBrowser()) {
@@ -291,7 +289,11 @@ $(document).ready(function() {
     
     $("#sample-photo-link").click(function(e) {
         e.preventDefault();
-        loadSample();
+        if (panoMode()) {
+            loadPano();
+        } else {
+            loadSample();
+        }
     });
     
     $("#change-picture-link").click(function(e) {
@@ -392,11 +394,16 @@ $(document).ready(function() {
         queueRenderPreview();
         repositionImages();
     });
-    
+    init();
+
 });
 
 function stickerMode() {
     return "${stickerMode}" == "true";
+}
+
+function panoMode() {
+    return "${panoMode}" == "true";
 }
 
 function zoomIn() {
@@ -444,6 +451,10 @@ function fileChosen() {
 
 function loadSample() {
     loadFileUrl("images/sample.jpg");
+}
+
+function loadPano() {
+    loadFileUrl("images/pano.jpg");
 }
 
 function loadFile(file) {

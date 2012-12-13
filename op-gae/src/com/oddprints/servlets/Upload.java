@@ -154,6 +154,13 @@ public class Upload {
         return viewBasic(req);
     }
 
+    @GET
+    @Path("/basicpano")
+    public Viewable viewBasicPano(@Context HttpServletRequest req) {
+        req.setAttribute("panoMode", Boolean.TRUE);
+        return viewBasic(req);
+    }
+
     @POST
     @Path("/basic")
     public Response postBasic(@FormParam("dpi") int dpi,
