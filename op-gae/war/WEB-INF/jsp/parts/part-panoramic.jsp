@@ -9,15 +9,15 @@ We offer printing at <strong>18"×4"</strong>,
 the perfect ratio for iPhone photos, for just <strong>${panoPrice}</strong>.</p>
 
 <div id="pano-container">
-	<div id="pano-sticker">
-		<div class="stickercontainer">
-			<div class="stickercrop"><div class="sticker"></div></div>
-			<div class="foldshadowcrop"><div class="foldshadow"></div></div>
-			<div class="foldcrop"><div class="fold"></div></div>
-			<div class="sticker-text">${panoPriceSticker}</div>
-		</div>
-	</div>
-	<div id="pano-text">← 18" →</div>
+    <div id="pano-sticker">
+        <div class="stickercontainer">
+            <div class="stickercrop"><div class="sticker"></div></div>
+            <div class="foldshadowcrop"><div class="foldshadow"></div></div>
+            <div class="foldcrop"><div class="fold"></div></div>
+            <div class="sticker-text">${panoPriceSticker}</div>
+        </div>
+    </div>
+    <div id="pano-text">← 18" →</div>
     <div id="pano-img">
 	    <img style="box-shadow: 0px 0px 15px #222222;" src="/images/pano.jpg"/>
     </div>

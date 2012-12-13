@@ -41,8 +41,8 @@ limitations under the License.
         
       
         <div class="supported-browser">
-	        <div class="text-align-right">
-	            <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-inline="true" data-ajax="false">Get started</a></p>
+            <div class="text-align-right">
+                <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-inline="true" data-ajax="false">Get started</a></p>
             </div>
         </div>
     </div>
