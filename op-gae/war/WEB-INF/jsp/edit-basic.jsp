@@ -50,14 +50,14 @@ limitations under the License.
 
         <form action="#" method="get">
             <div class="not-sticker-mode">
+                <h2 id="frame-size-text"></h2>
                 <div data-role="fieldcontain" title="Width of picture frame">
-                    <h2 id="frame-size-text"></h2>
-                    <label for="frame-width" id="width-label">Width:</label>
-                    <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
+                    <label for="frame-width">Width:</label>
+                    <input type="number" id="frame-width" value="4" step="0.1" min="0.1" max="100" data-highlight="true" class="frame-size-input"/>
                 </div>
                 <div data-role="fieldcontain" title="Height of picture frame">
-                    <label for="frame-height" id="height-label">Height:</label>
-                    <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
+                    <label for="frame-height">Height:</label>
+                    <input type="number" id="frame-height" value="2" step="0.1" min="0.1" max="100" data-highlight="true" class="frame-size-input"/>
                 </div>
                 <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorInches">
                     <p class="error-text">Frame too big. Maximum sizes are 18"×4", or 12"×8"</p>
@@ -192,10 +192,8 @@ $(document).ready(function() {
     dpiFull = 215;
     
     $("#error-loading-preview").hide();
-    $("input").click(queueRenderPreview);
     $("input").change(queueRenderPreview);
     $("input").keyup(queueRenderPreview);
-    $(".span-slider").change(queueRenderPreview);
     $("#radio-cm, #radio-inches").change(renderPreview);
     
     $("#img-upload").click(uploadImage);
@@ -217,26 +215,27 @@ function panoMode() {
 }
 
 function renderPreview() {        
-    $.mobile.showPageLoadingMsg();
-    updateTextAndControls();
-
-    var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95/" + $("#background").val().replace("#", "") + "/" + stickerMode();
-    var previewImageUrl = "/transformer/" + dpiRender + urlEnding + "/" + tileMargin;
-    var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "/" + parseInt(tileMargin*(dpiFull/dpiRender)) + "?download=true";
-    
-    $("#img-preview").attr("src", previewImageUrl);
-    $("#img-download").attr("href", finalImageUrl);
-    var img = new Image();
-    img.src = previewImageUrl;
-    img.onload = function(){
-        $("#error-loading-preview").hide();
-        $.mobile.hidePageLoadingMsg();
-    };
-    img.onerror = function(){
-        $.mobile.hidePageLoadingMsg();
-        $("#error-loading-preview").show();
-        renderPreview(); // try again
-    };
+    if (printsizeAvailable(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation())) {
+        $.mobile.showPageLoadingMsg();
+        updateTextAndControls();
+        var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95/" + $("#background").val().replace("#", "") + "/" + stickerMode();
+	    var previewImageUrl = "/transformer/" + dpiRender + urlEnding + "/" + tileMargin;
+	    var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "/" + parseInt(tileMargin*(dpiFull/dpiRender)) + "?download=true";
+	    
+	    $("#img-preview").attr("src", previewImageUrl);
+	    $("#img-download").attr("href", finalImageUrl);
+	    var img = new Image();
+	    img.src = previewImageUrl;
+	    img.onload = function(){
+	        $("#error-loading-preview").hide();
+	        $.mobile.hidePageLoadingMsg();
+	    };
+	    img.onerror = function(){
+	        $.mobile.hidePageLoadingMsg();
+	        $("#error-loading-preview").show();
+	        renderPreview(); // try again
+	    };
+    }
 }
 
 function uploadImage() {

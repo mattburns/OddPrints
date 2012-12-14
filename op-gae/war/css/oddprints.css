@@ -29,6 +29,10 @@ html {
     width: 67px;
 }
 
+.ui-field-contain input.frame-size-input {
+    width: 100px;
+}
+
 .ui-field-contain label.ui-slider {
     vertical-align: middle;
 }

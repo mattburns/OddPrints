@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.14 - 2012/12/14</h2>
+        <ul>
+            <li>Replace frame size sliders with simple textboxes.</li>
+        </ul>
         <h2>v.13 - 2012/12/12</h2>
         <ul>
             <li>Specific page for <a href="/panoramic">panoramics</a> and <a href="/custom">custom</a> prints.</li>            

@@ -63,14 +63,14 @@ limitations under the License.
     
             <form action="#" method="get">
                 <div class="not-sticker-mode">
+                    <h2 id="frame-size-text"></h2>
                     <div data-role="fieldcontain" title="Width of picture frame">
-                        <h2 id="frame-size-text"></h2>
                         <label for="frame-width">Width:</label>
-                        <span class="span-slider"><input type="range" name="slider" id="frame-width" value="4" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
+                        <input type="number" id="frame-width" value="4" step="0.1" min="0.1" max="100" data-highlight="true" class="frame-size-input"/>
                     </div>
                     <div data-role="fieldcontain" title="Height of picture frame">
                         <label for="frame-height">Height:</label>
-                        <span class="span-slider"><input type="range" name="slider" id="frame-height" value="2" step="0.1" min="0.1" max="18" data-highlight="true"/></span>
+                        <input type="number" id="frame-height" value="2" step="0.1" min="0.1" max="100" data-highlight="true" class="frame-size-input"/>
                     </div>
                     <div data-role="fieldcontain" title="PrintsizeError" id="PrintsizeErrorInches">
                         <p class="error-text">Frame too big. Maximum sizes are 18"×4", or 12"×8"</p>
@@ -314,8 +314,7 @@ $(document).ready(function() {
         queueRenderPreview();
     };
 
-    $("input").click(queueRenderPreview);
-    $("input, .span-slider").change(queueRenderPreview);
+    $("input").change(queueRenderPreview);
     $("input").keyup(queueRenderPreview);
     $("#radio-cm, #radio-inches").change(renderPreview);
     

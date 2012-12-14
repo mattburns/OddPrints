@@ -318,44 +318,25 @@ function isImageCurrentlyPortrait() {
     var height = img.clientHeight;
 }
 
-function checkPrintsizeAvailable(frameWidthInInches, frameHeightInInches, orientation) {
+function printsizeAvailable(frameWidthInInches, frameHeightInInches, orientation) {
     
     var settings = calculatePrintSize(frameWidthInInches, frameHeightInInches, orientation);
     
     if (!settings.printWidth) {
         if (getFrameUnits() === "cm") {
+            $("#PrintsizeErrorInches").hide();
             $("#PrintsizeErrorCm").show();
         } else {
             $("#PrintsizeErrorInches").show();
+            $("#PrintsizeErrorCm").hide();
         }
+        $("#img-preview").hide();
+        return false;
     } else {
         $("#PrintsizeErrorInches").hide();
         $("#PrintsizeErrorCm").hide();
-    }
-}
-
-function restrictSliders() {
-    var max = 0;
-
-    for (var i = 0 ; i < availableSizes.length ; i++) {
-        max = Math.max(max, availableSizes[i].h);
-        max = Math.max(max, availableSizes[i].w);
-    }
-    
-    var visibleMax = max;
-    
-    if (getFrameUnits() === "cm") {
-        visibleMax = toCm(max);
-    }
-    
-    $("#frame-width").attr("max", visibleMax);
-    $("#frame-height").attr("max", visibleMax);
-    
-    if (getFrameWidth() > visibleMax) {
-        $("#frame-width").val(visibleMax);
-    }
-    if (getFrameHeight() > visibleMax) {
-        $("#frame-height").val(visibleMax);
+        $("#img-preview").show();
+        return true;
     }
 }
 
@@ -364,10 +345,8 @@ var renderTimeoutId = 0;
 
 // if there are multiple call in quick succession, only that last call does the real work
 function queueRenderPreview() {
-    $.mobile.showPageLoadingMsg();
     $("#error-loading-preview").hide();
     updateFrameHeader();    
-    restrictSliders();
     clearTimeout(renderTimeoutId);
     
     renderTimeoutId = window.setTimeout(
@@ -384,8 +363,7 @@ function updateTextAndControls() {
     if (settings.printWidth) {
         $("#print-size-text").html(" and print yourself at <span class='output-size'>" + settings.printWidth + "\"×" + settings.printHeight + "\"</span>");
     }
-    checkPrintsizeAvailable(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
-    restrictSliders();
+    printsizeAvailable(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation());
 }
 
 function isSupportedBrowser() {
@@ -458,7 +436,7 @@ function handlePresetSelect(evt) {
             standardPrintDefaults();
             break;
     }
-    $("#frame-width, #frame-height").slider("refresh"); // this will also trigger render
+    queueRenderPreview();
 }
 
 function standardPrintDefaults() {
