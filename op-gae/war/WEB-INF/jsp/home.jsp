@@ -91,11 +91,11 @@ limitations under the License.
                 
                 <img class="osi-logo" src="/images/osi_standard_logo.png"/>
                 <h3>Free</h3>
-                <p>We believe in freedom. This site is free to use and the images you
+                <p>This site is free to use and the images you
                 download have no watermark or branding. There's no annoying captcha,
                 advertisements or registration process. Even this code for this website
                 is open source.</p>
-                <p>If you want to support this site, you can order your prints directly from us.
+                <p>If you want to support this site, you can order your prints directly.
                 </p>
                 <p>Or not. It's up to you. :)</p>
                 
