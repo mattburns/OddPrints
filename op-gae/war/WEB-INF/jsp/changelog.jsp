@@ -37,7 +37,9 @@ limitations under the License.
     <div data-role="content">
         <h2>v.13 - 2012/12/12</h2>
         <ul>
-            <li>Specific page for <a href="/panoramic">panoramics</a>.</li>
+            <li>Specific page for <a href="/panoramic">panoramics</a> and <a href="/custom">custom</a> prints.</li>            
+            <li>Set panoramic price to £3.99.</li>
+            <li>Restored missing title on turbo edit page.</li>
         </ul>
         <h2>v.12 - 2012/12/07</h2>
         <ul>

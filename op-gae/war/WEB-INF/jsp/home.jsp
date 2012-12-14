@@ -38,10 +38,11 @@ limitations under the License.
     <div data-role="content" class="full-width">
         <div class="thin-column">
     
-            <h1>Easy printing for tricky frames</h1>
+            <h1>Easy printing at <em>any</em> size</h1>
             
-            <p>The <strong>free</strong> and <strong>simple</strong> way to print photos
-            for your unusual picture frames or passport.
+            <p>The <strong>free</strong> and <strong>simple</strong> way to print
+            <a href="/panoramic">panoramic</a>, <a href="/passport">passport</a>,
+            or <a href="/custom">custom size</a> photos.
             </p>
         
             <div id="slider-code">
@@ -79,12 +80,8 @@ limitations under the License.
         <div class="after-fold">
             <div class="thin-column">
                 <h3>How it works</h3>
-                <p>Photo labs only offer printing at standard sizes such as 6"×4" or 7"×5" but
-                sometimes you want to print your photos at different dimensions or ratios. With OddPrints you can choose any size you like. We then generate a new image
-                to print at a standard size which is ready to be cut down to the size you want.</p>
+                <jsp:include page="/WEB-INF/jsp/parts/part-custom.jsp"/>
                 
-                <img src="/images/workflow.png" />
-               
                 <h3>Print your own passport photos</h3>
                 <jsp:include page="/WEB-INF/jsp/parts/part-passport.jsp"/>
                 
@@ -103,7 +100,9 @@ limitations under the License.
                 <p>Or not. It's up to you. :)</p>
                 
                 <div class="supported-browser">
-                    <p><a href="/upload/basic" class="get-started" data-ajax="false">Get started</a></p>
+                    <div class="text-align-right">
+                        <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-inline="true" data-ajax="false">Get started</a></p>
+                    </div>
                 </div>
             </div>
         </div>

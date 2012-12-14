@@ -22,7 +22,7 @@ import uk.co.mattburns.pwinty.Photo;
 import com.google.common.collect.Lists;
 
 public enum PrintSize {
-    _2x4(50), _4x6(50), _5x7(140), _8x10(300), _8x12(300), _4x18(400);
+    _2x4(50), _4x6(50), _5x7(140), _8x10(300), _8x12(300), _4x18(399);
 
     private final int height;
     private final int width;

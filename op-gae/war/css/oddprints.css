@@ -98,20 +98,19 @@ div.img-preview {
     position: relative;
 }
 
-#bg-img-preview,
-#crop-img-preview,
-#line-img-preview {
-    pointer-events:none;
+#bg-img-preview,#crop-img-preview,#line-img-preview {
+    pointer-events: none;
 }
 
 .zoom-in-button {
     background: url("/images/zoom-in.png") no-repeat 0 0;
 }
+
 .zoom-out-button {
     background: url("/images/zoom-out.png") no-repeat 0 0;
 }
 
-.zoom-in-button, .zoom-out-button {
+.zoom-in-button,.zoom-out-button {
     width: 26px;
     height: 26px;
     cursor: pointer;
@@ -217,10 +216,9 @@ dt {
     margin-top: 20px;
 }
 
-#slider-code .overview li p
-{
+#slider-code .overview li p {
     /* Bit of a hack to indent text when line wraps on mobile screens */
-    padding-left: 71px; 
+    padding-left: 71px;
 }
 
 #slider-code .pager {
@@ -267,11 +265,8 @@ dt {
 .stickercontainer {
     position: relative;
     top: 0px;
-    left: 100%;
-    width: 100%;
     height: 100%;
     margin: auto;
-    font-size: 125px;
     -moz-transform: rotate(25deg);
     -webkit-transform: rotate(25deg);
     -o-transform: rotate(25deg);
@@ -341,14 +336,14 @@ dt {
 .sticker-text {
     position: absolute;
     width: 100%;
-    height: 100%;
-    top: 22%;
+    top: 25%;
     overflow: hidden;
     text-align: center;
-    font-size: 28%;
+    font-size: 160%;
     color: #008500;
     text-shadow: 0px 2px 3px #39E639;
     font-family: 'Alfa Slab One', cursive;
+    color: #008500;
 }
 
 #pano-text {
@@ -364,8 +359,8 @@ dt {
 
 #pano-container {
     position: relative;
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
 }
 
 #pano-sticker {
@@ -375,8 +370,6 @@ dt {
     top: 0px;
     bottom: 0px;
     right: 0px;
-    left: 56%;
     /* ratio between width and height of pano */
-    width: 22.16%; 
+    width: 22.16%;
 }
-

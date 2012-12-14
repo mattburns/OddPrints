@@ -25,25 +25,32 @@ limitations under the License.
       xmlns:c="http://java.sun.com/jsp/jstl/core">
       
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
-    <jsp:param name="titleText" value=" - Passport Photos" />
-    <jsp:param name="descriptionText" value="Use OddPrints to print your own passport photos for free. Also handy if you have unwilling subjects like small children." />
+    <jsp:param name="titleText" value=" - Custom Size Prints" />
+    <jsp:param name="descriptionText" value="Print photos at any size you like for non-standard frames." />
 </jsp:include>
 <body>
 
-<div data-role="page" id="page-passport">
+<div data-role="page" id="page-custom">
 
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>Print your own passport photos</h2>
-        <p>Did you know you can use OddPrints to print your own passport photos?</p>
+        <h2>Custom Size Prints</h2>
+                
+        <jsp:include page="/WEB-INF/jsp/parts/part-custom.jsp"/>
         
-        <jsp:include page="/WEB-INF/jsp/parts/part-passport.jsp"/>
-
-        <p>You can print passport or visa photos at any size you require
-        but to keep things simple, there are default templates for the US, Canada,
-        India and the UK.</p>
+        <h3>Why?</h3>
+        <p>Unfortunately, at smaller sizes, "non-standard" frames are actually very common.
+        You will often see frames for 4"×4", 3"×3", 2"×2", 4"×3", 4×4cm, 3×3cm etc.
+        However, almost all printing labs only offer a smallest printing size of 6"×4".
+        Printing at these sizes is very difficult because you have to understand
+        print DPI, canvas sizes, exposure auto-correction problems.
+        OddPrints makes it easy.</p>
         
+        <h3>Completely Free</h3>
+        <p>OddPrints is free to use, you just download the image and prints them at a standard size,
+        or you can order prints directly. Either way, there are no nags/ads/watermarks or any other nonsense.</p>
+      
         <div class="supported-browser">
             <div class="text-align-right">
                 <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-inline="true" data-ajax="false">Get started</a></p>
