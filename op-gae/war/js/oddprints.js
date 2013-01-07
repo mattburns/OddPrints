@@ -271,18 +271,22 @@ function getZoomFactor() {
 
 function getFrameWidth() {
     var width = parseFloat($("#frame-width").val());
-    if (isNaN(width) || width <= 0) {
+    if (isNaN(width) || width < 0.1) {
+        if (width < 0.1 && $("#frame-width").val() != "0.") {
+            $("#frame-width").val(0.1);
+        }
         width = 0.1;
-        $("#frame-width").val(width);
     }
     return width;
 }
 
 function getFrameHeight() {
     var height = parseFloat($("#frame-height").val());
-    if (isNaN(height) || height <= 0) {
+    if (isNaN(height) || height < 0.1) {
+        if (height < 0.1 && $("#frame-height").val() != "0.") {
+            $("#frame-height").val(0.1);
+        }
         height = 0.1;
-        $("#frame-height").val(height);
     }
     return height;
 }
