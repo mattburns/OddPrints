@@ -707,10 +707,15 @@ function uploadImage() {
 }
 
 function uploadImageImpl() {
+    
     var settings = calculateSettings(dpiFull);
+    var imageDataValue = renderFull();
+    
+    // show spinner again while uploading
+    $.mobile.showPageLoadingMsg();
     
     $.post("/upload",
-       { imageData: renderFull(),
+       { imageData: imageDataValue,
          frameSize: frameSizeString(),
          printWidth: settings.printWidth,
          printHeight: settings.printHeight,
@@ -720,11 +725,13 @@ function uploadImageImpl() {
     .success(
             function() { 
                 window.location.href = "/checkout";
+                $.mobile.hidePageLoadingMsg();
             }
     )
     .error(
             function() { 
                 window.location.href = "/error?message=Failed+to+upload+image.";
+                $.mobile.hidePageLoadingMsg();
             }
     );
 }
@@ -735,6 +742,7 @@ function uploadDownloadImage() {
 }
 
 function uploadDownloadImageImpl() {
+    
     var form = document.createElement("form");
     form.setAttribute("method", "post");
     form.setAttribute("action", "/upload/download");
@@ -743,7 +751,10 @@ function uploadDownloadImageImpl() {
     hiddenField.setAttribute("type", "hidden");
     hiddenField.setAttribute("name", "imageData");
     hiddenField.setAttribute("value", renderFull());
-
+    
+    // continue to show loading message
+    $.mobile.showPageLoadingMsg();
+    
     form.appendChild(hiddenField);
 
     document.body.appendChild(form);
