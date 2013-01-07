@@ -235,6 +235,8 @@ function renderPreview() {
 	        $("#error-loading-preview").show();
 	        renderPreview(); // try again
 	    };
+    } else {
+        $.mobile.hidePageLoadingMsg();
     }
 }
 

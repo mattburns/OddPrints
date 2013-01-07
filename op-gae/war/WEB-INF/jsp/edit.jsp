@@ -316,7 +316,6 @@ $(document).ready(function() {
 
     $("input").change(queueRenderPreview);
     $("input").keyup(queueRenderPreview);
-    $("#radio-cm, #radio-inches").change(renderPreview);
     
     $("#img-upload").click(uploadImage);
     $("#img-download").click(uploadDownloadImage);
@@ -569,7 +568,6 @@ function renderPreview() {
 
 function renderFull() {
     var jpegData = calculate(dpiFull);
-    $.mobile.showPageLoadingMsg();
     return jpegData;
 }
 
@@ -654,7 +652,6 @@ function calculate(dpi) {
     $("#line-img-preview").attr("src", lineCanvas.toDataURL('image/png'));
 
     $('#img-img-preview, #crop-img-preview, #line-img-preview').load(repositionImages);
-    
     $.mobile.hidePageLoadingMsg();
     
     return mergedJpegData;

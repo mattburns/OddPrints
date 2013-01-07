@@ -345,6 +345,7 @@ var renderTimeoutId = 0;
 
 // if there are multiple call in quick succession, only that last call does the real work
 function queueRenderPreview() {
+    $.mobile.showPageLoadingMsg();
     $("#error-loading-preview").hide();
     updateFrameHeader();    
     clearTimeout(renderTimeoutId);
