@@ -26,20 +26,32 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.checkout.sdk.commands.ApiContext;
 import com.oddprints.Environment;
+import com.oddprints.PMF;
+import com.oddprints.checkout.Address;
 import com.oddprints.checkout.CheckoutNotificationHandler;
 import com.oddprints.checkout.GoogleCheckoutNotificationHandler;
+import com.oddprints.checkout.ManualCheckoutNotificationHandler;
 import com.oddprints.checkout.PaypalCheckoutNotificationHandler;
+import com.oddprints.dao.Basket;
+import com.oddprints.dao.Basket.CheckoutSystem;
+import com.oddprints.dao.Basket.State;
 import com.oddprints.util.EmailSender;
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 @Path("/checkoutnotification")
 public class CheckoutNotification {
@@ -110,6 +122,9 @@ public class CheckoutNotification {
         String res = in.readLine();
         in.close();
 
+        EmailSender.INSTANCE.sendToAdmin("Sent: '" + str
+                + "' and response was " + res, "Attempted to validate IPN");
+
         // assign posted variables to local variables
         String paymentStatus = request.getParameter("payment_status");
         String paymentAmount = request.getParameter("mc_gross");
@@ -144,11 +159,66 @@ public class CheckoutNotification {
             // check that paymentAmount/paymentCurrency are correct
             // process payment
         } else {
-            EmailSender.INSTANCE.sendToAdmin("response was " + res,
+            EmailSender.INSTANCE.sendToAdmin("Sent: '" + str
+                    + "' but response was " + res,
                     "failed to validate paypal IPN");
             // error
             return Response.serverError().build();
         }
 
+    }
+
+    @GET
+    @Path("/manual/{environment}/{checkoutSystem}/{checkoutSystemOrderNumber}/{basketKeyString}")
+    public Response handleManualNotification(
+            @PathParam("environment") String environment,
+            @PathParam("checkoutSystem") String checkoutSystemString,
+            @PathParam("checkoutSystemOrderNumber") String checkoutSystemOrderNumber,
+            @PathParam("basketKeyString") String basketKeyString,
+            @QueryParam("buyerEmail") String buyerEmail,
+            @QueryParam("addressName") String addressName,
+            @QueryParam("addressStreet1") String addressStreet1,
+            @QueryParam("addressStreet2") String addressStreet2,
+            @QueryParam("addressCity") String addressCity,
+            @QueryParam("addressState") String addressState,
+            @QueryParam("addressZip") String addressZip,
+            @QueryParam("addressCountry") String addressCountry,
+
+            @Context HttpServletRequest request,
+            @Context HttpServletResponse response) throws IOException {
+
+        UserService userService = UserServiceFactory.getUserService();
+        if (!userService.isUserLoggedIn() || !userService.isUserAdmin()) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
+
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+
+        Basket basket = Basket.getBasketByKeyString(basketKeyString, pm);
+        basket.setState(State.awaiting_payment);
+        pm.makePersistent(basket);
+        pm.close();
+
+        CheckoutNotificationHandler handler = new CheckoutNotificationHandler();
+        ManualCheckoutNotificationHandler manualHandler = new ManualCheckoutNotificationHandler(
+                handler);
+
+        CheckoutSystem checkoutSystem = CheckoutSystem
+                .valueOf(checkoutSystemString);
+        Address address = new Address();
+
+        address.setRecipientName(addressName);
+        address.setAddress1(addressStreet1);
+        address.setAddress2(addressStreet2);
+        address.setTownOrCity(addressCity);
+        address.setStateOrCounty(addressState);
+        address.setPostalOrZipCode(addressZip);
+        address.setCountry(addressCountry);
+
+        manualHandler
+                .manuallyAuthorizeOrder(checkoutSystem,
+                        checkoutSystemOrderNumber, basketKeyString, buyerEmail,
+                        address);
+        return Response.ok().build();
     }
 }

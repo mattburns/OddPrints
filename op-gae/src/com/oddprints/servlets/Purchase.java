@@ -47,6 +47,7 @@ import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.State;
 import com.oddprints.dao.BasketItem;
+import com.oddprints.util.EmailSender;
 import com.sun.jersey.api.view.Viewable;
 
 @Path("/purchase")
@@ -128,6 +129,10 @@ public class Purchase {
         pm.close();
         pm = PMF.get().getPersistenceManager();
         basket = Basket.fromSession(req, pm);
+
+        EmailSender.INSTANCE.sendToAdmin(
+                "paypal checkout -" + basket.getIdString(), "paypal checkout -"
+                        + basket.getIdString());
 
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);
