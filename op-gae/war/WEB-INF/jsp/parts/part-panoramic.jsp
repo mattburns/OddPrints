@@ -25,8 +25,8 @@ the perfect ratio for iPhone photos, at just <strong>${panoPrice}</strong>.</p>
 	</div>
 </a>
 <p>Of course you can also print panoramas created by any method.
-Perhaps you have some taken with an Android
-        smartphone, or maybe you have a panoramic image created with 
+Perhaps you have some taken with an <a href="http://www.youtube.com/watch?v=txwdD11sW1s" data-ajax="false">Android
+        smartphone</a>, or maybe you have a panoramic image created with 
         photostitch software.</p>
         
 <p>Securely packaged in a tube, OddPrints will ship

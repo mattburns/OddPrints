@@ -7,7 +7,7 @@ sometimes you want to print your photos at different dimensions or ratios.
 With OddPrints you can choose any size you like. You just download a transformed
 image ready to print at a standard size, and cut down to the size you want.</p>
 
-<a href="/upload/basicpano" data-ajax="false">
+<a href="/upload/basic" data-ajax="false">
     <img src="/images/workflow.png" />
 </a>
                

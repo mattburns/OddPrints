@@ -96,8 +96,8 @@ limitations under the License.
                             <option value="8x10" >Standard - 8"×10"</option>
                             <option value="12x8" >Standard - 12"×8"</option>
                             <option value="8x12" >Standard - 8"×12"</option>
-                            <option value="18x4" >Panoramic - 18"×4" (perfect for iPhone)</option>
-                            <option value="4x18" >Supertall - 4"×18" (perfect for iPhone)</option>
+                            <option value="18x4" >Panoramic - 18"×4"</option>
+                            <option value="4x18" >Supertall - 4"×18"</option>
                         </select>
                     </div>
                 </div>
