@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.16 - 2013/01/22</h2>
+        <ul>
+            <li>Continue to send dispatched email even if charging payment threw an error (will email admin).</li>
+        </ul>
         <h2>v.15 - 2013/01/10</h2>
         <ul>
             <li>Manually process PayPal payments (temp workaraound as part of live paypal testing).</li>

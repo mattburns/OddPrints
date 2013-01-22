@@ -163,17 +163,26 @@ public class Orders {
             Order pwintyOrder = basket.getPwintyOrderEL();
             if (pwintyOrder != null
                     && pwintyOrder.getStatus() == Status.Complete) {
-                if (basket.getCheckoutSystem() == CheckoutSystem.google) {
-                    // charge and ship
-                    ApiContext apiContext = basket.getEnvironment()
-                            .getGoogleCheckoutAPIContext();
-                    apiContext.orderCommands(
-                            basket.getCheckoutSystemOrderNumber())
-                            .chargeAndShipOrder();
-                }
-                basket.setState(State.dispatched_from_lab);
+
                 String checkoutSystemOrderNumber = basket
                         .getCheckoutSystemOrderNumber();
+
+                if (basket.getCheckoutSystem() == CheckoutSystem.google) {
+                    try {
+                        // charge and ship
+                        ApiContext apiContext = basket.getEnvironment()
+                                .getGoogleCheckoutAPIContext();
+                        apiContext.orderCommands(
+                                basket.getCheckoutSystemOrderNumber())
+                                .chargeAndShipOrder();
+                    } catch (Throwable t) {
+                        EmailSender.INSTANCE.sendToAdmin(
+                                "basket: " + basket.getUrl() + " error was "
+                                        + t.getMessage(),
+                                "Problem charging customer");
+                    }
+                }
+                basket.setState(State.dispatched_from_lab);
 
                 String subject = "OddPrints Dispatched Order #"
                         + checkoutSystemOrderNumber;
@@ -187,5 +196,4 @@ public class Orders {
         return Response.ok().build();
 
     }
-
 }
