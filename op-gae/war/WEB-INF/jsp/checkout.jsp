@@ -111,7 +111,7 @@ limitations under the License.
         
                 <div>
                     <div class="text-align-right">
-                    <p><a href="/purchase/google" data-ajax="false"><img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=${it.merchantId}&w=180&h=46&style=trans&variant=text&loc=en_GB" alt="Proceed to Google Checkout"/></a></p>
+                    <p><a id="google-purchase-link" href="/purchase/google" data-ajax="false"><img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=${it.merchantId}&w=180&h=46&style=trans&variant=text&loc=en_GB" alt="Proceed to Google Checkout"/></a></p>
                     <c:if test="${it.userIsAdmin}">
                         <p><a href="/purchase/paypal" data-ajax="false"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Proceed to PayPal checkout"/></a></p>
                     </c:if>
@@ -121,8 +121,10 @@ limitations under the License.
           </c:choose>
     </div>
     
-    <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
-
+    <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp">
+        <jsp:param name="hasCheckoutButtons" value="true" />
+    </jsp:include>
+    
 </div>
 
 
@@ -132,6 +134,16 @@ $(document).ready(function() {
         var id = event.target.id;
         var basketItemId = id.split('-')[1];
         window.location.href = "/checkout/update/" + basketItemId + "/" + event.target.value;
+    });
+    
+    $("#google-purchase-link").click(function(e){   
+      _gaq.push(function() {
+          var pageTracker = _gaq._getAsyncTracker();
+          setUrchinInputCode(pageTracker);
+          console.log(getUrchinFieldValue());
+          window.location = "/purchase/google?analyticsData=" + getUrchinFieldValue();
+      });
+      e.preventDefault();
     });
 });
 </script>

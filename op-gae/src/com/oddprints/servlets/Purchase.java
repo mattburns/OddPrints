@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -56,7 +57,8 @@ public class Purchase {
     @GET
     @Path("/google")
     @Produces(MediaType.TEXT_HTML)
-    public Response google(@Context HttpServletRequest req)
+    public Response google(@Context HttpServletRequest req,
+            @QueryParam("analyticsData") String analyticsData)
             throws URISyntaxException {
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -100,6 +102,8 @@ public class Purchase {
         frs.setPrice(frsprice);
         sm.getFlatRateShippingOrMerchantCalculatedShippingOrPickup().add(frs);
         merchantflowSupport.setShippingMethods(sm);
+        
+        merchantflowSupport.setAnalyticsData(analyticsData);
 
         cart.setCheckoutFlowSupport(flowSupport);
 

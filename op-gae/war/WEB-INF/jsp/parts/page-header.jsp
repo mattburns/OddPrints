@@ -12,5 +12,6 @@
     }(document, 'script', 'facebook-jssdk'));</script>
 
     <div data-role="header">
-        <h1><a href="/" data-ajax="false"><img alt="OddPrints" src="/images/logo-170x30.png"/></a></h1>
+        <h1><a href="/" class="logo" data-ajax="false">
+        <span class="oddprints-logo-a">Odd</span><span class="oddprints-logo-b">Prints</span></a></h1>
     </div>

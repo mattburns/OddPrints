@@ -63,3 +63,9 @@ $(document).ready(function() {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>
+
+<c:if test="${param.hasCheckoutButtons}">
+    <script src="http://checkout.google.com/files/digital/ga_post.js" type="text/javascript">
+    </script>
+</c:if>
+

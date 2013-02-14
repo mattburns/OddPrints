@@ -3,9 +3,40 @@ html {
     overflow-y: scroll;
 }
 
+@font-face {
+    font-family: 'AdelleBasicBold';
+    src: url('adellebasic_bold-adelle.eot');
+    src: url('adellebasic_bold-adelle.eot?#iefix')
+        format('eot'), url('adellebasic_bold-adelle.woff')
+        format('woff'), url('adellebasic_bold-adelle.ttf')
+        format('truetype'),
+        url('adellebasic_bold-adelle.svgz#webfontQtT5Mhrs')
+        format('svg'),
+        url('adellebasic_bold-adelle.svg#webfontQtT5Mhrs')
+        format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+a.logo {
+    text-decoration: none;
+}
+
+.oddprints-logo-a, .oddprints-logo-b {
+    font-family: 'AdelleBasicBold', Arial, Helvetica, Tahoma, Geneva, sans-serif;
+    font-size: 40px;
+    letter-spacing: -2px;
+    color: #5f9cc5;
+    font-weight: normal;
+    text-shadow: 0 1px 0 #000;
+}
+
+.oddprints-logo-b {
+    color: #396b9e;
+}
+
 .ui-header .ui-title {
-    margin-left: 0px;
-    margin-right: 0px;
+    margin: 0px;
 }
 
 .ui-content {

@@ -20,6 +20,11 @@
     <link type="text/css" rel="stylesheet" href="/css/oddprints.css?ver=1" />
     <link type="text/css" rel="stylesheet" href="/css/jquery.miniColors.css" />
     <script type="text/javascript" src="/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript">
+        $(document).bind("mobileinit", function () {
+            $.mobile.ajaxEnabled = false;
+        });
+    </script>
     <script type="text/javascript" src="/js/jquery.mobile-1.2.0.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui-1.9.0.custom.min.js"></script>
     <script type="text/javascript" src="/js/modernizr.custom.11873.js"></script>
