@@ -16,7 +16,7 @@ public enum TestUtils {
             prop.load(getClass()
                     .getResourceAsStream("test-settings.properties"));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Couldn't find test-settings.properties", e);
         }
 
         for (Object key : prop.keySet()) {

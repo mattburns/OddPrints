@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.17 - 2013/02/14</h2>
+        <ul>
+            <li>Remove confusing feature of cursors controlling panning.</li>
+        </ul>
         <h2>v.16 - 2013/01/22</h2>
         <ul>
             <li>Continue to send dispatched email even if charging payment threw an error (will email admin).</li>

@@ -28,4 +28,4 @@
     <script type="text/javascript" src="/js/jquery.miniColors.min.js"></script>
 </head>
 
-<c:set var="html_year" scope="application" value="2012"/>
+<c:set var="html_year" scope="application" value='<%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %>'/>
