@@ -1,4 +1,5 @@
 *~
+op-gae/.ant-targets-build.xml
 op-gae/war/WEB-INF/classes
 op-gae/war/WEB-INF/appengine-generated
 op-gae/test-results
