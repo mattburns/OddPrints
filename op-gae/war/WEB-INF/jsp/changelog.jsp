@@ -35,10 +35,14 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.21 - 2013/03/01</h2>
+        <ul>
+            <li>Fixed purchase link bug in IE.</li>
+        </ul>
         <h2>v.20 - 2013/02/14</h2>
         <ul>
             <li>Replace image logo with @fontface. Looks better on good browsers and worse on old ones.</li>
-            <li>Added tracking code for eCommerce feature of google analytics</li>
+            <li>Added tracking code for eCommerce feature of google analytics.</li>
         </ul>
         <h2>v.19 - 2013/02/14</h2>
         <ul>

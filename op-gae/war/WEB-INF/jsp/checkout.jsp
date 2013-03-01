@@ -141,7 +141,7 @@ $(document).ready(function() {
           var pageTracker = _gaq._getAsyncTracker();
           setUrchinInputCode(pageTracker);
           console.log(getUrchinFieldValue());
-          window.location = "/purchase/google?analyticsData=" + getUrchinFieldValue();
+          window.location.href = "/purchase/google?analyticsData=" + getUrchinFieldValue();
       });
       e.preventDefault();
     });
