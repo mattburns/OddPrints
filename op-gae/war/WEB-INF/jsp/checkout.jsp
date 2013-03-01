@@ -140,7 +140,6 @@ $(document).ready(function() {
       _gaq.push(function() {
           var pageTracker = _gaq._getAsyncTracker();
           setUrchinInputCode(pageTracker);
-          console.log(getUrchinFieldValue());
           window.location.href = "/purchase/google?analyticsData=" + getUrchinFieldValue();
       });
       e.preventDefault();
