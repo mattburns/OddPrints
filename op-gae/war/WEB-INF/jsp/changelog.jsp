@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.22 - 2013/03/10</h2>
+        <ul>
+            <li>Configure PayPal buy app setting.</li>
+        </ul>
         <h2>v.21 - 2013/03/01</h2>
         <ul>
             <li>Fixed purchase link bug in IE.</li>

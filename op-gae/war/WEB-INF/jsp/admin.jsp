@@ -59,7 +59,7 @@ limitations under the License.
         <a id="add-setting-link" data-ajax="false" href=""></a>
         
         <h3>Initialize the dev database</h3>
-        Use the file in your dropbox (maybe <a data-ajax="false" href="file:///media/data/Dropbox/OddPrints-Keys-and-DB-init.html">here</a>).
+        Use the file in your dropbox (maybe <a data-ajax="false" href="file:///Users/matt/Dropbox/OddPrints-Keys-and-DB-init.html">here</a>).
     </div>    
     
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />

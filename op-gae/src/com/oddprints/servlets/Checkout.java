@@ -34,6 +34,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.collect.Maps;
 import com.oddprints.Environment;
 import com.oddprints.PMF;
+import com.oddprints.dao.ApplicationSetting;
+import com.oddprints.dao.ApplicationSetting.Settings;
 import com.oddprints.dao.Basket;
 import com.sun.jersey.api.view.Viewable;
 
@@ -80,6 +82,10 @@ public class Checkout {
             it.put("merchantId", basket.getEnvironment()
                     .getGoogleCheckoutAPIContext().getMerchantId());
         }
+
+        it.put("paypalEnabled",
+                ApplicationSetting.getSetting(Settings.PAYPAL_ENABLED).equals(
+                        "true"));
 
         return new Viewable("/checkout", it);
     }

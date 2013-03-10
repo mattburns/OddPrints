@@ -112,7 +112,7 @@ limitations under the License.
                 <div>
                     <div class="text-align-right">
                     <p><a id="google-purchase-link" href="/purchase/google" data-ajax="false"><img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=${it.merchantId}&w=180&h=46&style=trans&variant=text&loc=en_GB" alt="Proceed to Google Checkout"/></a></p>
-                    <c:if test="${it.userIsAdmin}">
+                    <c:if test="${it.userIsAdmin and it.paypalEnabled}">
                         <p><a href="/purchase/paypal" data-ajax="false"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Proceed to PayPal checkout"/></a></p>
                     </c:if>
                     </div>
