@@ -102,7 +102,7 @@ public class Purchase {
         frs.setPrice(frsprice);
         sm.getFlatRateShippingOrMerchantCalculatedShippingOrPickup().add(frs);
         merchantflowSupport.setShippingMethods(sm);
-        
+
         merchantflowSupport.setAnalyticsData(analyticsData);
 
         cart.setCheckoutFlowSupport(flowSupport);
@@ -134,9 +134,17 @@ public class Purchase {
         pm = PMF.get().getPersistenceManager();
         basket = Basket.fromSession(req, pm);
 
-        EmailSender.INSTANCE.sendToAdmin(
-                "paypal checkout -" + basket.getIdString(), "paypal checkout -"
-                        + basket.getIdString());
+        EmailSender.INSTANCE
+                .sendToAdmin(
+                        "PayPal purchase attempted for order: www.oddprints.com/orders/"
+                                + basket.getSecret()
+                                + "/"
+                                + basket.getIdString()
+                                + " once they've paid, submit the order. "
+                                + "You can only do this once you manually authorize the order. "
+                                + "For the url format, look in your google doc : "
+                                + "'OddPrints - manual PayPal order submission'.",
+                        "paypal checkout -" + basket.getIdString());
 
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);

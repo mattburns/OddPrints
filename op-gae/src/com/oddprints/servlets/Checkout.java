@@ -25,6 +25,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -34,8 +35,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.collect.Maps;
 import com.oddprints.Environment;
 import com.oddprints.PMF;
-import com.oddprints.dao.ApplicationSetting;
-import com.oddprints.dao.ApplicationSetting.Settings;
 import com.oddprints.dao.Basket;
 import com.sun.jersey.api.view.Viewable;
 
@@ -65,7 +64,8 @@ public class Checkout {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Viewable viewCheckout(@Context HttpServletRequest req) {
+    public Viewable viewCheckout(@Context HttpServletRequest req,
+            @QueryParam("paypalEnabled") boolean paypalEnabled) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
         Basket basket = Basket.fromSession(req, pm);
@@ -83,9 +83,7 @@ public class Checkout {
                     .getGoogleCheckoutAPIContext().getMerchantId());
         }
 
-        it.put("paypalEnabled",
-                ApplicationSetting.getSetting(Settings.PAYPAL_ENABLED).equals(
-                        "true"));
+        it.put("paypalEnabled", paypalEnabled);
 
         return new Viewable("/checkout", it);
     }

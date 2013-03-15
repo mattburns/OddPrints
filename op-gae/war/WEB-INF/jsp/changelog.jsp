@@ -37,7 +37,7 @@ limitations under the License.
     <div data-role="content">
         <h2>v.22 - 2013/03/10</h2>
         <ul>
-            <li>Configure PayPal buy app setting.</li>
+            <li>Configure PayPal by query param.</li>
         </ul>
         <h2>v.21 - 2013/03/01</h2>
         <ul>
