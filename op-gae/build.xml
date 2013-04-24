@@ -1,5 +1,6 @@
 <project default="test">
-    <property name="sdk.dir" location="${user.home}/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.7.5/appengine-java-sdk-1.7.5" />
+    <property name="sdk.version" value="1.7.7.1" />
+    <property name="sdk.dir" location="${user.home}/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_${sdk.version}/appengine-java-sdk-${sdk.version}" />
     <property name="results" location="test-results" />
 
     <import file="${sdk.dir}/config/user/ant-macros.xml" />
