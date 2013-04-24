@@ -38,6 +38,7 @@ limitations under the License.
         <h2>v.22 - 2013/03/10</h2>
         <ul>
             <li>Configure PayPal by query param.</li>
+            <li>Hide broken sticker link.</li>
         </ul>
         <h2>v.21 - 2013/03/01</h2>
         <ul>

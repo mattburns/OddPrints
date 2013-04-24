@@ -82,11 +82,6 @@ limitations under the License.
                 <p>
                     <a href="${it.editurl}" data-ajax="false" data-role="button" data-theme="b" data-icon="plus" data-inline="true" data-mini="true">Upload more</a>
                 </p>
-                <c:if test="${not hasSticker}">
-                    <p>
-                        Is this a gift? Make it personal and <a href="${it.editstickerurl}" data-ajax="false">upload a photo</a> for us to stick on the envelope!
-                    </p>
-                </c:if>
                   
                 <div>
                     <div class="text-align-right">
