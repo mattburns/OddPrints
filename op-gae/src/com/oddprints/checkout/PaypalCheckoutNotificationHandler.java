@@ -57,7 +57,11 @@ public class PaypalCheckoutNotificationHandler {
         address.setAddress1(parameterMap.get("address_street"));
         address.setTownOrCity(parameterMap.get("address_city"));
         address.setStateOrCounty(parameterMap.get("address_state"));
-        address.setPostalOrZipCode(parameterMap.get("address_zip"));
+        String postcode = parameterMap.get("address_zip");
+        if (postcode == null || postcode.isEmpty()) {
+            postcode = " ";
+        }
+        address.setPostalOrZipCode(postcode);
         address.setCountry(parameterMap.get("address_country"));
         return address;
     }

@@ -86,8 +86,12 @@ public class GoogleCheckoutNotificationHandler extends
         address.setTownOrCity(orderSummary.getBuyerShippingAddress().getCity());
         address.setStateOrCounty(orderSummary.getBuyerShippingAddress()
                 .getRegion());
-        address.setPostalOrZipCode(orderSummary.getBuyerShippingAddress()
-                .getPostalCode());
+        String postcode = orderSummary.getBuyerShippingAddress()
+                .getPostalCode();
+        if (postcode == null || postcode.isEmpty()) {
+            postcode = " ";
+        }
+        address.setPostalOrZipCode(postcode);
         address.setCountry(orderSummary.getBuyerShippingAddress()
                 .getCountryCode());
         return address;

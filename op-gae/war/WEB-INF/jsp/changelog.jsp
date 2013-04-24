@@ -39,6 +39,7 @@ limitations under the License.
         <ul>
             <li>Configure PayPal by query param.</li>
             <li>Hide broken sticker link.</li>
+            <li>If no postcode given, just send space.</li>
         </ul>
         <h2>v.21 - 2013/03/01</h2>
         <ul>
