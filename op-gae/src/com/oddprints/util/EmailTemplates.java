@@ -17,6 +17,8 @@ package com.oddprints.util;
 
 import java.net.URL;
 
+import com.oddprints.dao.Basket.CheckoutSystem;
+
 public class EmailTemplates {
 
     public static String newOrder(String checkoutSystemOrderNumber, URL url) {
@@ -32,13 +34,26 @@ public class EmailTemplates {
                 + "<p>-Matt</p>" + "</font>";
     }
 
-    public static String orderReadyToSubmit(URL url) {
+    public static String orderReadyToSubmit(URL url, CheckoutSystem checkout) {
+        String next = "<strong>ERROR</strong>";
+        switch (checkout) {
+        case google:
+            next = "<p>Payment method has been authorised, check the order looks ok, "
+                    + "then submit to Pwinty from the <a href=\""
+                    + url.toExternalForm() + "\">Order Page</a>.</p>";
+            break;
+        case paypal:
+            next = "<p>Payment has been taken, just submit to Pwinty from the <a href=\""
+                    + url.toExternalForm() + "\">Order Page</a>.</p>";
+            break;
+        }
         return "<font face=\"arial, helvetica, sans-serif\"><h2>Admin action</h2> "
-                + "<p>Payment has been received, check it is ok, "
-                + "then submit to Pwinty from the <a href=\""
-                + url.toExternalForm() + "\">Order Page</a>.</p>"
-
-                + "<p>-Matt</p>" + "</font>";
+                + "<h3>"
+                + checkout
+                + " payment</h3>"
+                + next
+                + "<p>-Matt</p>"
+                + "</font>";
     }
 
     public static String shippedOrder(String checkoutSystemOrderNumber, URL url) {

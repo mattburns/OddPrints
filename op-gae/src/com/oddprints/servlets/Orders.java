@@ -167,6 +167,7 @@ public class Orders {
                 String checkoutSystemOrderNumber = basket
                         .getCheckoutSystemOrderNumber();
 
+                // For google orders, we only charge once the order has shipped
                 if (basket.getCheckoutSystem() == CheckoutSystem.google) {
                     try {
                         // charge and ship

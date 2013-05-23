@@ -54,7 +54,8 @@ public class CheckoutNotificationHandler {
             // create order on lab
             createOrderOnPwinty(basket, address, pm);
 
-            String msg = EmailTemplates.orderReadyToSubmit(basket.getUrl());
+            String msg = EmailTemplates.orderReadyToSubmit(basket.getUrl(),
+                    basket.getCheckoutSystem());
             EmailSender.INSTANCE.sendToAdmin(msg,
                     "Order ready to submit to pwinty!");
         } else {

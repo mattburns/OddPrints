@@ -128,23 +128,21 @@ public class Purchase {
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Basket basket = Basket.fromSession(req, pm);
+
         updateBasketState(basket, pm);
-        // close and re-fetch to persist updated state
         pm.close();
         pm = PMF.get().getPersistenceManager();
-        basket = Basket.fromSession(req, pm);
+        String basketKeyString = (String) req.getSession().getAttribute(
+                "basketKeyString");
+
+        basket = Basket.getBasketByKeyString(basketKeyString, pm);
 
         EmailSender.INSTANCE
                 .sendToAdmin(
                         "PayPal purchase attempted for order: www.oddprints.com/orders/"
-                                + basket.getSecret()
-                                + "/"
-                                + basket.getIdString()
-                                + " once they've paid, submit the order. "
-                                + "You can only do this once you manually authorize the order. "
-                                + "For the url format, look in your google doc : "
-                                + "'OddPrints - manual PayPal order submission'.",
-                        "paypal checkout -" + basket.getIdString());
+                                + basket.getSecret() + "/"
+                                + basket.getIdString() + ".",
+                        "paypal purchase initiated -" + basket.getIdString());
 
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);

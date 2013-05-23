@@ -51,8 +51,16 @@ limitations under the License.
         <form action="${paypalurl}" method="post" id="paypal-form">  
             <input type="hidden" name="cmd" value="_cart"> 
             <input type="hidden" name="upload" value="1"> 
-            <input type="hidden" name="shipping_1" value="2.99"> 
-            <input type="hidden" name="business" value="matt@mattburns.co.uk"> 
+            <input type="hidden" name="shipping_1" value="2.99">
+            <c:choose>                       
+                <c:when test="${it.basket.environment.sandbox}">
+                    <input type="hidden" name="business" value="seller_sellerpass@mattburns.co.uk">
+                </c:when>
+                <c:otherwise>
+                    <input type="hidden" name="business" value="matt@mattburns.co.uk">
+                </c:otherwise>
+            </c:choose>
+            
             <input type="hidden" name="currency_code" value="GBP"> 
             <input type="hidden" name="no_shipping" value="2"> 
             <input type="hidden" name="custom" value="${it.basket.idString}"> 

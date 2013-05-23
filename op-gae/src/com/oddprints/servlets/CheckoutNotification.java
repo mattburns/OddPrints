@@ -24,17 +24,23 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import com.google.appengine.api.users.UserService;
@@ -70,26 +76,34 @@ public class CheckoutNotification {
         return Response.ok().build();
     }
 
-    @SuppressWarnings("unchecked")
     @POST
     @Path("/paypal/{environment}")
+    @Consumes("application/x-www-form-urlencoded")
     public Response handlePaypalNotification(
-            @PathParam("environment") String environment,
-            @Context HttpServletRequest request,
-            @Context HttpServletResponse response) throws IOException {
+            MultivaluedMap<String, String> form,
+            @PathParam("environment") String environment) throws IOException {
 
-        // The following ugly slug of java was taken from paypal sample code:
+        // The following ugly slug of java was initially taken from paypal
+        // sample code:
         // https://www.x.com/developers/PayPal/documentation-tools/code-sample/216623
 
-        @SuppressWarnings("rawtypes")
-        Enumeration en = request.getParameterNames();
         String str = "cmd=_notify-validate";
-        while (en.hasMoreElements()) {
-            String paramName = (String) en.nextElement();
-            String paramValue = request.getParameter(paramName);
+
+        Map<String, String> formParams = new HashMap<String, String>();
+        for (Map.Entry<String, List<String>> m : form.entrySet()) {
+            if (m.getValue().size() != 1) {
+                EmailSender.INSTANCE.sendToAdmin("key: " + m.getKey()
+                        + " values: " + m.getValue(), "IPN >1");
+            } else {
+                formParams.put(m.getKey(), m.getValue().get(0));
+            }
+        }
+
+        SortedSet<String> sortedKeys = new TreeSet<String>(formParams.keySet());
+        for (String key : sortedKeys) {
             try {
-                str = str + "&" + paramName + "="
-                        + URLEncoder.encode(paramValue, "UTF-8");
+                str = str + "&" + key + "="
+                        + URLEncoder.encode(formParams.get(key), "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
@@ -122,47 +136,49 @@ public class CheckoutNotification {
         String res = in.readLine();
         in.close();
 
-        EmailSender.INSTANCE.sendToAdmin("Sent: '" + str
-                + "' and response was " + res, "Attempted to validate IPN");
-
         // assign posted variables to local variables
-        String paymentStatus = request.getParameter("payment_status");
-        String paymentAmount = request.getParameter("mc_gross");
-        String paymentCurrency = request.getParameter("mc_currency");
-        String txnId = request.getParameter("txn_id");
-        String receiverEmail = request.getParameter("receiver_email");
-        String payerEmail = request.getParameter("payer_email");
-
-        // send email to admin
-        String subject = "Notification recieved from PayPal " + paymentStatus
-                + " " + txnId;
-        String msg = "Payment of " + paymentCurrency + paymentAmount + ".<br/>"
-                + "receiverEmail " + receiverEmail + ".<br/>" + "payerEmail "
-                + payerEmail + ".<br/>" + "Parameters from paypal were: " + str;
-        EmailSender.INSTANCE.sendToAdmin(msg, subject);
+        String paymentStatus = formParams.get("payment_status");
 
         // check notification validation
         if (res.equals("VERIFIED")) {
+            String nextAction = "<h2>Next Action:</h2>";
+
             CheckoutNotificationHandler handler = new CheckoutNotificationHandler();
             PaypalCheckoutNotificationHandler paypalHandler = new PaypalCheckoutNotificationHandler(
                     handler);
+
+            String basketKeyString = formParams.get("custom");
+            PersistenceManager pm = PMF.get().getPersistenceManager();
+            URL url = Basket.getBasketByKeyString(basketKeyString, pm).getUrl();
+
             if (paymentStatus.equals("Completed")) {
-                paypalHandler.onAuthorizationAmountNotification(request
-                        .getParameterMap());
+                nextAction += "Submit <a href='" + url
+                        + "'>the order</a> to Pwinty";
+                paypalHandler.onAuthorizationAmountNotification(formParams);
             } else if (paymentStatus.equals("Pending")) {
-                paypalHandler.onNewOrderNotification(request.getParameterMap());
+
+                nextAction += "<p>Check if <a href='"
+                        + url
+                        + "'>the order</a> is ok, if so, charge the amount in PayPal</p>";
+                paypalHandler.onNewOrderNotification(formParams);
+            } else {
+                nextAction += "Unknown";
             }
+
+            EmailSender.INSTANCE
+                    .sendToAdmin(
+                            nextAction + "<h2>Received:</h2>" + "<p>"
+                                    + formParams + "</p>" + "<h2>Sent:</h2>"
+                                    + str + "<p>Response was <strong>" + res
+                                    + "</strong><p>",
+                            "IPN received (payment_status="
+                                    + formParams.get("payment_status") + ")");
+
             return Response.ok().build();
-            // check that paymentStatus=Completed
-            // check that txnId has not been previously processed
-            // check that receiverEmail is your Primary PayPal email
-            // check that paymentAmount/paymentCurrency are correct
-            // process payment
         } else {
             EmailSender.INSTANCE.sendToAdmin("Sent: '" + str
                     + "' but response was " + res,
-                    "failed to validate paypal IPN");
-            // error
+                    "ERROR : Failed to validate paypal IPN");
             return Response.serverError().build();
         }
 
