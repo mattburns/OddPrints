@@ -25,7 +25,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -64,8 +63,7 @@ public class Checkout {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Viewable viewCheckout(@Context HttpServletRequest req,
-            @QueryParam("paypalEnabled") boolean paypalEnabled) {
+    public Viewable viewCheckout(@Context HttpServletRequest req) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
         Basket basket = Basket.fromSession(req, pm);
@@ -83,7 +81,7 @@ public class Checkout {
                     .getGoogleCheckoutAPIContext().getMerchantId());
         }
 
-        it.put("paypalEnabled", paypalEnabled);
+        it.put("paypalEnabled", true);
 
         return new Viewable("/checkout", it);
     }
