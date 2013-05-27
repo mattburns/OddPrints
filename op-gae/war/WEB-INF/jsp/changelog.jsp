@@ -35,7 +35,16 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        
+     
+        <h2>v.25 - 2013/05/24</h2>
+        <ul>
+            <li>Try standard servlet to hand IPNs.</li>
+        </ul>
+        <h2>v.24 - 2013/05/23</h2>
+        <ul>
+            <li>Don't sort IPN keys.</li>
+            <li>Upgrade to GAE 1.8.0 using jarjar jars.</li>
+        </ul>   
         <h2>v.23 - 2013/05/22</h2>
         <ul>
             <li>Handle PayPal notifications.</li>
