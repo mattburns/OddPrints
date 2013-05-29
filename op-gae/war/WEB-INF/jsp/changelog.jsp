@@ -35,7 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-     
+        <h2>v.26 - 2013/05/29</h2>
+        <ul>
+            <li>Re-add guideline canvas between paints (fixes IE10 bug).</li>
+        </ul>
         <h2>v.25 - 2013/05/24</h2>
         <ul>
             <li>Try standard servlet to hand IPNs.</li>

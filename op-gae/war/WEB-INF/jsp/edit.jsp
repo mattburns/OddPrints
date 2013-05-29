@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%--
 Copyright 2011 Matt Burns
 
@@ -14,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --%>
 
-<!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
@@ -241,8 +241,10 @@ limitations under the License.
                 <canvas id="cropCanvas" width="100" height="100">
                 </canvas>
                 <p>Guidelines:</p>
-                <canvas id="lineCanvas" width="100" height="100">
-                </canvas>
+                <div id="line-canvas-wrapper">
+                    <canvas id="lineCanvas" width="100" height="100">
+                    </canvas>
+                </div>
                 <p>Merged image:</p>
                 <canvas id="mergedCanvas" width="100" height="100">
                 </canvas>
@@ -463,6 +465,7 @@ function drawTiledImage(settings) {
 }
 
 function drawGuidelines(settings) {
+    lineCtx.clearRect(0, 0, settings.canvasWidth, settings.canvasHeight);
     if (getZooming() == 'TILE') {
         drawTiledGuidelines(settings);
     } else {
@@ -559,6 +562,13 @@ function calculate(dpi) {
     updateTextAndControls();
     
     var settings = calculateSettings(dpi);
+
+    // IE10 doesn't clear canvas properly, just remove and re-add it instead...
+    $("#line-canvas-wrapper").empty();
+    $("#line-canvas-wrapper").append('<canvas id="lineCanvas" width="100" height="100"></canvas>');
+    lineCanvas = document.getElementById("lineCanvas");
+    lineCtx = lineCanvas.getContext("2d");    
+    
     $("canvas").attr("width", settings.canvasWidth);
     $("canvas").attr("height", settings.canvasHeight);
       
