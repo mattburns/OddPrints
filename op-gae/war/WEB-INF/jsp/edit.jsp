@@ -241,10 +241,8 @@ limitations under the License.
                 <canvas id="cropCanvas" width="100" height="100">
                 </canvas>
                 <p>Guidelines:</p>
-                <div id="line-canvas-wrapper">
-                    <canvas id="lineCanvas" width="100" height="100">
-                    </canvas>
-                </div>
+                <canvas id="lineCanvas" width="100" height="100">
+                </canvas>
                 <p>Merged image:</p>
                 <canvas id="mergedCanvas" width="100" height="100">
                 </canvas>
@@ -465,7 +463,6 @@ function drawTiledImage(settings) {
 }
 
 function drawGuidelines(settings) {
-    lineCtx.clearRect(0, 0, settings.canvasWidth, settings.canvasHeight);
     if (getZooming() == 'TILE') {
         drawTiledGuidelines(settings);
     } else {
@@ -507,6 +504,7 @@ function drawHorizontalLine(y, settings) {
 }
 
 function drawLine(x1, y1, x2, y2) {
+    lineCtx.beginPath();
     lineCtx.moveTo(x1 + 0.5, y1 + 0.5);
     lineCtx.lineTo(x2 + 0.5, y2 + 0.5);
     lineCtx.stroke();
@@ -563,14 +561,11 @@ function calculate(dpi) {
     
     var settings = calculateSettings(dpi);
 
-    // IE10 doesn't clear canvas properly, just remove and re-add it instead...
-    $("#line-canvas-wrapper").empty();
-    $("#line-canvas-wrapper").append('<canvas id="lineCanvas" width="100" height="100"></canvas>');
-    lineCanvas = document.getElementById("lineCanvas");
-    lineCtx = lineCanvas.getContext("2d");    
-    
     $("canvas").attr("width", settings.canvasWidth);
     $("canvas").attr("height", settings.canvasHeight);
+    
+    // Other browsers clear the canvas when setting width, except IE10 so do it manually
+    lineCtx.clearRect(0, 0, settings.canvasWidth, settings.canvasHeight);
       
     bgCtx.fillStyle = $("#background").val();
     bgCtx.fillRect(0, 0, settings.canvasWidth, settings.canvasHeight);
