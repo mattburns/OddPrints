@@ -86,6 +86,11 @@ a.logo {
     padding-top: 10px;
 }
 
+.payment-buttons div, .payment-buttons a, .payment-buttons span {
+    margin-left: 10px;
+    vertical-align: top;
+}
+
 .text-align-left {
     text-align: left;
 }

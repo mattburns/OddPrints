@@ -105,15 +105,46 @@ limitations under the License.
                 </c:if>
         
                 <div>
-                    <div class="text-align-right">
-                    <p><a id="google-purchase-link" href="/purchase/google" data-ajax="false"><img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=${it.merchantId}&w=180&h=46&style=trans&variant=text&loc=en_GB" alt="Proceed to Google Checkout"/></a></p>
-                    <c:if test="${it.userIsAdmin or it.paypalEnabled}">
-                        <p><a href="/purchase/paypal" data-ajax="false"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Proceed to PayPal checkout"/></a></p>
-                    </c:if>
+                    <div class="text-align-right payment-buttons">
+                        <p>
+                            <a id="google-purchase-link" href="/purchase/google" data-ajax="false"><img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=${it.merchantId}&w=180&h=46&style=trans&variant=text&loc=en_GB" alt="Proceed to Google Checkout"/></a>
+                            <c:if test="${it.userIsAdmin or it.paypalEnabled}">
+                                <span>or</span>
+                                <a href="/purchase/paypal" data-ajax="false"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Proceed to PayPal checkout"/></a>
+                            </c:if>
+                        
+                            <%--
+                                <form action="" method="POST">
+                                  <script
+                                    src="https://checkout.stripe.com/v2/checkout.js" class="stripe-button"
+                                    data-key="pk_test_wAvVqWKntaEUz0wOHGrgSFkC"
+                                    data-amount="${it.basket.totalPrice}"
+                                    data-name="OddPrints"
+                                    data-description="OddPrints ${it.basket.totalPriceString}"
+                                    data-image="/128x128.png">
+                                  </script>
+                                </form>
+                                
+                                <form action="purchase/paymill" method="post">
+                                    <script
+                                        src="https://button.paymill.com/v1/"
+                                        id="button"
+                                        data-title="Pay with Card"
+                                        data-description="OddPrints"
+                                        data-amount="${it.basket.totalPrice}"
+                                        data-currency="GBP"
+                                        data-submit-button="Pay ${it.basket.totalPriceString}"
+                                        data-public-key="eadff9e18d6ba987f265c245862e658c">
+                                    </script>
+                                </form>
+                                <button data-inline="true" id="stripe-button" data-theme="b" data-mini="true">Pay with Card</button>
+                             --%>
+                        </p>
+                        
                     </div>
-                  </div>
-              </c:otherwise>
-          </c:choose>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
     
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp">
@@ -139,7 +170,35 @@ $(document).ready(function() {
       });
       e.preventDefault();
     });
+    
+    $('body').on('token', function(event) {
+    	$.post('/purchase/stripe', {
+    	    "token": event.token
+    	});
+    });
+    
+    $('#stripe-button').click(function(){
+        var token = function(res){
+            var $input = $('<input type=hidden name=stripeToken />').val(res.id);
+            $('form').append($input).submit();
+        };
+        
+        StripeCheckout.open({
+            key:         'pk_test_wAvVqWKntaEUz0wOHGrgSFkC',
+            address:     false,
+            
+            currency:    'gbp',
+            name:        'OddPrints',
+            description: 'OddPrints order',
+            panelLabel:  'Next',
+            image:       '/images/icon128.png',
+            token:       token
+        });
+        
+        return false;
+      });
 });
 </script>
+<script src="https://checkout.stripe.com/v2/checkout.js"></script>
 </body>
 </html>

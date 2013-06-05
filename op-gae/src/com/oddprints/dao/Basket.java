@@ -274,9 +274,11 @@ public class Basket {
     }
 
     public String getTotalPriceString() {
-        int totalPricePence = getPriceOfPrintsInPennies() + shipping;
+        return StringUtils.formatMoney(getTotalPrice());
+    }
 
-        return StringUtils.formatMoney(totalPricePence);
+    public int getTotalPrice() {
+        return getPriceOfPrintsInPennies() + shipping;
     }
 
     public static Basket getBasketByKeyString(String basketKeyString,
