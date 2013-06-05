@@ -25,22 +25,22 @@ limitations under the License.
       xmlns:c="http://java.sun.com/jsp/jstl/core">
       
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
-    <jsp:param name="titleText" value=" - Matt Burns Ltd" />
-    <jsp:param name="descriptionText" value="Details about the company, Matt Burns Ltd." />
+    <jsp:param name="titleText" value=" - Panoramic Prints" />
+    <jsp:param name="descriptionText" value="Use OddPrints to print stunning panoramas." />
 </jsp:include>
 <body>
 
-<div data-role="page" id="page-mattburnsltd">
+<div data-role="page" id="page-panoramic">
 
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>Matt Burns Ltd</h2>
-        <p>Matt Burns Ltd, Registered in England and Wales No. 07734891</p>
-        <p>Registered Office: 39 Tyler Street, Bristol, BS2 0LS.</p>
-        
-        <h2>Creators of</h2>
-        <p><a href="http://www.stolencamerafinder.com/"><img src="/images/scf-logo.png"/></a></p>
+        <h2>Exclusive 15% offer!</h2>
+        <p>
+        For this month only, OddPrints and <strong>Photography for beginners</strong> magazine have teamed up to offer you an exclusive 15%
+        off all orders placed here.</p>
+        <a href="/" data-role="button" data-ajax="false" data-theme="b">Claim 15% discount (applied at checkout)</a>
+        <a href="http://www.photoforbeginners.com/"><img src="/images/pfb-logo.png"/></a>
     </div>
     
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />

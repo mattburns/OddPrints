@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.27 - 2013/06/05</h2>
+        <ul>
+            <li>Add promo page for PFB.</li>
+        </ul>
         <h2>v.26 - 2013/05/29</h2>
         <ul>
             <li>Re-add guideline canvas between paints (fixes IE10 bug).</li>

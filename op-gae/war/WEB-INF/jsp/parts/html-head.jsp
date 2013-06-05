@@ -17,7 +17,7 @@
           
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link type="text/css" rel="stylesheet" href="/css/jquery.mobile-1.2.0.min.css" />
-    <link type="text/css" rel="stylesheet" href="/css/oddprints.css?ver=1" />
+    <link type="text/css" rel="stylesheet" href="/css/oddprints.css?v=2" />
     <link type="text/css" rel="stylesheet" href="/css/jquery.miniColors.css" />
     <script type="text/javascript" src="/js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript">

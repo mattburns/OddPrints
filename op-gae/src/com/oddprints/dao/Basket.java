@@ -87,6 +87,12 @@ public class Basket {
     @Persistent
     private String buyerEmail;
 
+    @Persistent
+    private String discountText;
+
+    @Persistent
+    private Integer discountPercentage;
+
     public static final int LATEST_VERSION = 2;
     public static int FLAT_RATE_SHIPPING = 299;
 
@@ -278,7 +284,7 @@ public class Basket {
     }
 
     public int getTotalPrice() {
-        return getPriceOfPrintsInPennies() + shipping;
+        return getPriceOfPrintsInPennies() + shipping - getDiscountAmount();
     }
 
     public static Basket getBasketByKeyString(String basketKeyString,
@@ -308,6 +314,25 @@ public class Basket {
         }
     }
 
+    public static Basket getOrCreateBasket(HttpServletRequest req,
+            PersistenceManager pm) {
+        Basket basket = Basket.fromSession(req, pm);
+        if (basket == null) {
+            Environment env = null;
+            try {
+                env = Environment.getDefault();
+            } catch (NullPointerException npe) {
+                npe.printStackTrace();
+                return null;
+            }
+            basket = new Basket(env);
+            pm.makePersistent(basket);
+            String basketKeyString = KeyFactory.keyToString(basket.getId());
+            req.getSession().setAttribute("basketKeyString", basketKeyString);
+        }
+        return basket;
+    }
+
     /**
      * If user has progressed the Basket in the Session past the draft state,
      * let's clone it to a new draft to prevent accidental editing of submitted
@@ -329,6 +354,8 @@ public class Basket {
                     item.getFrameSize(), item.getPrintSize(),
                     item.getQuantity());
         }
+        newBasket.setDiscountPercentage(basket.getDiscountPercentage());
+        newBasket.setDiscountText(basket.getDiscountText());
         return newBasket;
     }
 
@@ -389,5 +416,37 @@ public class Basket {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Integer getDiscountPercentage() {
+        if (discountPercentage == null) {
+            return 0;
+        }
+        return discountPercentage;
+    }
+
+    public void setDiscountPercentage(Integer discountPercentage) {
+        this.discountPercentage = discountPercentage;
+    }
+
+    public String getDiscountText() {
+        return discountText;
+    }
+
+    public void setDiscountText(String discountText) {
+        this.discountText = discountText;
+    }
+
+    public Integer getDiscountAmount() {
+        return (int) Math
+                .round((getDiscountPercentage() * getPriceOfPrintsInPennies()) / 100.0);
+    }
+
+    public String getDiscountAmountString() {
+        return StringUtils.formatMoney(getDiscountAmount());
+    }
+
+    public String getDiscountAmountStringNoSymbol() {
+        return StringUtils.formatMoneyNoSymbol(getDiscountAmount());
     }
 }

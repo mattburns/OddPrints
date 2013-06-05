@@ -152,11 +152,12 @@ limitations under the License.
                 </div>
             </c:if>
             
-            
-        
             <div>
                 <div class="text-align-right">
                     <p class="checkout-subtotal">prints: ${order.printPriceString}</p>
+                    <c:if test="${order.discountPercentage gt 0}">
+                        <p class="checkout-subtotal">discount: ${order.discountAmountString}</p>
+                    </c:if>
                     <p class="checkout-subtotal">shipping: ${order.shippingPriceString}</p>
                     <p class="checkout-total">Total: ${order.totalPriceString}</p>
                 </div>

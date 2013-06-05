@@ -43,6 +43,9 @@ limitations under the License.
         <p>Twitter: <a 
         href="http://twitter.com/oddprints" target="_blank">@OddPrints</a>
         </p>
+        
+        <h2>See also...</h2>
+        <p><a href="http://www.stolencamerafinder.com/"><img src="/images/scf-logo.png"/></a></p>
     </div>
     
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />

@@ -86,6 +86,12 @@ public class Purchase {
             }
         }
 
+        if (basket.getDiscountPercentage() > 0) {
+            cartBuilder.addItem("Discount", basket.getDiscountText() + "("
+                    + basket.getDiscountPercentage() + ")",
+                    (double) basket.getDiscountAmount() / -100, 1);
+        }
+
         CheckoutShoppingCart cart = cartBuilder.build();
 
         CheckoutFlowSupport flowSupport = new CheckoutFlowSupport();

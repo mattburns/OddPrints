@@ -30,10 +30,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService.OutputEncoding;
-import com.oddprints.Environment;
 import com.oddprints.PMF;
 import com.oddprints.PrintSize;
 import com.oddprints.dao.Basket;
@@ -92,7 +90,7 @@ public class Upload {
             long blobSize) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
-        Basket basket = getOrCreateBasket(req, pm);
+        Basket basket = Basket.getOrCreateBasket(req, pm);
         if (basket == null) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -105,30 +103,11 @@ public class Upload {
         return Response.ok().build();
     }
 
-    private Basket getOrCreateBasket(HttpServletRequest req,
-            PersistenceManager pm) {
-        Basket basket = Basket.fromSession(req, pm);
-        if (basket == null) {
-            Environment env = null;
-            try {
-                env = Environment.getDefault();
-            } catch (NullPointerException npe) {
-                npe.printStackTrace();
-                return null;
-            }
-            basket = new Basket(env);
-            pm.makePersistent(basket);
-            String basketKeyString = KeyFactory.keyToString(basket.getId());
-            req.getSession().setAttribute("basketKeyString", basketKeyString);
-        }
-        return basket;
-    }
-
     private Response updateSticker(HttpServletRequest req, BlobKey blobKey,
             long blobSize) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
-        Basket basket = getOrCreateBasket(req, pm);
+        Basket basket = Basket.getOrCreateBasket(req, pm);
         if (basket == null) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }

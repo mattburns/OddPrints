@@ -64,7 +64,10 @@ limitations under the License.
             <input type="hidden" name="currency_code" value="GBP"> 
             <input type="hidden" name="no_shipping" value="2"> 
             <input type="hidden" name="custom" value="${it.basket.idString}"> 
-            <input type="hidden" name="notify_url" value="${notifyurl}"> 
+            <input type="hidden" name="notify_url" value="${notifyurl}">
+            <c:if test="${it.basket.discountPercentage gt 0}">
+                <input type="hidden" name="discount_amount_cart" value="${it.basket.discountAmountStringNoSymbol}">
+            </c:if>
             
             <c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">
                 <input type="hidden" name="item_name_${basketItemNumber.index + 1}" value="Image ${basketItemNumber.index + 1}"> 
