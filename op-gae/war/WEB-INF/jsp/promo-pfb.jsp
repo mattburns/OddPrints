@@ -37,9 +37,10 @@ limitations under the License.
     <div data-role="content">
         <h2>Exclusive 15% offer!</h2>
         <p>
-        For this month only, OddPrints and <strong>Photography for beginners</strong> magazine have teamed up to offer you an exclusive 15%
-        off all orders placed here.</p>
-        <a href="/" data-role="button" data-ajax="false" data-theme="b">Claim 15% discount (applied at checkout)</a>
+        For this month only, OddPrints and <strong>Photography for Beginners</strong> magazine have teamed
+        up to offer you an exclusive 15% off all orders placed here. Offer valid until September 1st, 2013. 
+        Discount will be applied at checkout.</p>
+        <a href="/" data-role="button" data-ajax="false" data-theme="b">Claim 15% discount</a>
         <a href="http://www.photoforbeginners.com/"><img src="/images/pfb-logo.png"/></a>
     </div>
     
