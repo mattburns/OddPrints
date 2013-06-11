@@ -28,7 +28,7 @@
     <script type="text/javascript" src="/js/jquery.mobile-1.2.0.min.js"></script>
     <script type="text/javascript" src="/js/jquery-ui-1.9.0.custom.min.js"></script>
     <script type="text/javascript" src="/js/modernizr.custom.11873.js"></script>
-    <script type="text/javascript" src="/js/oddprints.js?ver=1"></script>
+    <script type="text/javascript" src="/js/oddprints.js?v=2"></script>
     <script type="text/javascript" src="/js/jquery.tinycarousel.min.js"></script>
     <script type="text/javascript" src="/js/jquery.miniColors.min.js"></script>
 </head>

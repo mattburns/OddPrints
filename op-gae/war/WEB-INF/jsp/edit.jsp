@@ -216,9 +216,9 @@ limitations under the License.
                     </c:when>
                     <c:otherwise>
                         <div class="text-align-right">
-	                        <a href="#" id="img-download" data-inline="true" data-mini="true">Download</a>
-	                        <span id="print-size-text" class="not-sticker-mode"></span>
-	                        or simply <a href="#" id="img-upload" data-role="button" data-inline="true" data-theme="b">Order prints</a>
+                        <a href="#" id="img-download" data-inline="true" data-mini="true">Download</a>
+                        <span id="print-size-text" class="not-sticker-mode"></span>
+                        or simply <a href="#" id="img-upload" data-role="button" data-inline="true" data-theme="b">Order prints</a>
                         </div>
                     </c:otherwise>
                 </c:choose>
@@ -273,6 +273,7 @@ var horizontalOffset = 0;
 var verticalOffset = 0;
     
 $(document).ready(function() {
+    
     fileChooser();
     
     if (!isSupportedBrowser()) {
@@ -446,7 +447,7 @@ function drawImage(settings) {
     if (getZooming() == 'TILE') {
         drawTiledImage(settings);
     } else {
-        imgCtx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth * getZoomFactor(), settings.destinationHeight * getZoomFactor());
+        drawImageIOSFix(imgCtx, img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, settings.destinationX, settings.destinationY, settings.destinationWidth * getZoomFactor(), settings.destinationHeight * getZoomFactor());
     }
 }
 
@@ -455,7 +456,7 @@ function drawTiledImage(settings) {
     while ((tempFrameY + (settings.frameHeightPx - 1)) < settings.canvasHeight) {
         var tempFrameX = settings.tileMargin;
         while ((tempFrameX + (settings.frameWidthPx - 1)) < settings.canvasWidth) {
-            imgCtx.drawImage(img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, tempFrameX, tempFrameY, settings.destinationWidth, settings.destinationHeight);
+            drawImageIOSFix(imgCtx, img, settings.sourceX, settings.sourceY, settings.sourceWidth, settings.sourceHeight, tempFrameX, tempFrameY, settings.destinationWidth, settings.destinationHeight);
             tempFrameX += (settings.frameWidthPx - 1) + settings.tileMargin;
         }
         tempFrameY += (settings.frameHeightPx - 1) + settings.tileMargin;
@@ -540,6 +541,9 @@ function renderPreview() {
 }
 
 function renderFull() {
+    if (detectVerticalSquash(img) != 1) {
+        dpiFull = 215;
+    }
     var jpegData = calculate(dpiFull);
     return jpegData;
 }
@@ -556,6 +560,16 @@ function downloadImpl() {
 }
 
 function calculate(dpi) {
+    var jpegData = calculateImpl(dpi);
+    
+    // Something has gone wrong, try basic mode...
+    if (jpegData.length < 1000) {
+        window.location.href = "/upload/basic";
+    }
+    return jpegData;    
+}
+
+function calculateImpl(dpi) {
     $.mobile.showPageLoadingMsg();
     updateTextAndControls();
     
@@ -596,8 +610,8 @@ function calculate(dpi) {
     }
     
     mergedCtx.drawImage(bgCanvas,0,0);
-
     mergedCtx.drawImage(imgCanvas,0,0);
+    
     if (getZooming() == 'CROP' || getZooming() == 'TILE') {
         if ($("#crop-img-preview").next()[0] == $("#img-img-preview")[0]) {
             // only swap layers and repaint if necessary

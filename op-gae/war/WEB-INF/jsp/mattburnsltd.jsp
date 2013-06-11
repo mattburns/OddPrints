@@ -41,6 +41,15 @@ limitations under the License.
         
         <h2>Creators of</h2>
         <p><a href="http://www.stolencamerafinder.com/"><img src="/images/scf-logo.png"/></a></p>
+        <h2>Credits</h2>
+        <p>This project is open source and wouldn't be possible without:</p>
+        <ul>
+            <li>An <a href="https://github.com/stomita/ios-imagefile-megapixel">iOS bug fix</a> by stomita.</li>
+            <li><a href="http://jquery.com/">jquery</a> and <a href="http://jquerymobile.com/">jquerymobile</a>.</li>
+            <li><a href="http://labs.abeautifulsite.net/jquery-miniColors/">miniColors</a>.</li>
+            <li><a href="http://modernizr.com/">modernizr</a>.</li>
+            <li><a href="http://baijs.nl/tinycarousel/">tinycarousel</a>.</li>
+        </ul>
     </div>
     
     <jsp:include page="/WEB-INF/jsp/parts/page-footer.jsp" />
