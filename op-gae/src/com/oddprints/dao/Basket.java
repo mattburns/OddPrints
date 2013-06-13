@@ -40,6 +40,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.oddprints.Environment;
 import com.oddprints.PrintSize;
+import com.oddprints.dao.ApplicationSetting.Settings;
 import com.oddprints.util.ServerUtils;
 import com.oddprints.util.StringUtils;
 import com.sun.jersey.api.client.ClientHandlerException;
@@ -448,5 +449,21 @@ public class Basket {
 
     public String getDiscountAmountStringNoSymbol() {
         return StringUtils.formatMoneyNoSymbol(getDiscountAmount());
+    }
+
+    public boolean isHasWarning() {
+        return !getWarning().isEmpty();
+    }
+
+    public String getWarning() {
+        String warning = null;
+        for (BasketItem item : getItems()) {
+            if (item.getPrintSize() == PrintSize._4x18) {
+                warning = ApplicationSetting
+                        .getSetting(Settings.CHECKOUT_WARNING);
+                break;
+            }
+        }
+        return (warning == null) ? "" : warning;
     }
 }

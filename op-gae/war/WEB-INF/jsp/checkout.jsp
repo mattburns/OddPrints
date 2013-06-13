@@ -107,8 +107,15 @@ limitations under the License.
                     </div>
                 </div>
                 
+                <c:if test="${it.basket.hasWarning}">
+                    <div class="ui-body ui-body-e">
+                        <h4>IMPORTANT</h4>
+                        <p>${it.basket.warning}</p>
+                    </div>
+                </c:if>
+                
                 <c:if test="${it.basket.environment.sandbox}">
-                    <div style="background-color: #cfc">
+                    <div class="ui-body ui-body-e">
                         <h4>Hey there beta tester!</h4>
                         <p>This is currently set in sandbox mode so no real payments are possible
                         and no photos are ever printed or posted.
