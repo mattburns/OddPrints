@@ -47,14 +47,8 @@ limitations under the License.
         regardless of order size. Simple.</p>
         
         <h2>How long will my prints take to arrive?</h2>
-        <p>
-        <ul>
-            <li>UK: 1-2 days</li>
-            <li>Western Europe: 3-4 days</li>
-            <li>Eastern Europe: 5-6 days</li>
-            <li>Rest of world: 7 days (though major cities are likely to be faster)</li>
-        </ul>
-        </p>
+        <p>We have printing facilities in the UK (1-3 days) and the US (3-5 days)
+        but also ship worldwide (delivery time varies).</p>
 
         <h2>Are prints ordered from OddPrints pre-cut?</h2>
         <p>No, but it's really easy and helps keep the price low.</p>
