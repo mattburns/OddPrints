@@ -27,6 +27,7 @@
         <a href="/help">help</a>
         <div class="fb-like" data-href="http://www.oddprints.com" data-send="false" data-layout="button_count" data-width="45" data-show-faces="true"></div>
     </div>
+    <div class="footer-right">From the makers of <a class='logo' href='http://www.stolencamerafinder.com'><span class='scf-logo-a'>stolen</span><span class='scf-logo-b'>camera</span><span class='scf-logo-a'>finder</span></a></div>
 </div>
 
 <script type="text/javascript">

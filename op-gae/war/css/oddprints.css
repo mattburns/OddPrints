@@ -31,6 +31,19 @@ a.logo {
     text-shadow: 0 1px 0 #000;
 }
 
+.scf-logo-a,.scf-logo-b {
+    font-family: 'AdelleBasicBold', Arial, Helvetica, Tahoma, Geneva, sans-serif;
+    margin: 0;
+    letter-spacing: -1px;
+    font-size: 16px;
+    color: #29205F;
+    clear: none;
+}
+
+.scf-logo-b {
+    color: #992D90;
+}
+
 .oddprints-logo-b {
     color: #396b9e;
 }
@@ -123,6 +136,16 @@ table * {
     font-size: smaller;
     padding-left: 0px;
     padding-right: 0px;
+}
+
+.footer-right {
+    min-width: 1000px;
+    text-align: right;
+    position: relative;
+    top: -29px;
+    height: 0px;
+    right: 10px;
+    font-weight: normal;
 }
 
 img {
