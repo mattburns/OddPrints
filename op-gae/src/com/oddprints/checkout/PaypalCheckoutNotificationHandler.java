@@ -35,19 +35,17 @@ public class PaypalCheckoutNotificationHandler {
 
         Address address = extractAddress(parameterMap);
 
+        checkoutNotificationHandler.onNewOrderNotification(
+                CheckoutSystem.paypal, checkoutSystemOrderNumber,
+                basketKeyString, buyerEmail);
+
         checkoutNotificationHandler.onAuthorizationAmountNotification(
                 CheckoutSystem.paypal, checkoutSystemOrderNumber,
                 basketKeyString, buyerEmail, address);
     }
 
     public void onNewOrderNotification(Map<String, String> parameterMap) {
-        String checkoutSystemOrderNumber = parameterMap.get("txn_id");
-        String basketKeyString = parameterMap.get("custom");
-        String buyerEmail = parameterMap.get("payer_email");
-
-        checkoutNotificationHandler.onNewOrderNotification(
-                CheckoutSystem.paypal, checkoutSystemOrderNumber,
-                basketKeyString, buyerEmail);
+        // This is not needed to PayPal. We got straight through Authorization notification
     };
 
     private Address extractAddress(Map<String, String> parameterMap) {

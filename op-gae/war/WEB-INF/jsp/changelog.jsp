@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.29 - 2013/07/31</h2>
+        <ul>
+            <li>Send order confirmation to PayPal orders.</li>
+        </ul>
         <h2>v.28 - 2013/06/11</h2>
         <ul>
             <li>Fixed iOS6 image squash bug.</li>
