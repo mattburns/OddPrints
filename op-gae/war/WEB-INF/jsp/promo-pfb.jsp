@@ -25,12 +25,12 @@ limitations under the License.
       xmlns:c="http://java.sun.com/jsp/jstl/core">
       
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
-    <jsp:param name="titleText" value=" - Panoramic Prints" />
+    <jsp:param name="titleText" value=" - Promo" />
     <jsp:param name="descriptionText" value="Use OddPrints to print stunning panoramas." />
 </jsp:include>
 <body>
 
-<div data-role="page" id="page-panoramic">
+<div data-role="page" id="page-promo">
 
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
