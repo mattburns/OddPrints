@@ -2,6 +2,7 @@ package com.oddprints.checkout;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
@@ -65,6 +66,34 @@ public class PaypalCheckoutNotificationHandlerTest {
         assertEquals(State.payment_received, basket.getState());
         assertEquals("brian@asd.com", basket.getBuyerEmail());
 
+    }
+
+    @Test
+    public void addresses_with_line_breaks_are_split() {
+        PaypalCheckoutNotificationHandler p = new PaypalCheckoutNotificationHandler(
+                null);
+
+        Map<String, String> parameterMap = new HashMap<String, String>();
+
+        parameterMap.put("address_street", "Road");
+        Address address = p.extractAddress(parameterMap);
+        assertEquals("Road", address.getAddress1());
+        assertEquals(null, address.getAddress2());
+
+        parameterMap.put("address_street", "Road\nTown");
+        address = p.extractAddress(parameterMap);
+        assertEquals("Road", address.getAddress1());
+        assertEquals("Town", address.getAddress2());
+
+        parameterMap.put("address_street", "Road\nTown\nCity");
+        address = p.extractAddress(parameterMap);
+        assertEquals("Road", address.getAddress1());
+        assertEquals("Town, City", address.getAddress2());
+
+        parameterMap.put("address_street", "Road\nTown\nCity\nState");
+        address = p.extractAddress(parameterMap);
+        assertEquals("Road", address.getAddress1());
+        assertEquals("Town, City, State", address.getAddress2());
     }
 
 }

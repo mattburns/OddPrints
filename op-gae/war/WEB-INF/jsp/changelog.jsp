@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.30 - 2013/08/14</h2>
+        <ul>
+            <li>Remove line breaks from PayPal addresses.</li>
+        </ul>
         <h2>v.29 - 2013/07/31</h2>
         <ul>
             <li>Send order confirmation to PayPal orders.</li>

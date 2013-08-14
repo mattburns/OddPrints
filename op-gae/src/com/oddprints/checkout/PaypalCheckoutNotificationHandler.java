@@ -45,14 +45,27 @@ public class PaypalCheckoutNotificationHandler {
     }
 
     public void onNewOrderNotification(Map<String, String> parameterMap) {
-        // This is not needed to PayPal. We got straight through Authorization notification
+        // This is not needed to PayPal. We got straight through Authorization
+        // notification
     };
 
-    private Address extractAddress(Map<String, String> parameterMap) {
+    protected Address extractAddress(Map<String, String> parameterMap) {
         Address address = new Address();
 
         address.setRecipientName(parameterMap.get("address_name"));
-        address.setAddress1(parameterMap.get("address_street"));
+
+        String street = "" + parameterMap.get("address_street");
+
+        String lines[] = street.split("\\r?\\n");
+
+        address.setAddress1(lines[0]);
+        if (lines.length > 1) {
+            String address2 = lines[1];
+            for (int i = 2; i < lines.length; i++) {
+                address2 += ", " + lines[i];
+            }
+            address.setAddress2(address2);
+        }
         address.setTownOrCity(parameterMap.get("address_city"));
         address.setStateOrCounty(parameterMap.get("address_state"));
         String postcode = parameterMap.get("address_zip");
