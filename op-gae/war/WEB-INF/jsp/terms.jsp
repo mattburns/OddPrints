@@ -42,7 +42,7 @@ limitations under the License.
         (the 'Service'). Please read these terms carefully before using the Site and its Services.</p>
         
         <p>The term 'Matt Burns Ltd' or 'our' or 'us' or 'we' refers to the owner of the Site and Service
-        whose registered office is 39 Tyler Street, Bristol, BS2 0LS.
+        whose registered office is Engine Shed, Station Approach, Temple Meads, Bristol, BS1 6QH.
         Our company is registered in England with the company number 07734891.</p>
         
         <p>The term 'you' or 'user' refers to you the user or viewer of our Site and Service.</p>

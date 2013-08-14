@@ -37,7 +37,7 @@ limitations under the License.
     <div data-role="content">
         <h2>Matt Burns Ltd</h2>
         <p>Matt Burns Ltd, Registered in England and Wales No. 07734891</p>
-        <p>Registered Office: 39 Tyler Street, Bristol, BS2 0LS.</p>
+        <p>Registered Office: Engine Shed, Station Approach, Temple Meads, Bristol, BS1 6QH.</p>
         
         <h2>Creators of</h2>
         <p><a href="http://www.stolencamerafinder.com/"><img src="/images/scf-logo.png"/></a></p>
