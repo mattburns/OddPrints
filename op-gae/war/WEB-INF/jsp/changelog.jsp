@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.31 - 2013/08/28</h2>
+        <ul>
+            <li>Disable mouse scroll wheel from zooming.</li>
+        </ul>
         <h2>v.30 - 2013/08/14</h2>
         <ul>
             <li>Remove line breaks from PayPal addresses.</li>

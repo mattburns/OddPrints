@@ -30,8 +30,6 @@ limitations under the License.
 </jsp:include>
 <body>
 
-<script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
-
 <div data-role="page" id="page-upload">
 
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
@@ -329,19 +327,6 @@ $(document).ready(function() {
     
     $("#radio-fill,#radio-fit,#radio-crop,#radio-tile,#select-preset,#frame-width,#frame-height").change(resetOffsets);
 
-    $('#img-img-preview').mousewheel(function(event, delta, deltaX, deltaY) {
-        switch (delta) {
-            case (-1) :
-                zoomOut();
-                break;
-            case (1) :
-                zoomIn();
-                break;
-        }
-        event.stopPropagation();
-        event.preventDefault();
-    });
-    
     $("#img-img-preview").draggable({ 
         start: function(e, ui) {
             $("div.img-preview").css("width", $("#bg-img-preview").width() + "px");
