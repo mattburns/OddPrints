@@ -40,7 +40,7 @@ limitations under the License.
     
             <h1>Easy printing at <em>any</em> size</h1>
             
-            <p>The <strong>free</strong> and <strong>simple</strong> way to print
+            <p>The <strong>simple</strong> way to print
             <a href="/panoramic">panoramic</a>, <a href="/passport">passport</a>,
             or <a href="/custom">custom size</a> photos.
             </p>
@@ -79,23 +79,23 @@ limitations under the License.
 
         <div class="after-fold">
             <div class="thin-column">
-                <h3>How it works</h3>
+                <h2>How it works</h2>
                 <jsp:include page="/WEB-INF/jsp/parts/part-custom.jsp"/>
                 
-                <h3>Print your own passport photos</h3>
+                <h2>Print stunning panoramas</h2>
+                <jsp:include page="/WEB-INF/jsp/parts/part-panoramic.jsp"/>
+
+                <h2>Print your own passport photos</h2>
                 <jsp:include page="/WEB-INF/jsp/parts/part-passport.jsp"/>
                 
-                
-                <h3>Print stunning panoramas</h3>
-                <jsp:include page="/WEB-INF/jsp/parts/part-panoramic.jsp"/>
-                
+                <h2>Free</h2>
                 <img class="osi-logo" src="/images/osi_standard_logo.png"/>
-                <h3>Free</h3>
-                <p>This site is free to use and the images you
-                download have no watermark or branding. There's no annoying captcha,
+                <p>Don't want to order prints from us? You don't have to!
+                You can simply download the prints for free and print them yourself or with any other lab.
+                The images you download have no watermark or branding. There's no annoying captcha,
                 advertisements or registration process. Even this code for this website
                 is open source.</p>
-                <p>If you want to support this site, you can order your prints directly.
+                <p>If you want to support this site, you can order your high-quality prints directly from us.
                 </p>
                 <p>Or not. It's up to you. :)</p>
                 

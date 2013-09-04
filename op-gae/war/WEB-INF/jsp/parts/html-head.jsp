@@ -2,6 +2,8 @@
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 
+<c:set var="cache_version" scope="application" value='4'/>
+
 <head>
     <title>OddPrints${param.titleText}</title>
     <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
@@ -17,20 +19,9 @@
           
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <link type="text/css" rel="stylesheet" href="/css/jquery.mobile-1.2.0.min.css" />
-    <link type="text/css" rel="stylesheet" href="/css/oddprints.css?v=3" />
+    <link type="text/css" rel="stylesheet" href="/css/oddprints.css?v=${cache_version}" />
     <link type="text/css" rel="stylesheet" href="/css/jquery.miniColors.css" />
-    <script type="text/javascript" src="/js/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript">
-        $(document).bind("mobileinit", function () {
-            $.mobile.ajaxEnabled = false;
-        });
-    </script>
-    <script type="text/javascript" src="/js/jquery.mobile-1.2.0.min.js"></script>
-    <script type="text/javascript" src="/js/jquery-ui-1.9.0.custom.min.js"></script>
-    <script type="text/javascript" src="/js/modernizr.custom.11873.js"></script>
-    <script type="text/javascript" src="/js/oddprints.js?v=2"></script>
-    <script type="text/javascript" src="/js/jquery.tinycarousel.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.miniColors.min.js"></script>
+
 </head>
 
 <c:set var="html_year" scope="application" value='<%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %>'/>

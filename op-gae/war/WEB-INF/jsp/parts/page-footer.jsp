@@ -30,6 +30,19 @@
     <div class="footer-right">From the makers of <a class='logo' href='http://www.stolencamerafinder.com'><span class='scf-logo-a'>stolen</span><span class='scf-logo-b'>camera</span><span class='scf-logo-a'>finder</span></a></div>
 </div>
 
+    <script type="text/javascript" src="/js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript">
+        $(document).bind("mobileinit", function () {
+            $.mobile.ajaxEnabled = false;
+        });
+    </script>
+    <script type="text/javascript" src="/js/jquery.mobile-1.2.0.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui-1.9.0.custom.min.js"></script>
+    <script type="text/javascript" src="/js/modernizr.custom.11873.js"></script>
+    <script type="text/javascript" src="/js/oddprints.js?v=${cache_version}"></script>
+    <script type="text/javascript" src="/js/jquery.tinycarousel.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.miniColors.min.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
     if (isSupportedBrowser()) {

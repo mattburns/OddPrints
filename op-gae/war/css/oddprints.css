@@ -69,6 +69,10 @@ a.logo {
     padding: 15px;
 }
 
+h2 {
+    margin-top: 2em;
+}
+
 .quantity-input-column {
     width: 67px;
 }
@@ -217,7 +221,7 @@ dt {
 
 .osi-logo {
     float: right;
-    margin-top: 20px;
+    padding: 0px 20px;
 }
 
 #slider-code .step-number {

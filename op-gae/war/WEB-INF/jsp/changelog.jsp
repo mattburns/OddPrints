@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.32 - 2013/09/04</h2>
+        <ul>
+            <li>Simplified homepage text.</li>
+        </ul>
         <h2>v.31 - 2013/08/28</h2>
         <ul>
             <li>Disable mouse scroll wheel from zooming.</li>
