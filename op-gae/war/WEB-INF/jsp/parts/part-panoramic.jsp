@@ -30,6 +30,6 @@ Perhaps you have some taken with an <a href="http://www.youtube.com/watch?v=txwd
         photostitch software.</p>
         
 <p>Securely packaged in a tube, OddPrints will ship
-your panoramic print worldwide.</p>
+your panoramic print <strong>worldwide</strong>.</p>
 
             

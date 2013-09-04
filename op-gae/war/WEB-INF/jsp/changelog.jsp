@@ -38,6 +38,7 @@ limitations under the License.
         <h2>v.32 - 2013/09/04</h2>
         <ul>
             <li>Simplified homepage text.</li>
+            <li>Added promo code mechanism to admin settings.</li>
         </ul>
         <h2>v.31 - 2013/08/28</h2>
         <ul>

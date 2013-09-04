@@ -37,7 +37,7 @@ limitations under the License.
 
     <div data-role="content">
         <div id="choose-a-file">
-            <h2>Upload a photo</h2>
+            <h1>Upload a photo</h1>
             
             <c:set var="formAction" value ="/edit/basic"/>
             <c:if test="${stickerMode}">

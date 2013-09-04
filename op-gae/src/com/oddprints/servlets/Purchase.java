@@ -18,14 +18,11 @@ package com.oddprints.servlets;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -52,13 +49,6 @@ import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.State;
 import com.oddprints.dao.BasketItem;
 import com.oddprints.util.EmailSender;
-import com.stripe.Stripe;
-import com.stripe.exception.APIConnectionException;
-import com.stripe.exception.APIException;
-import com.stripe.exception.AuthenticationException;
-import com.stripe.exception.CardException;
-import com.stripe.exception.InvalidRequestException;
-import com.stripe.model.Charge;
 import com.sun.jersey.api.view.Viewable;
 
 @Path("/purchase")
@@ -136,21 +126,21 @@ public class Purchase {
                 .build();
     }
 
-    @POST
-    @Path("/stripe")
-    @Produces(MediaType.TEXT_HTML)
-    public Response stripe(@Context HttpServletRequest req,
-            @FormParam("token") String token) throws URISyntaxException,
-            AuthenticationException, InvalidRequestException,
-            APIConnectionException, CardException, APIException {
-
-        Stripe.apiKey = "sk_test_8MsGxSB6d8Axlq2OuTajMGEO";
-
-        Map<String, Object> params = new HashMap<String, Object>();
-        Charge charge = Charge.create(params);
-
-        return Response.ok("ok").build();
-    }
+    // @POST
+    // @Path("/stripe")
+    // @Produces(MediaType.TEXT_HTML)
+    // public Response stripe(@Context HttpServletRequest req,
+    // @FormParam("token") String token) throws URISyntaxException,
+    // AuthenticationException, InvalidRequestException,
+    // APIConnectionException, CardException, APIException {
+    //
+    // Stripe.apiKey = "sk_test_8MsGxSB6d8Axlq2OuTajMGEO";
+    //
+    // Map<String, Object> params = new HashMap<String, Object>();
+    // Charge charge = Charge.create(params);
+    //
+    // return Response.ok("ok").build();
+    // }
 
     @GET
     @Path("/paypal")

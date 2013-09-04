@@ -22,12 +22,15 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.google.common.collect.Maps;
 import com.oddprints.PMF;
+import com.oddprints.dao.ApplicationSetting;
+import com.oddprints.dao.ApplicationSetting.Settings;
 import com.oddprints.dao.Basket;
 import com.sun.jersey.api.view.Viewable;
 
@@ -36,10 +39,21 @@ public class PromoGoodwill {
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("sandrine482")
-    public Viewable pfb(@Context HttpServletRequest req)
-            throws URISyntaxException {
-        return get(req, "Sandrine", 15);
+    @Path("/{secret}")
+    public Viewable get(@Context HttpServletRequest req,
+            @PathParam("secret") String secret) throws URISyntaxException {
+
+        // format: matt123-Matt-15,dav321-Dave-10
+        String goodwill = ApplicationSetting.getSetting(Settings.GOODWILL);
+
+        for (String entry : goodwill.split(",")) {
+            String[] secretNameDiscount = entry.split("-");
+            if (secretNameDiscount[0].equals(secret)) {
+                return get(req, secretNameDiscount[1],
+                        Integer.parseInt(secretNameDiscount[2]));
+            }
+        }
+        return new Error().get("The code '" + secret + "' was not recognised.");
     }
 
     public Viewable get(HttpServletRequest req, String name, int discount)

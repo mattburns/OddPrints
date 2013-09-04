@@ -36,7 +36,7 @@ limitations under the License.
 
     <div data-role="content">
         <div id="choose-a-file">
-            <h2>Upload a photo</h2>
+            <h1>Upload a photo</h1>
             <div data-role="fieldcontain" >        
                 <label for="files"></label>
                 <input type="file" id="files" name="files[]" />
@@ -61,7 +61,7 @@ limitations under the License.
     
             <form action="#" method="get">
                 <div class="not-sticker-mode">
-                    <h2 id="frame-size-text"></h2>
+                    <h1 id="frame-size-text"></h1>
                     <div data-role="fieldcontain" title="Width of picture frame">
                         <label for="frame-width">Width:</label>
                         <input type="number" id="frame-width" value="4" step="0.1" min="0.1" max="100" data-highlight="true" class="frame-size-input"/>

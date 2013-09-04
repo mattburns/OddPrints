@@ -90,7 +90,7 @@ limitations under the License.
                 
                 <h2>Free</h2>
                 <img class="osi-logo" src="/images/osi_standard_logo.png"/>
-                <p>Don't want to order prints from us? You don't have to!
+                <p>Don't want to order prints from us? 
                 You can simply download the prints for free and print them yourself or with any other lab.
                 The images you download have no watermark or branding. There's no annoying captcha,
                 advertisements or registration process. Even this code for this website

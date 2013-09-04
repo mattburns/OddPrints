@@ -35,7 +35,7 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>Hi ${it.name},</h2>
+        <h1>Hi ${it.name},</h1>
         <p>
         This link is specifically for you and entitles you to a ${it.discount}% discount.
         Please do not share this link with others. 
