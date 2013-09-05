@@ -373,7 +373,7 @@ function updateTextAndControls() {
 }
 
 function isSupportedBrowser() {
-    return !!window.FileReader && Modernizr.canvas && isFileInputSupported();
+    return !!window.FileReader && Modernizr.canvas && isFileInputSupported() && canRenderLargeCanvasesToJpeg();
 }
 
 function isFileInputSupported() {
@@ -483,6 +483,13 @@ function detectVerticalSquash(img) {
     }
     var ratio = (py / ih);
     return (ratio===0)?1:ratio;
+}
+
+function canRenderLargeCanvasesToJpeg() {
+    var canvas = document.createElement('canvas');
+    canvas.width = 2500;
+    canvas.height = 2500;
+    return canvas.toDataURL('image/jpeg').length > 10;
 }
 
 /**

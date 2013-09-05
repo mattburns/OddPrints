@@ -271,7 +271,6 @@ var horizontalOffset = 0;
 var verticalOffset = 0;
     
 $(document).ready(function() {
-    
     fileChooser();
     
     if (!isSupportedBrowser()) {

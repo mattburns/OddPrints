@@ -37,7 +37,6 @@ limitations under the License.
 
     <div data-role="content" class="full-width">
         <div class="thin-column">
-    
             <h1>Easy printing at <em>any</em> size</h1>
             
             <p>The <strong>simple</strong> way to print

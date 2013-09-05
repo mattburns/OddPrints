@@ -2,7 +2,7 @@
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 
-<c:set var="cache_version" scope="application" value='4'/>
+<c:set var="cache_version" scope="application" value='6'/>
 
 <head>
     <title>OddPrints${param.titleText}</title>
