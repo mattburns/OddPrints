@@ -152,6 +152,13 @@ table * {
     font-weight: normal;
 }
 
+@media all and (max-width: 1000px) {
+    .footer-right {
+        display: none;
+    }
+}
+
+
 img {
     max-width: 100%;
 }

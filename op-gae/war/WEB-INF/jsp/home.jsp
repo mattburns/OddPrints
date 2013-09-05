@@ -92,7 +92,7 @@ limitations under the License.
                     reviewed OddPrints and described it as <strong><em>fantastic</em></strong>.
                     </p>
                     
-                    <p>Read the full article <a href="/images/pfb-large.jpg">here</a>:</p>
+                    <p>Read the full article <a href="/images/pfb-large.jpg">here</a>.</p>
                     <a href="/images/pfb-large.jpg"><img class="mild-shadow" src="/images/pfb-small.jpg"/></a>
                 </div>
 
