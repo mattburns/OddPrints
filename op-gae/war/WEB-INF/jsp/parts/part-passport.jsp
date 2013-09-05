@@ -6,5 +6,5 @@
 <p>Unlike other online services, you can use OddPrints for free. Just download the generated image
 and print it at 6"×4". The image has no watermark or any other nonsense.</p>
 <p>If you don't want to print it yourself, you can simply order the prints directly from us.</p>
-<img style="box-shadow: 0px 0px 15px #222222;" src="/images/passport.png"/>
+<img class="mild-shadow" src="/images/passport.png"/>
                 

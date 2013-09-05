@@ -440,3 +440,21 @@ dt {
     /* ratio between width and height of pano */
     width: 22.16%;
 }
+
+.mild-shadow {
+    box-shadow: 0px 0px 15px #222222;
+}
+
+.home-pfb h2 {
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 0.5em;
+}
+
+div.home-pfb {
+    margin-top: 2em;
+}
+
+.right {
+    float: right;
+}

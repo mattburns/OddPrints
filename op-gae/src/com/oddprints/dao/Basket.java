@@ -239,6 +239,9 @@ public class Basket {
 
         BasketItem item = new BasketItem(this, blobImage, blobSize, frameSize,
                 printSize, quantity);
+        if (item.getBlobSize() == 0) {
+            throw new RuntimeException("Attempted to add empty image");
+        }
         items.add(item);
     }
 

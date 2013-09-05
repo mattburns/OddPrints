@@ -20,7 +20,7 @@ the perfect ratio for iPhone photos, at just <strong>${panoPrice}</strong>.</p>
         </div>
         <div id="pano-text">← 18" →</div>
 	    <div id="pano-img">
-		    <img style="box-shadow: 0px 0px 15px #222222;" src="/images/pano.jpg"/>
+		    <img class="mild-shadow" src="/images/pano.jpg"/>
 	    </div>
 	</div>
 </a>

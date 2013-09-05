@@ -549,7 +549,8 @@ function calculate(dpi) {
     
     // Something has gone wrong, try basic mode...
     if (jpegData.length < 1000) {
-        window.location.href = "/upload/basic";
+	    jpegData = null;
+        window.location.href = "/empty-image-error";
     }
     return jpegData;    
 }

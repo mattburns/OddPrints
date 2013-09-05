@@ -84,6 +84,17 @@ limitations under the License.
                 
                 <h2>Print stunning panoramas</h2>
                 <jsp:include page="/WEB-INF/jsp/parts/part-panoramic.jsp"/>
+                
+                <div class="home-pfb">
+                    <h2>"Fantastic printing service"</h2>
+                    <a class="right" href="http://www.photoforbeginners.com/"><img src="/images/pfb-logo.png"/></a>
+                    <p><a href="http://www.photoforbeginners.com/">Photography for Beginners</a> magazine 
+                    reviewed OddPrints and described it as <strong><em>fantastic</em></strong>.
+                    </p>
+                    
+                    <p>Read the full article <a href="/images/pfb-large.jpg">here</a>:</p>
+                    <a href="/images/pfb-large.jpg"><img class="mild-shadow" src="/images/pfb-small.jpg"/></a>
+                </div>
 
                 <h2>Print your own passport photos</h2>
                 <jsp:include page="/WEB-INF/jsp/parts/part-passport.jsp"/>

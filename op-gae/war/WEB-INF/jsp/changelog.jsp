@@ -35,6 +35,11 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.33 - 2013/09/05</h2>
+        <ul>
+            <li>Fix bugs on safari on iOS.</li>
+            <li>Added pfb article to homepage.</li>
+        </ul>
         <h2>v.32 - 2013/09/04</h2>
         <ul>
             <li>Simplified homepage text.</li>

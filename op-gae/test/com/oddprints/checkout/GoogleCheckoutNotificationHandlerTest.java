@@ -47,7 +47,7 @@ public class GoogleCheckoutNotificationHandlerTest {
         PersistenceManager pm = PMF.get().getPersistenceManager();
         // create basket
         Basket basket = new Basket(Environment.SANDBOX);
-        basket.addItem(null, 0, "2x2", PrintSize._4x6);
+        basket.addItem(null, 1, "2x2", PrintSize._4x6);
         basket.setState(State.awaiting_payment);
         pm.makePersistent(basket);
 
