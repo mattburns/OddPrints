@@ -35,6 +35,12 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.35 - 2013/09/18</h2>
+        <ul>
+            <li>Added google satisfaction survey.</li>
+            <li>Updated Pwinty SDK jar to 1.6.</li>
+            <li>Killed off all references to the deprecated Sticker feature.<li>
+        </ul>
         <h2>v.33 - 2013/09/05</h2>
         <ul>
             <li>Fix bugs on safari on iOS.</li>

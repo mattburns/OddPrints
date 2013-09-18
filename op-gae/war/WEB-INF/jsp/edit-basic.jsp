@@ -41,15 +41,8 @@ limitations under the License.
             </div>
         </c:if>
         
-        <c:if test="${stickerMode}">
-            <h2>Custom Sticker</h2>
-            <p>We will print this photo at 2"×4" and stick it to the envelope!
-            Be creative and make it fun. No invoices are posted (it's all online)
-            so you can the prints send directly.</p>
-        </c:if>
-
         <form action="#" method="get">
-            <div class="not-sticker-mode">
+            <div>
                 <h1 id="frame-size-text"></h1>
                 <div data-role="fieldcontain" title="Width of picture frame">
                     <label for="frame-width">Width:</label>
@@ -94,7 +87,7 @@ limitations under the License.
                 <p>Error loading preview. Retrying...</p>
             </div>
             <div class="text-align-right">
-                <a id="change-picture-link" class="not-sticker-mode" href="/upload/basic">change picture</a>
+                <a id="change-picture-link" href="/upload/basic">change picture</a>
             </div>
 
             <div data-role="collapsible" data-collapsed="true"  data-content-theme="c" >
@@ -126,21 +119,19 @@ limitations under the License.
                             Fit
                         </label>
                         
-                        <c:if test="${not stickerMode}">
-                            <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP" checked="checked" />
-                            <label for="radio-crop" title="Crop parts of the image that are outside the frame">
-                                Crop
-                            </label>
-                            
-                            <input type="radio" name="radio-crop-fit" id="radio-tile" value="TILE" />
-                            <label for="radio-tile" title="Tile the image">
-                                Tile
+                        <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP" checked="checked" />
+                        <label for="radio-crop" title="Crop parts of the image that are outside the frame">
+                            Crop
                         </label>
-                        </c:if>
+                        
+                        <input type="radio" name="radio-crop-fit" id="radio-tile" value="TILE" />
+                        <label for="radio-tile" title="Tile the image">
+                            Tile
+                        </label>
                     </fieldset>
                 </div>
                 
-                <div data-role="fieldcontain" class="not-sticker-mode">
+                <div data-role="fieldcontain">
                     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                         <legend>Print orientation:</legend>
                         
@@ -169,7 +160,7 @@ limitations under the License.
                 <c:otherwise>
                     <div class="text-align-right">
                         <a href="#" id="img-download" data-inline="true" data-mini="true" target="_blank">Download</a>
-                        <span id="print-size-text" class="not-sticker-mode"></span>
+                        <span id="print-size-text"></span>
                         or simply <a href="#" id="img-upload" data-role="button" data-inline="true" data-theme="b">Order prints</a>
                     </div>
                 </c:otherwise>
@@ -207,9 +198,6 @@ $(document).ready(function() {
     renderPreview();
 });
 
-function stickerMode() {
-    return "${stickerMode}" == "true";
-}
 function panoMode() {
     return "${panoMode}" == "true";
 }
@@ -218,23 +206,23 @@ function renderPreview() {
     if (printsizeAvailable(getFrameWidthInInches(), getFrameHeightInInches(), getOrientation())) {
         $.mobile.showPageLoadingMsg();
         updateTextAndControls();
-        var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95/" + $("#background").val().replace("#", "") + "/" + stickerMode();
-	    var previewImageUrl = "/transformer/" + dpiRender + urlEnding + "/" + tileMargin;
-	    var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "/" + parseInt(tileMargin*(dpiFull/dpiRender)) + "?download=true";
-	    
-	    $("#img-preview").attr("src", previewImageUrl);
-	    $("#img-download").attr("href", finalImageUrl);
-	    var img = new Image();
-	    img.src = previewImageUrl;
-	    img.onload = function(){
-	        $("#error-loading-preview").hide();
-	        $.mobile.hidePageLoadingMsg();
-	    };
-	    img.onerror = function(){
-	        $.mobile.hidePageLoadingMsg();
-	        $("#error-loading-preview").show();
-	        renderPreview(); // try again
-	    };
+        var urlEnding = "/" + getFrameWidthInInches() + "/" + getFrameHeightInInches() + "/" + getZooming() + "/" + getOrientation() + "/JPEG/95/" + $("#background").val().replace("#", "");
+        var previewImageUrl = "/transformer/" + dpiRender + urlEnding + "/" + tileMargin;
+        var finalImageUrl = "/transformer/" + dpiFull + urlEnding + "/" + parseInt(tileMargin*(dpiFull/dpiRender)) + "?download=true";
+        
+        $("#img-preview").attr("src", previewImageUrl);
+        $("#img-download").attr("href", finalImageUrl);
+        var img = new Image();
+        img.src = previewImageUrl;
+        img.onload = function(){
+            $("#error-loading-preview").hide();
+            $.mobile.hidePageLoadingMsg();
+        };
+        img.onerror = function(){
+            $.mobile.hidePageLoadingMsg();
+            $("#error-loading-preview").show();
+            renderPreview(); // try again
+        };
     } else {
         $.mobile.hidePageLoadingMsg();
     }
@@ -253,7 +241,6 @@ function uploadImage() {
          outputEncoding: 'JPEG',
          quality: 95,
          backgroundColor: $("#background").val().replace("#",""),
-         stickerMode: stickerMode(),
          tileMargin: parseInt(tileMargin*(dpiFull/dpiRender)),
          frameSize: frameSizeString(),
          printWidth: settings.printWidth,

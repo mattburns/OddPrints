@@ -287,7 +287,7 @@ public class TransformerTest {
         Mockito.when(image.getHeight()).thenReturn(1000);
         Transformer transformer = new Transformer();
         TransformSettings settings = transformer.calculateSettings(image, 300,
-                2, 1, Zooming.FILL, Orientation.AUTO, false);
+                2, 1, Zooming.FILL, Orientation.AUTO);
         assertEquals(300, settings.getFrameHeightPx());
         assertEquals(600, settings.getFrameWidthPx());
     }
@@ -299,7 +299,7 @@ public class TransformerTest {
         Mockito.when(image.getHeight()).thenReturn(554);
         Transformer transformer = new Transformer();
         TransformSettings settings = transformer.calculateSettings(image, 100,
-                5, 3, Zooming.CROP, Orientation.AUTO, false);
+                5, 3, Zooming.CROP, Orientation.AUTO);
         assertEquals(0, settings.getSourceX());
         assertEquals(28, settings.getSourceY());
 
@@ -314,7 +314,7 @@ public class TransformerTest {
         Mockito.when(image.getHeight()).thenReturn(1000);
         Transformer transformer = new Transformer();
         TransformSettings settings = transformer.calculateSettings(image, 300,
-                5, 3, Zooming.CROP, Orientation.AUTO, false);
+                5, 3, Zooming.CROP, Orientation.AUTO);
         assertTrue(settings.getSourceX() >= 0);
         assertTrue(settings.getSourceY() >= 0);
     }

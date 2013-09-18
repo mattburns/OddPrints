@@ -53,14 +53,6 @@ public class Checkout {
         }
     }
 
-    private String editStickerUrl(HttpServletRequest req) {
-        if (basicMode(req)) {
-            return "/upload/basicsticker";
-        } else {
-            return "/editsticker";
-        }
-    }
-
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Viewable viewCheckout(@Context HttpServletRequest req) {
@@ -71,7 +63,6 @@ public class Checkout {
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);
         it.put("editurl", editUrl(req));
-        it.put("editstickerurl", editStickerUrl(req));
         UserService userService = UserServiceFactory.getUserService();
         it.put("userIsAdmin",
                 userService.isUserLoggedIn() && userService.isUserAdmin());

@@ -42,7 +42,7 @@ limitations under the License.
                 <input type="file" id="files" name="files[]" />
                 <output id="list"></output>
             </div>
-            <p class="not-sticker-mode">Or just play with the <a id="sample-photo-link" href="#">sample photo</a>.</p>
+            <p>Or just play with the <a id="sample-photo-link" href="#">sample photo</a>.</p>
         </div>
  
         <div id="file-chosen">
@@ -51,16 +51,9 @@ limitations under the License.
                     <a href="/checkout">basket (${it.basket.size})</a>
                 </div>
             </c:if>
-            
-            <c:if test="${stickerMode}">
-                <h2>Custom Sticker</h2>
-                <p>We will print this photo at 2"×4" and stick it to the envelope!
-                Be creative and make it fun. No invoices are posted (it's all online)
-                so you can the prints send directly.</p>
-            </c:if>
-    
+                
             <form action="#" method="get">
-                <div class="not-sticker-mode">
+                <div>
                     <h1 id="frame-size-text"></h1>
                     <div data-role="fieldcontain" title="Width of picture frame">
                         <label for="frame-width">Width:</label>
@@ -109,14 +102,14 @@ limitations under the License.
                     <div class="zoom-out-button"></div>
                 </div>
                 
-                <div class="text-align-right not-sticker-mode">
+                <div class="text-align-right">
                     <a id="change-picture-link" href="/edit">change picture</a>
                 </div>
 
                 <div data-role="collapsible" data-collapsed="true"  data-content-theme="c" >
                     <h3 title="Advanced control of the generated image">Extra options</h3>
                     
-                    <div data-role="fieldcontain" class="not-sticker-mode">    
+                    <div data-role="fieldcontain">    
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Units:</legend>                    
     
@@ -142,21 +135,19 @@ limitations under the License.
                                 Fit
                             </label>
                             
-                            <c:if test="${not stickerMode}">
-                                <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP"/>
-                                <label for="radio-crop" title="Crop parts of the image that are outside the frame" class="not-sticker-mode">
-                                    Crop
-                                </label>
-    
-                                <input type="radio" name="radio-crop-fit" id="radio-tile" value="TILE"/>
-                                <label for="radio-tile" title="Tile the image"  class="not-sticker-mode">
-                                    Tile
-                                </label>
-                            </c:if>
+                            <input type="radio" name="radio-crop-fit" id="radio-crop" value="CROP"/>
+                            <label for="radio-crop" title="Crop parts of the image that are outside the frame">
+                                Crop
+                            </label>
+
+                            <input type="radio" name="radio-crop-fit" id="radio-tile" value="TILE"/>
+                            <label for="radio-tile" title="Tile the image">
+                                Tile
+                            </label>
                         </fieldset>
                     </div>
                     
-                    <div data-role="fieldcontain" class="not-sticker-mode">
+                    <div data-role="fieldcontain">
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Show guidelines:</legend>
                             
@@ -172,7 +163,7 @@ limitations under the License.
                         </fieldset>
                     </div>
                     
-                    <div data-role="fieldcontain" class="not-sticker-mode">
+                    <div data-role="fieldcontain">
                         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                             <legend>Print orientation:</legend>
                             
@@ -194,7 +185,7 @@ limitations under the License.
                         <label for="vertical-offset">Vertical offset:</label>
                         <input data-mini="true" type="number" id="vertical-offset" value="0" step="1" data-highlight="true"/>
                     </div>
-                    <div data-role="fieldcontain" title="Tile margin" class="not-sticker-mode">
+                    <div data-role="fieldcontain" title="Tile margin">
                         <label for="tile-margin">Tile margin:</label>
                         <span class="span-slider"><input data-mini="true" type="range" name="slider" id="tile-margin" value="0" step="1" min="0" max="200" data-highlight="true"/></span>
                     </div>
@@ -215,7 +206,7 @@ limitations under the License.
                     <c:otherwise>
                         <div class="text-align-right">
                         <a href="#" id="img-download" data-inline="true" data-mini="true">Download</a>
-                        <span id="print-size-text" class="not-sticker-mode"></span>
+                        <span id="print-size-text"></span>
                         or simply <a href="#" id="img-upload" data-role="button" data-inline="true" data-theme="b">Order prints</a>
                         </div>
                     </c:otherwise>
@@ -353,10 +344,6 @@ $(document).ready(function() {
     init();
 
 });
-
-function stickerMode() {
-    return "${stickerMode}" == "true";
-}
 
 function panoMode() {
     return "${panoMode}" == "true";
@@ -548,7 +535,7 @@ function calculate(dpi) {
     
     // Something has gone wrong, try basic mode...
     if (jpegData.length < 1000) {
-	    jpegData = null;
+        jpegData = null;
         window.location.href = "/empty-image-error";
     }
     return jpegData;    
@@ -694,8 +681,7 @@ function uploadImageImpl() {
        { imageData: imageDataValue,
          frameSize: frameSizeString(),
          printWidth: settings.printWidth,
-         printHeight: settings.printHeight,
-         stickerMode: stickerMode()
+         printHeight: settings.printHeight
        }
     )
     .success(

@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mockito-all-1.9.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gson-2.2.jar"/>
 	<classpathentry kind="lib" path="test-lib/appengine-testing.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/pwinty-java-sdk-1.5.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-client-1.17.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-core-1.17.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-json-1.17.jar"/>
@@ -31,6 +30,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-mapper-asl-1.9.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-xc-1.9.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/stripe-java-latest.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/pwinty-java-sdk-1.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

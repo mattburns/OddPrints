@@ -209,19 +209,6 @@ public class Basket {
         this.environment = environment;
     }
 
-    public void updateSticker(BlobKey blobImage, long blobSize) {
-        BasketItem currentSticker = null;
-        for (BasketItem item : getItems()) {
-            if (item.getPrintSize() == PrintSize._2x4) {
-                currentSticker = item;
-            }
-        }
-        if (currentSticker != null) {
-            delete(currentSticker);
-        }
-        addItem(blobImage, blobSize, "", PrintSize._2x4, 1);
-    }
-
     public void addItem(BlobKey blobImage, long blobSize, String frameSize,
             PrintSize printSize) {
         addItem(blobImage, blobSize, frameSize, printSize, 1);
@@ -231,10 +218,6 @@ public class Basket {
             PrintSize printSize, int quantity) {
         if (state != State.draft) {
             throw new RuntimeException("cant edit draft");
-        }
-
-        if (printSize == PrintSize._2x4) {
-            frameSize = "Custom sticker";
         }
 
         BasketItem item = new BasketItem(this, blobImage, blobSize, frameSize,

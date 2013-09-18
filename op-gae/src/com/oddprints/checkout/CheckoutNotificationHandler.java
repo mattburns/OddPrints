@@ -15,8 +15,6 @@
  ******************************************************************************/
 package com.oddprints.checkout;
 
-import java.io.ByteArrayInputStream;
-import java.net.URL;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -25,16 +23,13 @@ import uk.co.mattburns.pwinty.Order;
 import uk.co.mattburns.pwinty.Photo.Sizing;
 import uk.co.mattburns.pwinty.Pwinty;
 
-import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.oddprints.PMF;
-import com.oddprints.PrintSize;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.CheckoutSystem;
 import com.oddprints.dao.Basket.State;
 import com.oddprints.dao.BasketItem;
 import com.oddprints.util.EmailSender;
 import com.oddprints.util.EmailTemplates;
-import com.oddprints.util.ServerUtils;
 
 public class CheckoutNotificationHandler {
 
@@ -104,46 +99,11 @@ public class CheckoutNotificationHandler {
 
         List<BasketItem> basketItems = basket.getItems();
 
-        boolean stickerAdded = false;
-
         for (BasketItem item : basketItems) {
-            if (item.getPrintSize() != PrintSize._2x4) {
-                newOrder.addPhoto(item.getFullImageUrl(), item.getPrintSize()
-                        .toPwintyType(), item.getQuantity(), Sizing.Crop);
-            } else {
-                ByteArrayInputStream imageStream = new ByteArrayInputStream(
-                        item.getImage().getImageData());
-                newOrder.addSticker("sticker.jpg", imageStream);
-                stickerAdded = true;
-            }
-        }
-
-        if (!stickerAdded) {
-            addDefaultSticker(newOrder);
+            newOrder.addPhoto(item.getFullImageUrl(), item.getPrintSize()
+                    .toPwintyType(), item.getQuantity(), Sizing.Crop);
         }
 
         basket.setPwintyOrderNumber(newOrder.getId());
-    }
-
-    private void addDefaultSticker(Order order) {
-        String imageUrl = ServerUtils.getAppspotHostUrl()
-                + "/images/sticker.jpg";
-
-        byte[] bytes = null;
-        try {
-            bytes = URLFetchServiceFactory.getURLFetchService()
-                    .fetch(new URL(imageUrl)).getContent();
-        } catch (Exception e) {
-            EmailSender.INSTANCE.sendToAdmin(e.getMessage(),
-                    "Error adding default sticker");
-            e.printStackTrace();
-        }
-        if (bytes != null) {
-            ByteArrayInputStream imageStream = new ByteArrayInputStream(bytes);
-            order.addSticker("sticker.jpg", imageStream);
-        } else {
-            EmailSender.INSTANCE.sendToAdmin("No bytes read from sticker jpeg",
-                    "Error adding default sticker");
-        }
     }
 }

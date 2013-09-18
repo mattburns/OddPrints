@@ -40,17 +40,12 @@ limitations under the License.
             <h1>Upload a photo</h1>
             
             <c:set var="formAction" value ="/edit/basic"/>
-            <c:if test="${stickerMode}">
-                <c:set var="formAction" value ="/editsticker/basic"/>
-            </c:if>
             
             
             <form action="${formAction}" data-ajax="false" method="POST" id="file-form" enctype="multipart/form-data">
                 <input type="file" id="file-chooser" name="myFile" >
             </form>
-            <c:if test="${not stickerMode}">
-                <p>Or just play with the <a id="sample-photo-link" data-ajax="false" href="/edit/basic/sample">sample photo</a>.</p>
-            </c:if>
+            <p>Or just play with the <a id="sample-photo-link" data-ajax="false" href="/edit/basic/sample">sample photo</a>.</p>
         </div>
     </div>
        

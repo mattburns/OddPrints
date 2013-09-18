@@ -15,14 +15,10 @@
  ******************************************************************************/
 package com.oddprints;
 
-import java.util.List;
-
 import uk.co.mattburns.pwinty.Photo;
 
-import com.google.common.collect.Lists;
-
 public enum PrintSize {
-    _2x4(50), _4x6(50), _5x7(140), _8x10(300), _8x12(300), _4x18(499);
+    _4x6(50), _5x7(140), _8x10(300), _8x12(300), _4x18(499);
 
     private final int height;
     private final int width;
@@ -36,18 +32,8 @@ public enum PrintSize {
         height = Integer.parseInt(heightAndWidth[0]);
         width = Integer.parseInt(heightAndWidth[1]);
         this.price = price;
-        if (this.name().equals("_2x4")) {
-            pwintyType = Photo.Type.sticker;
-        } else {
-            // Enum name must match pwinty enum name
-            pwintyType = Photo.Type.valueOf(this.name());
-        }
-    }
-
-    public static List<PrintSize> printableSizes() {
-        List<PrintSize> list = Lists.newArrayList(values());
-        list.remove(_2x4);
-        return list;
+        // Enum name must match pwinty enum name
+        pwintyType = Photo.Type.valueOf(this.name());
     }
 
     public static PrintSize toPrintSize(int width, int height) {

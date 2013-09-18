@@ -34,7 +34,7 @@
     <script type="text/javascript" src="/js/oddprints.js?v=${cache_version}"></script>
     <script type="text/javascript" src="/js/jquery.tinycarousel.min.js"></script>
     <script type="text/javascript" src="/js/jquery.miniColors.min.js"></script>
-
+    <script async="" defer="" src="//survey.g.doubleclick.net/async_survey?site=yz6olxu3jv6xa"></script>
 </head>
 
 <c:set var="html_year" scope="application" value='<%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %>'/>

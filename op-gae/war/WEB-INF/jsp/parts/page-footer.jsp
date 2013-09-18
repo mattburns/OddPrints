@@ -43,7 +43,6 @@ $(document).ready(function() {
     if (isSupportedBrowser() && !basicModeVar) {
         $("a[href='/upload/basic']").attr("href", "/edit");
         $("a[href='/upload/basicpano']").attr("href", "/editpano");
-        $("a[href='/upload/basicsticker']").attr("href", "/editsticker");
         // oops, shouldn't change this one, change back!
         $(".force-basic").attr("href", "/upload/basic");
     } else if (!isFileInputSupported()) {

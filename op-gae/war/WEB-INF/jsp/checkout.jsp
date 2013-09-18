@@ -60,15 +60,7 @@ limitations under the License.
                                     <a href="/image/basket/${basketItemNumber.index}" data-ajax="false" title="Preview"><img class="checkout-thumb" style="background:url(/image/basket/thumb/${basketItemNumber.index}) no-repeat center;" src="/images/mag.png" alt="" /></a>
                                 </td>
                                 <td>
-                                    <c:choose>
-                                        <c:when test="${basketItem.printSize eq '_2x4'}">
-                                            ${basketItem.frameSize}
-                                            <c:set var="hasSticker" value="true"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            ${basketItem.printSize.displayString} print / ${basketItem.frameSize} frame
-                                        </c:otherwise>
-                                    </c:choose>
+                                    ${basketItem.printSize.displayString} print / ${basketItem.frameSize} frame
                                     (<a href="/checkout/delete/${basketItemNumber.index}" data-ajax="false">remove</a>)
                                 </td>
                                 <td>
