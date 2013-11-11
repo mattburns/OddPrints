@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.36 - 2013/11/11</h2>
+        <ul>
+            <li>Added competition to email templates.</li>
+        </ul>
         <h2>v.35 - 2013/09/18</h2>
         <ul>
             <li>Added google satisfaction survey.</li>
