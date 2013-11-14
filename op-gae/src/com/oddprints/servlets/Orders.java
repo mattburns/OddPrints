@@ -44,118 +44,118 @@ import com.sun.jersey.api.view.Viewable;
 
 @Path("/orders")
 public class Orders {
-
+    
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Viewable getAllOrders(@PathParam("state") String state) {
         return getOrdersByState(State.payment_received.toString());
     }
-
+    
     @GET
     @Path("/{state}")
     @Produces(MediaType.TEXT_HTML)
     public Viewable getOrdersByState(@PathParam("state") String state) {
-
+        
         String thisURL = "/orders";
-
+        
         Map<String, Object> it = Maps.newHashMap();
         PersistenceManager pm = PMF.get().getPersistenceManager();
         List<Basket> baskets = Lists.newArrayList();
-
+        
         UserService userService = UserServiceFactory.getUserService();
         boolean userIsAdmin = userService.isUserLoggedIn()
                 && userService.isUserAdmin();
-
+        
         it.put("userIsAdmin", userIsAdmin);
         if (userService.isUserLoggedIn()) {
             it.put("logoutUrl", userService.createLogoutURL(thisURL));
         } else {
             it.put("loginUrl", userService.createLoginURL(thisURL));
         }
-
+        
         if (userIsAdmin) {
             baskets = Basket.getBasketsByState(State.valueOf(state), pm);
         }
-
+        
         it.put("states", State.values());
         it.put("currentState", state);
-
+        
         it.put("orders", baskets);
-
+        
         return new Viewable("/orders", it);
-
+        
     }
-
+    
     @GET
     @Path("/{secret}/{key}")
     @Produces(MediaType.TEXT_HTML)
     public Viewable getOrder(@PathParam("secret") String secret,
             @PathParam("key") String key) {
-
+        
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Basket basket = Basket.getBasketByKeyString(key, pm);
-
+        
         Map<String, Object> it = Maps.newHashMap();
         UserService userService = UserServiceFactory.getUserService();
         it.put("userIsAdmin",
                 userService.isUserLoggedIn() && userService.isUserAdmin());
-
+        
         if (basket.getSecret().equals(secret)) {
             List<Basket> baskets = Lists.newArrayList(basket);
             it.put("orders", baskets);
         }
-
+        
         return new Viewable("/orders", it);
     }
-
+    
     @GET
     @Path("/submit/{secret}/{key}")
     @Produces(MediaType.TEXT_HTML)
     public Response submitOrderToPwinty(@PathParam("secret") String secret,
             @PathParam("key") String key) {
-
+        
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Basket basket = Basket.getBasketByKeyString(key, pm);
-
+        
         if (basket.getState() != State.payment_received) {
             return Response
                     .status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED)
                     .build();
         }
-
+        
         UserService userService = UserServiceFactory.getUserService();
         boolean userIsAdmin = userService.isUserLoggedIn()
                 && userService.isUserAdmin();
-
+        
         if (!userIsAdmin) {
             return Response
                     .status(com.sun.jersey.api.client.ClientResponse.Status.UNAUTHORIZED)
                     .build();
         }
-
+        
         Order pwintyOrder = basket.getPwintyOrder();
         if (pwintyOrder.getSubmissionStatus().isValid()) {
             pwintyOrder.submit();
             basket.setState(State.submitted_to_lab);
         } else {
-            basket.setState(State.problem_submitting_to_lab);
             // TODO: Ultimately, I want to handle this better, but for now,
             // lets just see what the common problems are (if any).
-            String msg = "Error submitting to pwinty: "
+            // Don't bother changing order state, as it prevents us retrying
+            String msg = "**** Error submitting to pwinty: "
                     + basket.getCheckoutSystemOrderNumber();
             EmailSender.INSTANCE.sendToAdmin(msg, msg);
         }
         pm.makePersistent(basket);
         pm.close();
-
+        
         return Response.ok().build();
     }
-
+    
     @GET
     @Path("/charge")
     @Produces(MediaType.TEXT_HTML)
     public Response chargeAndShipOrders() {
-
+        
         PersistenceManager pm = PMF.get().getPersistenceManager();
         List<Basket> baskets = Basket.getBasketsByState(State.submitted_to_lab,
                 pm);
@@ -163,10 +163,10 @@ public class Orders {
             Order pwintyOrder = basket.getPwintyOrderEL();
             if (pwintyOrder != null
                     && pwintyOrder.getStatus() == Status.Complete) {
-
+                
                 String checkoutSystemOrderNumber = basket
                         .getCheckoutSystemOrderNumber();
-
+                
                 // For google orders, we only charge once the order has shipped
                 if (basket.getCheckoutSystem() == CheckoutSystem.google) {
                     try {
@@ -184,7 +184,7 @@ public class Orders {
                     }
                 }
                 basket.setState(State.dispatched_from_lab);
-
+                
                 String subject = "OddPrints Dispatched Order #"
                         + checkoutSystemOrderNumber;
                 String msg = EmailTemplates.shippedOrder(
@@ -192,9 +192,9 @@ public class Orders {
                 EmailSender.INSTANCE.send(basket.getBuyerEmail(), msg, subject);
             }
         }
-
+        
         pm.close();
         return Response.ok().build();
-
+        
     }
 }
