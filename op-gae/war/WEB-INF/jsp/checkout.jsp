@@ -121,11 +121,7 @@ limitations under the License.
                 <div>
                     <div class="text-align-right payment-buttons">
                         <p>
-                            <a id="google-purchase-link" href="/purchase/google" data-ajax="false"><img src="https://checkout.google.com/buttons/checkout.gif?merchant_id=${it.merchantId}&w=180&h=46&style=trans&variant=text&loc=en_GB" alt="Proceed to Google Checkout"/></a>
-                            <c:if test="${it.userIsAdmin or it.paypalEnabled}">
-                                <span>or</span>
-                                <a href="/purchase/paypal" data-ajax="false"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Proceed to PayPal checkout"/></a>
-                            </c:if>
+                            <a href="/purchase/paypal" data-ajax="false"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Proceed to PayPal checkout"/></a>
                         
                             <%--
                                 <form action="" method="POST">
@@ -175,16 +171,7 @@ $(document).ready(function() {
         var basketItemId = id.split('-')[1];
         window.location.href = "/checkout/update/" + basketItemId + "/" + event.target.value;
     });
-    
-    $("#google-purchase-link").click(function(e){   
-      _gaq.push(function() {
-          var pageTracker = _gaq._getAsyncTracker();
-          setUrchinInputCode(pageTracker);
-          window.location.href = "/purchase/google?analyticsData=" + getUrchinFieldValue();
-      });
-      e.preventDefault();
-    });
-    
+        
     $('body').on('token', function(event) {
         $.post('/purchase/stripe', {
             "token": event.token

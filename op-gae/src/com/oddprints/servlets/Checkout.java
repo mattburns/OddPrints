@@ -39,12 +39,12 @@ import com.sun.jersey.api.view.Viewable;
 
 @Path("/checkout")
 public class Checkout {
-
+    
     private boolean basicMode(HttpServletRequest req) {
         Object basicMode = req.getSession().getAttribute("basicMode");
         return basicMode != null && (Boolean) basicMode;
     }
-
+    
     private String editUrl(HttpServletRequest req) {
         if (basicMode(req)) {
             return "/upload/basic";
@@ -52,31 +52,24 @@ public class Checkout {
             return "/edit";
         }
     }
-
+    
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Viewable viewCheckout(@Context HttpServletRequest req) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
-
+        
         Basket basket = Basket.fromSession(req, pm);
-
+        
         Map<String, Object> it = Maps.newHashMap();
         it.put("basket", basket);
         it.put("editurl", editUrl(req));
         UserService userService = UserServiceFactory.getUserService();
         it.put("userIsAdmin",
                 userService.isUserLoggedIn() && userService.isUserAdmin());
-
-        if (basket != null) {
-            it.put("merchantId", basket.getEnvironment()
-                    .getGoogleCheckoutAPIContext().getMerchantId());
-        }
-
-        it.put("paypalEnabled", true);
-
+        
         return new Viewable("/checkout", it);
     }
-
+    
     @GET
     @Path("/delete/{basketItem}")
     @Produces(MediaType.TEXT_HTML)
@@ -88,7 +81,7 @@ public class Checkout {
         pm.close();
         return Response.temporaryRedirect(new URI("/checkout")).build();
     }
-
+    
     @GET
     @Path("/environment/{environment}")
     @Produces(MediaType.TEXT_HTML)
@@ -101,7 +94,7 @@ public class Checkout {
         pm.close();
         return Response.temporaryRedirect(new URI("/checkout")).build();
     }
-
+    
     @GET
     @Path("/update/{basketItem}/{quantity}")
     @Produces(MediaType.TEXT_HTML)
@@ -110,11 +103,11 @@ public class Checkout {
             throws URISyntaxException {
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Basket basket = Basket.fromSession(req, pm);
-
+        
         basket.updateQuantity(basketItemToUpdate, quantity);
         pm.close();
-
+        
         return Response.temporaryRedirect(new URI("/checkout")).build();
     }
-
+    
 }

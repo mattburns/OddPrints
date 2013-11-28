@@ -35,6 +35,11 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.37 - 2013/11/28</h2>
+        <ul>
+            <li>Removed Google checkout.</li>
+            <li>Added facebook like box.</li>
+        </ul>
         <h2>v.36 - 2013/11/11</h2>
         <ul>
             <li>Added competition to email templates.</li>

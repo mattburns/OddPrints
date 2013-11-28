@@ -47,8 +47,9 @@ limitations under the License.
         regardless of order size. Simple.</p>
         
         <h2>How long will my prints take to arrive?</h2>
-        <p>We have printing facilities in the UK (1-3 days) and the US (3-5 days, however panoramics are printed in the UK and will take longer)
-        but also ship worldwide (delivery time varies).</p>
+        <p>We have printing facilities in the UK (typically 1-3 days) and the US (typically 3-5 days,
+         however panoramics are currently printed in the UK and will take longer).
+         We also ship worldwide (delivery time varies).</p>
 
         <h2>Are prints ordered from OddPrints pre-cut?</h2>
         <p>No, but it's really easy and helps keep the price low.</p>
@@ -57,6 +58,7 @@ limitations under the License.
         <p>When you select an image, it is manipulated entirely within your web browser using javascript.
         You barely need an internet connection at all. Of course, if you choose to order prints with us, then the images
         have to be sent to our servers so that we can print them.</p>
+        
         <h2>Further help</h2>
         <p>Still need help? Just leave a comment below and we will get back to you.</p>
         

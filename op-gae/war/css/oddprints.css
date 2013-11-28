@@ -465,3 +465,18 @@ div.home-pfb {
 .right {
     float: right;
 }
+
+div.fb-like-box {
+    float: right;
+    position: relative;
+    top: 10px;
+    height: 0px;
+    right: 10px;
+    display: none !important;
+}
+
+@media all and (min-device-width: 1150px) and (min-width: 1150px) {
+    div.fb-like-box {
+        display: block !important;
+    }
+}

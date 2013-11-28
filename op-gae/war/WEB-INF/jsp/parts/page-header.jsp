@@ -15,3 +15,5 @@
         <h1><a href="/" class="logo" data-ajax="false">
         <span class="oddprints-logo-a">Odd</span><span class="oddprints-logo-b">Prints</span></a></h1>
     </div>
+    
+    <div class="fb-like-box" data-href="https://www.facebook.com/OddPrints" data-width="250" data-height="570" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="true" data-show-border="true"></div>

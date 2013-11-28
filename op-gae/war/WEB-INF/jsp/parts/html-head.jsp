@@ -2,7 +2,7 @@
 <%@ page isELIgnored="false" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 
-<c:set var="cache_version" scope="application" value='6'/>
+<c:set var="cache_version" scope="application" value='11'/>
 
 <head>
     <title>OddPrints${param.titleText}</title>
@@ -17,7 +17,7 @@
           
     <meta name="Description" content="${param.descriptionText}" />
           
-    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <link type="text/css" rel="stylesheet" href="/css/jquery.mobile-1.2.0.min.css" />
     <link type="text/css" rel="stylesheet" href="/css/oddprints.css?v=${cache_version}" />
     <link type="text/css" rel="stylesheet" href="/css/jquery.miniColors.css" />
