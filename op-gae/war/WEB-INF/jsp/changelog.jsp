@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.38 - 2013/11/29</h2>
+        <ul>
+            <li>Added twitter box.</li>
+        </ul>
         <h2>v.37 - 2013/11/28</h2>
         <ul>
             <li>Removed Google checkout.</li>

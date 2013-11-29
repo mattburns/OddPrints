@@ -17,3 +17,8 @@
     </div>
     
     <div class="fb-like-box" data-href="https://www.facebook.com/OddPrints" data-width="250" data-height="570" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="true" data-show-border="true"></div>
+
+    <a class="twitter-timeline" href="https://twitter.com/OddPrints" data-widget-id="406380945541824512">Tweets by @OddPrints</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+    

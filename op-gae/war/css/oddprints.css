@@ -466,17 +466,23 @@ div.home-pfb {
     float: right;
 }
 
-div.fb-like-box {
-    float: right;
-    position: relative;
-    top: 10px;
-    height: 0px;
-    right: 10px;
+div.fb-like-box, .twitter-timeline {
+    width: 250px;
+    position: absolute;
+    top: 70px;
     display: none !important;
 }
 
+div.fb-like-box {
+    left: 10px;
+}
+    
+.twitter-timeline {
+    right: 10px;
+}
+
 @media all and (min-device-width: 1150px) and (min-width: 1150px) {
-    div.fb-like-box {
+    div.fb-like-box, .twitter-timeline {
         display: block !important;
     }
 }
