@@ -105,6 +105,9 @@ public class ImageTransformer {
         Transformer t = new Transformer();
         TransformSettings settings = t.calculateSettings(image, dpi,
                 frameWidthInInches, frameHeightInInches, zooming, orientation);
+        // System.out.println(dpi + " dpi " + frameWidthInInches + " fw "
+        // + frameHeightInInches + " fh " + zooming + " zoom "
+        // + settings.getDestinationWidth());
 
         if (zooming == Zooming.CROP || zooming == Zooming.TILE) {
             double xTrim = (double) settings.getSourceX() / image.getWidth();

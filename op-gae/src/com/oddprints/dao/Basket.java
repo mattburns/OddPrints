@@ -176,8 +176,10 @@ public class Basket {
     }
 
     public static List<Basket> getBasketsByState(State state,
-            PersistenceManager pm) {
+            PersistenceManager pm, long maxRecords) {
         Query query = pm.newQuery(Basket.class);
+
+        query.setRange(0, maxRecords);
 
         query.setFilter("state == stateParam");
         query.declareParameters("Enum stateParam");

@@ -69,25 +69,32 @@ limitations under the License.
                         <dt>Environment:</dt> <dd>${order.environment}&nbsp;</dd>
                     </c:if>
                     
-                    <c:set var="pwintyOrder" value="${order.pwintyOrderEL}"/>
-                    <c:if test="${not empty pwintyOrder}">
-                        <dt>Contact Name:</dt> <dd>${pwintyOrder.recipientName}&nbsp;</dd>
-                        <dt>Address 1:</dt> <dd>${pwintyOrder.address1}&nbsp;</dd>
-                        <dt>Address 2:</dt> <dd>${pwintyOrder.address2}&nbsp;</dd>
-                        <dt>City:</dt> <dd>${pwintyOrder.addressTownOrCity}&nbsp;</dd>
-                        <dt>Region:</dt> <dd>${pwintyOrder.stateOrCounty}&nbsp;</dd>
-                        <dt>Postal Code:</dt> <dd>${pwintyOrder.postalOrZipCode}&nbsp;</dd>
-                        <dt>Country:</dt> <dd>${pwintyOrder.country}&nbsp;</dd>
-                        
-                        <c:if test="${it.userIsAdmin}">
-                            <dt>Pwinty id:</dt> <dd>${pwintyOrder.id}&nbsp;</dd>
-                            <dt>Pwinty status:</dt> <dd>${pwintyOrder.status}&nbsp;</dd>
-                        </c:if>
-                        
-                        <c:forEach var="generalError" items="${pwintyOrder.submissionStatus.generalErrors}">
-                            <dt>General error:</dt> <dd>${generalError}&nbsp;</dd>
-                        </c:forEach>
-                    </c:if>
+                    <c:choose>
+                        <c:when test="${it.hidePwinty}">
+                            <dt>Pwinty details:</dt> <dd><a href="${order.url}">order page</a></dd>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="pwintyOrder" value="${order.pwintyOrderEL}"/>
+                            <c:if test="${not empty pwintyOrder}">
+                                <dt>Contact Name:</dt> <dd>${pwintyOrder.recipientName}&nbsp;</dd>
+                                <dt>Address 1:</dt> <dd>${pwintyOrder.address1}&nbsp;</dd>
+                                <dt>Address 2:</dt> <dd>${pwintyOrder.address2}&nbsp;</dd>
+                                <dt>City:</dt> <dd>${pwintyOrder.addressTownOrCity}&nbsp;</dd>
+                                <dt>Region:</dt> <dd>${pwintyOrder.stateOrCounty}&nbsp;</dd>
+                                <dt>Postal Code:</dt> <dd>${pwintyOrder.postalOrZipCode}&nbsp;</dd>
+                                <dt>Country:</dt> <dd>${pwintyOrder.country}&nbsp;</dd>
+                                
+                                <c:if test="${it.userIsAdmin}">
+                                    <dt>Pwinty id:</dt> <dd>${pwintyOrder.id}&nbsp;</dd>
+                                    <dt>Pwinty status:</dt> <dd>${pwintyOrder.status}&nbsp;</dd>
+                                </c:if>
+                                
+                                <c:forEach var="generalError" items="${pwintyOrder.submissionStatus.generalErrors}">
+                                    <dt>General error:</dt> <dd>${generalError}&nbsp;</dd>
+                                </c:forEach>
+                            </c:if>
+                        </c:otherwise>
+                    </c:choose>
                     
                     <c:if test="${not empty order.checkoutSystemOrderNumber}">
                         <dt>Order Number:</dt> <dd> #${order.checkoutSystemOrderNumber}&nbsp;</dd>
@@ -179,7 +186,7 @@ limitations under the License.
 <script type="text/javascript">
     $(document).ready(function() {    
         $( "#order-state-choice-id" ).bind( "change", function(event, ui) {
-            window.location.href = "/orders/" + $("#order-state-choice-id").val();
+            window.location.href = "/orders/" + $("#order-state-choice-id").val() + "?hidePwinty=true";
         });
     });
 </script>

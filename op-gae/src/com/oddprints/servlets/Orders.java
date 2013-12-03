@@ -23,6 +23,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -44,95 +45,101 @@ import com.sun.jersey.api.view.Viewable;
 
 @Path("/orders")
 public class Orders {
-    
+
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Viewable getAllOrders(@PathParam("state") String state) {
-        return getOrdersByState(State.payment_received.toString());
+    public Viewable getAllOrders(@PathParam("state") String state,
+            @QueryParam("hidePwinty") boolean hidePwinty) {
+        return getOrdersByState(State.payment_received.toString(), hidePwinty);
     }
-    
+
     @GET
     @Path("/{state}")
     @Produces(MediaType.TEXT_HTML)
-    public Viewable getOrdersByState(@PathParam("state") String state) {
-        
+    public Viewable getOrdersByState(@PathParam("state") String state,
+            @QueryParam("hidePwinty") boolean hidePwinty) {
+
         String thisURL = "/orders";
-        
+
         Map<String, Object> it = Maps.newHashMap();
         PersistenceManager pm = PMF.get().getPersistenceManager();
         List<Basket> baskets = Lists.newArrayList();
-        
+
         UserService userService = UserServiceFactory.getUserService();
         boolean userIsAdmin = userService.isUserLoggedIn()
                 && userService.isUserAdmin();
-        
+
         it.put("userIsAdmin", userIsAdmin);
         if (userService.isUserLoggedIn()) {
             it.put("logoutUrl", userService.createLogoutURL(thisURL));
         } else {
             it.put("loginUrl", userService.createLoginURL(thisURL));
         }
-        
+
         if (userIsAdmin) {
-            baskets = Basket.getBasketsByState(State.valueOf(state), pm);
+            baskets = Basket.getBasketsByState(State.valueOf(state), pm, 10);
         }
-        
+
         it.put("states", State.values());
         it.put("currentState", state);
-        
+
         it.put("orders", baskets);
-        
+
+        it.put("hidePwinty", hidePwinty);
+
         return new Viewable("/orders", it);
-        
+
     }
-    
+
     @GET
     @Path("/{secret}/{key}")
     @Produces(MediaType.TEXT_HTML)
     public Viewable getOrder(@PathParam("secret") String secret,
-            @PathParam("key") String key) {
-        
+            @PathParam("key") String key,
+            @QueryParam("hidePwinty") boolean hidePwinty) {
+
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Basket basket = Basket.getBasketByKeyString(key, pm);
-        
+
         Map<String, Object> it = Maps.newHashMap();
         UserService userService = UserServiceFactory.getUserService();
         it.put("userIsAdmin",
                 userService.isUserLoggedIn() && userService.isUserAdmin());
-        
+
         if (basket.getSecret().equals(secret)) {
             List<Basket> baskets = Lists.newArrayList(basket);
             it.put("orders", baskets);
         }
-        
+        it.put("hidePwinty", hidePwinty);
+
         return new Viewable("/orders", it);
     }
-    
+
     @GET
     @Path("/submit/{secret}/{key}")
     @Produces(MediaType.TEXT_HTML)
     public Response submitOrderToPwinty(@PathParam("secret") String secret,
             @PathParam("key") String key) {
-        
+
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Basket basket = Basket.getBasketByKeyString(key, pm);
-        
+
         if (basket.getState() != State.payment_received) {
             return Response
                     .status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED)
                     .build();
         }
-        
+
         UserService userService = UserServiceFactory.getUserService();
         boolean userIsAdmin = userService.isUserLoggedIn()
                 && userService.isUserAdmin();
-        
+
         if (!userIsAdmin) {
             return Response
                     .status(com.sun.jersey.api.client.ClientResponse.Status.UNAUTHORIZED)
                     .build();
         }
-        
+
         Order pwintyOrder = basket.getPwintyOrder();
         if (pwintyOrder.getSubmissionStatus().isValid()) {
             pwintyOrder.submit();
@@ -147,27 +154,31 @@ public class Orders {
         }
         pm.makePersistent(basket);
         pm.close();
-        
+
         return Response.ok().build();
     }
-    
+
     @GET
     @Path("/charge")
     @Produces(MediaType.TEXT_HTML)
     public Response chargeAndShipOrders() {
-        
+
+        int basketsToProcess = 5; // process no more than this to prevent
+                                  // timeouts when there are lots of orders
+
         PersistenceManager pm = PMF.get().getPersistenceManager();
         List<Basket> baskets = Basket.getBasketsByState(State.submitted_to_lab,
-                pm);
+                pm, basketsToProcess);
         for (Basket basket : baskets) {
             Order pwintyOrder = basket.getPwintyOrderEL();
             if (pwintyOrder != null
                     && pwintyOrder.getStatus() == Status.Complete) {
-                
+
                 String checkoutSystemOrderNumber = basket
                         .getCheckoutSystemOrderNumber();
-                
-                // For google orders, we only charge once the order has shipped
+
+                // For google orders, we only charge once the order has
+                // shipped
                 if (basket.getCheckoutSystem() == CheckoutSystem.google) {
                     try {
                         // charge and ship
@@ -184,7 +195,7 @@ public class Orders {
                     }
                 }
                 basket.setState(State.dispatched_from_lab);
-                
+
                 String subject = "OddPrints Dispatched Order #"
                         + checkoutSystemOrderNumber;
                 String msg = EmailTemplates.shippedOrder(
@@ -192,9 +203,9 @@ public class Orders {
                 EmailSender.INSTANCE.send(basket.getBuyerEmail(), msg, subject);
             }
         }
-        
+
         pm.close();
         return Response.ok().build();
-        
+
     }
 }
