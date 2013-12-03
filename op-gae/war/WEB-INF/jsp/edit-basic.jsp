@@ -180,7 +180,7 @@ $(document).ready(function() {
     
     // override max dpi so that we can scale image to 18" without exceeding 4000
     // max width in app engine
-    dpiFull = 215;
+    dpiFull = 175;
     
     $("#error-loading-preview").hide();
     $("input").change(queueRenderPreview);
