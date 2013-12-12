@@ -50,6 +50,7 @@ limitations under the License.
                    <option value="${state}" ${selectedAttribute}>${state}</option>
                 </c:forEach>
             </select>
+            <p>Note: To prevent timeouts, only first ${it.maxOrders} orders are shown</p>
         </c:if>
         
         <c:forEach var="order" items="${it.orders}">

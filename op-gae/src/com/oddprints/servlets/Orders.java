@@ -76,11 +76,14 @@ public class Orders {
             it.put("loginUrl", userService.createLoginURL(thisURL));
         }
 
+        int maxOrders = 10;
         if (userIsAdmin) {
-            baskets = Basket.getBasketsByState(State.valueOf(state), pm, 10);
+            baskets = Basket.getBasketsByState(State.valueOf(state), pm,
+                    maxOrders);
         }
 
         it.put("states", State.values());
+        it.put("maxOrders", maxOrders);
         it.put("currentState", state);
 
         it.put("orders", baskets);
