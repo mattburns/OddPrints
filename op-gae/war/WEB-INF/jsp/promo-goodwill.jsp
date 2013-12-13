@@ -26,7 +26,7 @@ limitations under the License.
       
 <jsp:include page="/WEB-INF/jsp/parts/html-head.jsp">
     <jsp:param name="titleText" value=" - Goodwill" />
-    <jsp:param name="descriptionText" value="Use OddPrints to print stunning panoramas." />
+    <jsp:param name="descriptionText" value="Goodwill" />
 </jsp:include>
 <body>
 

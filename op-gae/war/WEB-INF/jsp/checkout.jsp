@@ -69,16 +69,16 @@ limitations under the License.
                                 <td>${basketItem.priceString}</td>
                             </tr>
                         </c:forEach>
-                        <c:if test="${it.basket.discountPercentage gt 0}">
+                        <c:if test="${it.basket.discountAmount gt 0}">
                             <tr>
                                 <td>
                                 </td>
                                 <td>
-                                    <em>${it.basket.discountText} (${it.basket.discountPercentage}%)</em>
+                                    <em>${it.basket.coupon.displayString}</em>
                                 </td>
                                 <td>
                                 </td>
-                                <td>${it.basket.discountAmountString}</td>
+                                <td>-${it.basket.discountAmountString}</td>
                             </tr>
                         </c:if>
                     </tbody>
@@ -91,8 +91,8 @@ limitations under the License.
                     <div class="text-align-right">
                         <a href="/checkout">update</a>
                         <p class="checkout-subtotal">prints: ${it.basket.printPriceString}</p>
-                        <c:if test="${it.basket.discountPercentage gt 0}">
-                            <p class="checkout-subtotal">discount: ${it.basket.discountAmountString}</p>
+                        <c:if test="${it.basket.discountAmount gt 0}">
+                            <p class="checkout-subtotal">discount: -${it.basket.discountAmountString}</p>
                         </c:if>
                         <p class="checkout-subtotal">shipping: ${it.basket.shippingPriceString}</p>
                         <p class="checkout-total">Total: ${it.basket.totalPriceString}</p>

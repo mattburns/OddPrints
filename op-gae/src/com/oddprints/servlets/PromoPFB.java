@@ -17,7 +17,6 @@ package com.oddprints.servlets;
 
 import java.net.URISyntaxException;
 
-import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -25,8 +24,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.oddprints.PMF;
-import com.oddprints.dao.Basket;
 import com.sun.jersey.api.view.Viewable;
 
 @Path("/pfb")
@@ -36,16 +33,6 @@ public class PromoPFB {
     @Produces(MediaType.TEXT_HTML)
     public Viewable pfb(@Context HttpServletRequest req)
             throws URISyntaxException {
-
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        Basket basket = Basket.getOrCreateBasket(req, pm);
-
-        basket.setDiscountPercentage(15);
-        basket.setDiscountText("PFB discount");
-
-        pm.makePersistent(basket);
-        pm.close();
-
         return new Viewable("/promo-pfb");
     }
 }

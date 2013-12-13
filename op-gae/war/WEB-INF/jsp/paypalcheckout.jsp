@@ -51,7 +51,7 @@ limitations under the License.
         <form action="${paypalurl}" method="post" id="paypal-form">  
             <input type="hidden" name="cmd" value="_cart"> 
             <input type="hidden" name="upload" value="1"> 
-            <input type="hidden" name="shipping_1" value="2.99">
+            <input type="hidden" name="shipping_1" value="${it.basket.totalShippingPriceStringNoSymbols}">
             <c:choose>                       
                 <c:when test="${it.basket.environment.sandbox}">
                     <input type="hidden" name="business" value="seller_sellerpass@mattburns.co.uk">
@@ -65,8 +65,8 @@ limitations under the License.
             <input type="hidden" name="no_shipping" value="2"> 
             <input type="hidden" name="custom" value="${it.basket.idString}"> 
             <input type="hidden" name="notify_url" value="${notifyurl}">
-            <c:if test="${it.basket.discountPercentage gt 0}">
-                <input type="hidden" name="discount_amount_cart" value="${it.basket.discountAmountStringNoSymbol}">
+            <c:if test="${it.basket.discountAmount gt 0}">
+                <input type="hidden" name="discount_amount_cart" value="${it.basket.cartDiscountAmountStringNoSymbol}">
             </c:if>
             
             <c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">

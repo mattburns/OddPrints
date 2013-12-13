@@ -39,6 +39,7 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.oddprints.Environment;
+import com.oddprints.PMF;
 import com.oddprints.PrintSize;
 import com.oddprints.dao.ApplicationSetting.Settings;
 import com.oddprints.util.ServerUtils;
@@ -89,10 +90,9 @@ public class Basket {
     private String buyerEmail;
 
     @Persistent
-    private String discountText;
+    private String couponKeyString;
 
-    @Persistent
-    private Integer discountPercentage;
+    private Coupon coupon;
 
     public static final int LATEST_VERSION = 2;
     public static int FLAT_RATE_SHIPPING = 299;
@@ -272,8 +272,14 @@ public class Basket {
         return StringUtils.formatMoney(getTotalPrice());
     }
 
+    public String getTotalShippingPriceStringNoSymbols() {
+        return StringUtils.formatMoneyNoSymbol(shipping
+                - getShippingDiscountAmount());
+    }
+
     public int getTotalPrice() {
-        return getPriceOfPrintsInPennies() + shipping - getDiscountAmount();
+        return Math.max(0, getPriceOfPrintsInPennies() + shipping
+                - getDiscountAmount());
     }
 
     public static Basket getBasketByKeyString(String basketKeyString,
@@ -343,8 +349,7 @@ public class Basket {
                     item.getFrameSize(), item.getPrintSize(),
                     item.getQuantity());
         }
-        newBasket.setDiscountPercentage(basket.getDiscountPercentage());
-        newBasket.setDiscountText(basket.getDiscountText());
+        newBasket.setCoupon(basket.getCoupon());
         return newBasket;
     }
 
@@ -407,36 +412,77 @@ public class Basket {
         }
     }
 
-    public Integer getDiscountPercentage() {
-        if (discountPercentage == null) {
-            return 0;
+    public String getCouponKeyString() {
+        return couponKeyString;
+    }
+
+    public void setCouponKeyString(String couponKeyString) {
+        this.couponKeyString = couponKeyString;
+    }
+
+    public Coupon getCoupon() {
+        if (couponKeyString == null) {
+            return null;
         }
-        return discountPercentage;
+        if (coupon == null) {
+            PersistenceManager pm = PMF.get().getPersistenceManager();
+            coupon = Coupon.getCouponByKeyString(couponKeyString, pm);
+        }
+        return coupon;
     }
 
-    public void setDiscountPercentage(Integer discountPercentage) {
-        this.discountPercentage = discountPercentage;
-    }
-
-    public String getDiscountText() {
-        return discountText;
-    }
-
-    public void setDiscountText(String discountText) {
-        this.discountText = discountText;
+    public void setCoupon(Coupon coupon) {
+        this.couponKeyString = coupon.getIdString();
     }
 
     public Integer getDiscountAmount() {
-        return (int) Math
-                .round((getDiscountPercentage() * getPriceOfPrintsInPennies()) / 100.0);
+        return getCartDiscountAmount() + getShippingDiscountAmount();
+    }
+
+    public Integer getCartDiscountAmount() {
+        int amount = 0;
+        if (getCoupon() != null) {
+            switch (getCoupon().getDiscountType()) {
+                case percentage:
+                    amount = (int) Math
+                            .round((getCoupon().getDiscountAmount() * getPriceOfPrintsInPennies()) / 100.0);
+                    break;
+                case pence:
+                    amount = getCoupon().getDiscountAmount();
+                    break;
+            }
+        }
+        amount = Math.min(amount, getPriceOfPrintsInPennies() - 1);
+
+        return amount;
+    }
+
+    public Integer getShippingDiscountAmount() {
+        int amount = 0;
+        if (getCoupon() != null) {
+            switch (getCoupon().getDiscountType()) {
+                case percentage:
+                    break;
+                case pence:
+                    amount = getCoupon().getDiscountAmount();
+
+                    int surplus = amount - getCartDiscountAmount();
+                    amount = Math.min(surplus, shipping);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return amount;
     }
 
     public String getDiscountAmountString() {
         return StringUtils.formatMoney(getDiscountAmount());
     }
 
-    public String getDiscountAmountStringNoSymbol() {
-        return StringUtils.formatMoneyNoSymbol(getDiscountAmount());
+    public String getCartDiscountAmountStringNoSymbol() {
+        return StringUtils.formatMoneyNoSymbol(getCartDiscountAmount());
     }
 
     public boolean isHasWarning() {

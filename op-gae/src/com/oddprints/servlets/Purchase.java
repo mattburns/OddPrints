@@ -15,8 +15,6 @@
  ******************************************************************************/
 package com.oddprints.servlets;
 
-import java.math.BigDecimal;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
@@ -25,106 +23,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import com.google.checkout.sdk.commands.ApiContext;
-import com.google.checkout.sdk.commands.CartPoster.CheckoutShoppingCartBuilder;
-import com.google.checkout.sdk.domain.AnyMultiple;
-import com.google.checkout.sdk.domain.CheckoutRedirect;
-import com.google.checkout.sdk.domain.CheckoutShoppingCart;
-import com.google.checkout.sdk.domain.CheckoutShoppingCart.CheckoutFlowSupport;
-import com.google.checkout.sdk.domain.FlatRateShipping;
-import com.google.checkout.sdk.domain.FlatRateShipping.Price;
-import com.google.checkout.sdk.domain.MerchantCheckoutFlowSupport;
-import com.google.checkout.sdk.domain.MerchantCheckoutFlowSupport.ShippingMethods;
-import com.google.checkout.sdk.domain.ShippingRestrictions;
-import com.google.checkout.sdk.domain.ShippingRestrictions.AllowedAreas;
-import com.google.checkout.sdk.domain.WorldArea;
 import com.google.common.collect.Maps;
 import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.State;
-import com.oddprints.dao.BasketItem;
 import com.oddprints.util.EmailSender;
 import com.sun.jersey.api.view.Viewable;
 
 @Path("/purchase")
 public class Purchase {
-
-    @GET
-    @Path("/google")
-    @Produces(MediaType.TEXT_HTML)
-    public Response google(@Context HttpServletRequest req,
-            @QueryParam("analyticsData") String analyticsData)
-            throws URISyntaxException {
-
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        Basket basket = Basket.fromSession(req, pm);
-        ApiContext apiContext = basket.getEnvironment()
-                .getGoogleCheckoutAPIContext();
-
-        CheckoutShoppingCartBuilder cartBuilder = apiContext.cartPoster()
-                .makeCart();
-
-        for (BasketItem item : basket.getItems()) {
-            if (item.getQuantity() > 0) {
-                cartBuilder.addItem("Print", item.toString(), (double) item
-                        .getPrintSize().getPrice() / 100, item.getQuantity());
-            }
-        }
-
-        if (basket.getDiscountPercentage() > 0) {
-            cartBuilder.addItem("Discount", basket.getDiscountText() + "("
-                    + basket.getDiscountPercentage() + ")",
-                    (double) basket.getDiscountAmount() / -100, 1);
-        }
-
-        CheckoutShoppingCart cart = cartBuilder.build();
-
-        CheckoutFlowSupport flowSupport = new CheckoutFlowSupport();
-        MerchantCheckoutFlowSupport merchantflowSupport = new MerchantCheckoutFlowSupport();
-        merchantflowSupport
-                .setContinueShoppingUrl("http://www.oddprints.com/thanks");
-        flowSupport.setMerchantCheckoutFlowSupport(merchantflowSupport);
-        ShippingMethods sm = new ShippingMethods();
-        sm.getFlatRateShippingOrMerchantCalculatedShippingOrPickup();
-        FlatRateShipping frs = new FlatRateShipping();
-        frs.setName("flat rate");
-
-        ShippingRestrictions shippingRestrictions = new ShippingRestrictions();
-        AllowedAreas allowedAreas = new AllowedAreas();
-        allowedAreas.getUsStateAreaOrUsZipAreaOrUsCountryArea().add(
-                new WorldArea());
-        shippingRestrictions.setAllowedAreas(allowedAreas);
-        frs.setShippingRestrictions(shippingRestrictions);
-
-        Price frsprice = new Price();
-        frsprice.setValue(BigDecimal.valueOf((double) basket.getShipping() / 100));
-        frsprice.setCurrency("GBP");
-
-        frs.setPrice(frsprice);
-        sm.getFlatRateShippingOrMerchantCalculatedShippingOrPickup().add(frs);
-        merchantflowSupport.setShippingMethods(sm);
-
-        merchantflowSupport.setAnalyticsData(analyticsData);
-
-        cart.setCheckoutFlowSupport(flowSupport);
-
-        MerchantData md = new MerchantData();
-        md.addString(basket.getIdString());
-        cart.getShoppingCart().setMerchantPrivateData(md);
-
-        CheckoutRedirect redirect = apiContext.cartPoster().postCart(cart);
-
-        updateBasketState(basket, pm);
-        pm.close();
-
-        return Response.temporaryRedirect(new URI(redirect.getRedirectUrl()))
-                .build();
-    }
 
     // @POST
     // @Path("/stripe")
@@ -170,12 +80,6 @@ public class Purchase {
         it.put("basket", basket);
 
         return new Viewable("/paypalcheckout", it);
-    }
-
-    private class MerchantData extends AnyMultiple {
-        private void addString(String s) {
-            getContent().add(s);
-        }
     }
 
     private void updateBasketState(Basket basket, PersistenceManager pm) {

@@ -35,12 +35,9 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>Exclusive 15% offer!</h2>
+        <h2>Offer ended</h2>
         <p>
-        For this month only, OddPrints and <strong>Photography for Beginners</strong> magazine have teamed
-        up to offer you an exclusive 15% off all orders placed here. Offer valid until September 1st, 2013. 
-        Discount will be applied at checkout.</p>
-        <a href="/" data-role="button" data-ajax="false" data-theme="b">Claim 15% discount</a>
+        This offer has now expired.</p>
         <a href="http://www.photoforbeginners.com/"><img src="/images/pfb-logo.png"/></a>
     </div>
     
