@@ -37,6 +37,10 @@ limitations under the License.
 
     <div data-role="content" class="full-width">
         <div class="thin-column">
+            <div class="ui-body ui-body-e">
+                <p>The last date for Christmas delivery is December 16th :)</p>
+            </div>
+            
             <h1>Easy printing at <em>any</em> size</h1>
             
             <p>The <strong>simple</strong> way to print
@@ -75,6 +79,7 @@ limitations under the License.
                 <p><a href="/upload/basic" class="get-started" data-role="button" data-theme="b" data-icon="arrow-r" data-iconpos="right" data-ajax="false">Get Started!</a></p>
             </div>
         </div>
+        
 
         <div class="after-fold">
             <div class="thin-column">

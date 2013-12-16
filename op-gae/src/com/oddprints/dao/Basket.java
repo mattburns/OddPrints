@@ -432,7 +432,9 @@ public class Basket {
     }
 
     public void setCoupon(Coupon coupon) {
-        this.couponKeyString = coupon.getIdString();
+        if (coupon != null) {
+            this.couponKeyString = coupon.getIdString();
+        }
     }
 
     public Integer getDiscountAmount() {
