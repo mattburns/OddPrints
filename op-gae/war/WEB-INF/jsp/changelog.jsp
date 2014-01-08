@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.40 - 2014/01/05</h2>
+        <ul>
+            <li>Hide xmas shipping.</li>
+        </ul>
         <h2>v.39 - 2013/12/13</h2>
         <ul>
             <li>Added coupons.</li>

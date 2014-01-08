@@ -65,6 +65,9 @@ limitations under the License.
             <input type="hidden" name="no_shipping" value="2"> 
             <input type="hidden" name="custom" value="${it.basket.idString}"> 
             <input type="hidden" name="notify_url" value="${notifyurl}">
+       <!--  TODO: test with new analytics.js
+            <input type="hidden" name="return" value="http://www.oddprints.com/thanks">
+            -->
             <c:if test="${it.basket.discountAmount gt 0}">
                 <input type="hidden" name="discount_amount_cart" value="${it.basket.cartDiscountAmountStringNoSymbol}">
             </c:if>

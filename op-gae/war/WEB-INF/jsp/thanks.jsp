@@ -46,10 +46,10 @@ limitations under the License.
        
         <h2>Thanks!</h2>
         <p>Massive thanks from us at OddPrints.
-        You will receive a confirmation email so that you can track your order.</p>
+        You will receive a confirmation email which includes a link to the current status of your order.</p>
         
-        <p>We're only a teeny-tiny company so if you'd like to help support the site,
-        please share your experience!<p>
+        <p>We're only a <em>teeny-tiny</em> company so if you'd like to help support the site,
+        please share your experience:<p>
         
         <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.oddprints.com" data-text="Clever photo printing website..." data-via="OddPrints" data-size="large" data-dnt="true">Tweet</a>
         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>

@@ -37,9 +37,10 @@ limitations under the License.
 
     <div data-role="content" class="full-width">
         <div class="thin-column">
-            <div class="ui-body ui-body-e">
+            <!--  <div class="ui-body ui-body-e">
                 <p>The last date for Christmas delivery is December 16th :)</p>
             </div>
+            -->
             
             <h1>Easy printing at <em>any</em> size</h1>
             
