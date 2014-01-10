@@ -49,23 +49,8 @@ $(document).ready(function() {
         $(".get-started").attr("href", "/mobile-safari-error?agent=" + navigator.userAgent);
     } else {
         // stick with basic upload
-       }
+    }
 });
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-32205253-1']);
-  _gaq.push(['_setDomainName', 'oddprints.com']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
 </script>
 
-<c:if test="${param.hasCheckoutButtons}">
-    <script src="http://checkout.google.com/files/digital/ga_post.js" type="text/javascript">
-    </script>
-</c:if>
 

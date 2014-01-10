@@ -36,7 +36,32 @@ limitations under the License.
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=154500891318156";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+}(document, 'script', 'facebook-jssdk'));
+
+
+// Track ecommerce in Google Analytics...
+// see https://developers.google.com/analytics/devguides/collection/analyticsjs/ecommerce
+ga('require', 'ecommerce', 'ecommerce.js');
+
+ga('ecommerce:addTransaction', {
+    'id': '${it.basket.idString}',
+    'revenue': '${it.basket.totalPriceStringNoSymbols}',
+    'shipping': '${it.basket.totalShippingPriceStringNoSymbols}'
+  });
+  
+<c:forEach var="basketItem" items="${it.basket.items}" varStatus="basketItemNumber">
+  ga('ecommerce:addItem', {
+      'id': '${it.basket.idString}',
+      'name': '${basketItem.printSize.displayString}',
+      'sku': '${basketItem.printSize.displayString}',
+      'price': '${basketItem.unitPriceStringNoSymbol}',
+      'quantity': '${basketItem.quantity}'
+  });
+</c:forEach>
+
+ga('ecommerce:send');
+
+</script>
 
 <div data-role="page" id="page-thanks">
 

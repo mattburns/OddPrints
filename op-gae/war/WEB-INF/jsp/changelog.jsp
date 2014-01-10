@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.41 - 2014/01/10</h2>
+        <ul>
+            <li>New universal Google analytics.</li>
+        </ul>
         <h2>v.40 - 2014/01/05</h2>
         <ul>
             <li>Hide xmas shipping.</li>

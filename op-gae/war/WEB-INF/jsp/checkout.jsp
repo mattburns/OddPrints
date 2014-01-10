@@ -98,10 +98,12 @@ limitations under the License.
                         <p class="checkout-total">Total: ${it.basket.totalPriceString}</p>
                     </div>
                 </div>
-                
+     
+     <!--            
                 <div class="ui-body ui-body-e">
                     <p>The last date for Christmas delivery is December 16th :)</p>
                 </div>
+                -->
                 
                 <c:if test="${it.basket.hasWarning}">
                     <div class="ui-body ui-body-e">

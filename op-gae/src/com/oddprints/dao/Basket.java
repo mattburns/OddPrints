@@ -277,6 +277,10 @@ public class Basket {
                 - getShippingDiscountAmount());
     }
 
+    public String getTotalPriceStringNoSymbols() {
+        return StringUtils.formatMoneyNoSymbol(getTotalPrice());
+    }
+
     public int getTotalPrice() {
         return Math.max(0, getPriceOfPrintsInPennies() + shipping
                 - getDiscountAmount());

@@ -15,18 +15,33 @@
  ******************************************************************************/
 package com.oddprints.servlets;
 
+import java.util.Map;
+
+import javax.jdo.PersistenceManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.google.common.collect.Maps;
+import com.oddprints.PMF;
+import com.oddprints.dao.Basket;
 import com.sun.jersey.api.view.Viewable;
 
 @Path("/thanks")
 public class Thanks {
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Viewable get() {
-        return new Viewable("/thanks");
+    public Viewable get(@Context HttpServletRequest req) {
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+
+        Basket basket = Basket.fromSession(req, pm);
+
+        Map<String, Object> it = Maps.newHashMap();
+        it.put("basket", basket);
+
+        return new Viewable("/thanks", it);
     }
 }
