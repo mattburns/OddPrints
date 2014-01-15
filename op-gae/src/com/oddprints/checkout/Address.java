@@ -1,6 +1,5 @@
 package com.oddprints.checkout;
 
-
 public class Address {
     private String recipientName;
     private String address1;
@@ -8,7 +7,7 @@ public class Address {
     private String townOrCity;
     private String stateOrCounty;
     private String postalOrZipCode;
-    private String country;
+    private String countryCode;
 
     public String getRecipientName() {
         return recipientName;
@@ -58,12 +57,12 @@ public class Address {
         this.postalOrZipCode = postalOrZipCode;
     }
 
-    public String getCountry() {
-        return country;
+    public String getCountryCode() {
+        return countryCode;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
 }

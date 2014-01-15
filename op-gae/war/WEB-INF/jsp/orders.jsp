@@ -83,7 +83,7 @@ limitations under the License.
                                 <dt>City:</dt> <dd>${pwintyOrder.addressTownOrCity}&nbsp;</dd>
                                 <dt>Region:</dt> <dd>${pwintyOrder.stateOrCounty}&nbsp;</dd>
                                 <dt>Postal Code:</dt> <dd>${pwintyOrder.postalOrZipCode}&nbsp;</dd>
-                                <dt>Country:</dt> <dd>${pwintyOrder.country}&nbsp;</dd>
+                                <dt>CountryCode:</dt> <dd>${pwintyOrder.countryCode}&nbsp;</dd>
                                 
                                 <c:if test="${it.userIsAdmin}">
                                     <dt>Pwinty id:</dt> <dd>${pwintyOrder.id}&nbsp;</dd>

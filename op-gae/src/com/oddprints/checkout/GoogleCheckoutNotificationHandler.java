@@ -92,7 +92,7 @@ public class GoogleCheckoutNotificationHandler extends
             postcode = " ";
         }
         address.setPostalOrZipCode(postcode);
-        address.setCountry(orderSummary.getBuyerShippingAddress()
+        address.setCountryCode(orderSummary.getBuyerShippingAddress()
                 .getCountryCode());
         return address;
     }

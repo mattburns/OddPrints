@@ -33,7 +33,13 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 import javax.servlet.http.HttpServletRequest;
 
-import uk.co.mattburns.pwinty.Order;
+import uk.co.mattburns.pwinty.v2.Catalogue;
+import uk.co.mattburns.pwinty.v2.Country;
+import uk.co.mattburns.pwinty.v2.CountryCode;
+import uk.co.mattburns.pwinty.v2.Order;
+import uk.co.mattburns.pwinty.v2.Order.QualityLevel;
+import uk.co.mattburns.pwinty.v2.Photo.Sizing;
+import uk.co.mattburns.pwinty.v2.Pwinty;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
@@ -41,7 +47,9 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.oddprints.Environment;
 import com.oddprints.PMF;
 import com.oddprints.PrintSize;
+import com.oddprints.checkout.Address;
 import com.oddprints.dao.ApplicationSetting.Settings;
+import com.oddprints.util.EmailSender;
 import com.oddprints.util.ServerUtils;
 import com.oddprints.util.StringUtils;
 import com.sun.jersey.api.client.ClientHandlerException;
@@ -506,4 +514,68 @@ public class Basket {
         }
         return (warning == null) ? "" : warning;
     }
+
+    public Order createOrderOnPwinty(Address address) {
+        Pwinty pwinty = getEnvironment().getPwinty();
+        QualityLevel quality = QualityLevel.Standard; // Default
+
+        CountryCode labCountry = CountryCode.valueOf(address.getCountryCode());
+        CountryCode destinationCountry = labCountry;
+
+        // If destination has no lab, use GB and Pro
+        List<Country> countries = pwinty.getCountries();
+        for (Country country : countries) {
+            if (country.getCountryCode() == destinationCountry) {
+                if (!country.getHasProducts()) {
+                    labCountry = CountryCode.GB;
+                    quality = QualityLevel.Pro;
+                    break;
+                }
+            }
+        }
+
+        Catalogue catalogue = pwinty.getCatalogue(labCountry, quality);
+
+        if (!canBePrintedWithCatalogue(catalogue)) {
+            // Can't do it standard? Try Pro...
+            quality = QualityLevel.Pro;
+            catalogue = pwinty.getCatalogue(labCountry, quality);
+            if (!canBePrintedWithCatalogue(catalogue)) {
+                // Still can't? Abort...
+                String error = "Cannot fulfil this Basket Order with any Lab";
+                EmailSender.INSTANCE.sendToAdmin(error, error);
+                throw new RuntimeException(error);
+            }
+        }
+
+        Order newOrder = new Order(pwinty, labCountry, destinationCountry,
+                quality);
+        newOrder.setRecipientName(address.getRecipientName());
+        newOrder.setAddress1(address.getAddress1());
+        newOrder.setAddress2(address.getAddress2());
+        newOrder.setAddressTownOrCity(address.getTownOrCity());
+        newOrder.setStateOrCounty(address.getStateOrCounty());
+        newOrder.setPostalOrZipCode(address.getPostalOrZipCode());
+
+        List<BasketItem> basketItems = getItems();
+
+        for (BasketItem item : basketItems) {
+            newOrder.addPhoto(item.getFullImageUrl(), item.getPrintSize()
+                    .toPwintyType(), item.getQuantity(), Sizing.Crop);
+        }
+
+        setPwintyOrderNumber(newOrder.getId());
+
+        return newOrder;
+    }
+
+    private boolean canBePrintedWithCatalogue(Catalogue catalogue) {
+        for (BasketItem item : getItems()) {
+            if (!catalogue.containsType(item.getPrintSize().toPwintyType())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

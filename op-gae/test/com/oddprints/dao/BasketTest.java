@@ -1,6 +1,7 @@
 package com.oddprints.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import javax.jdo.PersistenceManager;
 
@@ -8,12 +9,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import uk.co.mattburns.pwinty.v2.CountryCode;
+import uk.co.mattburns.pwinty.v2.Order;
+import uk.co.mattburns.pwinty.v2.Order.QualityLevel;
+
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.oddprints.Environment;
 import com.oddprints.PMF;
 import com.oddprints.PrintSize;
 import com.oddprints.TestUtils;
+import com.oddprints.checkout.Address;
 import com.oddprints.dao.Coupon.DiscountType;
 
 public class BasketTest {
@@ -112,4 +118,82 @@ public class BasketTest {
         assertEquals(299 + (499 * 10) - 2000, b.getTotalPrice());
     }
 
+    @Test
+    public void address_country_code_is_mandatory() {
+        Basket b = new Basket(Environment.SANDBOX);
+        b.addItem(null, 1, "4x18", PrintSize._4x18, 10);
+
+        try {
+            b.createOrderOnPwinty(new Address());
+            fail();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            assertEquals("Name is null", e.getMessage());
+        }
+    }
+
+    @Test
+    public void cant_create_order_before_basket_persisted() {
+        Basket b = new Basket(Environment.SANDBOX);
+        b.addItem(null, 1, "4x18", PrintSize._4x18, 10);
+
+        Address address = new Address();
+        address.setCountryCode("GB");
+        try {
+            b.createOrderOnPwinty(address);
+            fail();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            assertEquals("cant get url before BasketItem persisted",
+                    e.getMessage());
+        }
+    }
+
+    @Test
+    public void order_will_be_pro_if_it_cant_be_done_with_standard() {
+        Basket b = new Basket(Environment.SANDBOX);
+        b.addItem(null, 1, "4x18", PrintSize._4x18, 10);
+
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        pm.makePersistentAll(b);
+
+        Address address = new Address();
+        address.setCountryCode("GB");
+        Order order = b.createOrderOnPwinty(address);
+        assertEquals(QualityLevel.Pro, order.getQualityLevel());
+    }
+
+    @Test
+    public void order_will_be_printed_pro_and_in_gb_if_it_cant_be_done_in_destination_country() {
+        Basket b = new Basket(Environment.SANDBOX);
+        b.addItem(null, 1, "4x6", PrintSize._4x6, 10);
+
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        pm.makePersistentAll(b);
+
+        Address address = new Address();
+        address.setCountryCode("AD");
+
+        Order order = b.createOrderOnPwinty(address);
+        assertEquals(QualityLevel.Pro, order.getQualityLevel());
+        assertEquals(CountryCode.GB, order.getCountryCode());
+        assertEquals(CountryCode.AD, order.getDestinationCountryCode());
+    }
+
+    @Test
+    public void can_create_order_from_basket() {
+        Basket b = new Basket(Environment.SANDBOX);
+        b.addItem(null, 1, "4x6", PrintSize._4x6, 10);
+
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        pm.makePersistentAll(b);
+
+        Address address = new Address();
+        address.setCountryCode("GB");
+        Order order = b.createOrderOnPwinty(address);
+
+        assertEquals(QualityLevel.Standard, order.getQualityLevel());
+        assertEquals(CountryCode.GB, order.getCountryCode());
+        assertEquals(CountryCode.GB, order.getDestinationCountryCode());
+    }
 }

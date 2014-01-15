@@ -35,6 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.42 - 2014/01/15</h2>
+        <ul>
+            <li>Pwinty API v2.</li>
+        </ul>
         <h2>v.41 - 2014/01/10</h2>
         <ul>
             <li>New universal Google analytics.</li>

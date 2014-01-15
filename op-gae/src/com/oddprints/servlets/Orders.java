@@ -27,8 +27,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import uk.co.mattburns.pwinty.Order;
-import uk.co.mattburns.pwinty.Order.Status;
+import uk.co.mattburns.pwinty.v2.Order;
+import uk.co.mattburns.pwinty.v2.Order.Status;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;

@@ -15,19 +15,19 @@
  ******************************************************************************/
 package com.oddprints;
 
-import uk.co.mattburns.pwinty.Pwinty;
+import uk.co.mattburns.pwinty.v2.Pwinty;
 
 import com.google.checkout.sdk.commands.ApiContext;
 import com.oddprints.dao.ApplicationSetting;
 import com.oddprints.dao.ApplicationSetting.Settings;
 
 public enum Environment {
-    LIVE(uk.co.mattburns.pwinty.Pwinty.Environment.LIVE,
+    LIVE(uk.co.mattburns.pwinty.v2.Pwinty.Environment.LIVE,
             com.google.checkout.sdk.commands.Environment.PRODUCTION), SANDBOX(
-            uk.co.mattburns.pwinty.Pwinty.Environment.SANDBOX,
+            uk.co.mattburns.pwinty.v2.Pwinty.Environment.SANDBOX,
             com.google.checkout.sdk.commands.Environment.SANDBOX);
 
-    private final uk.co.mattburns.pwinty.Pwinty.Environment pwintyEnvironment;
+    private final uk.co.mattburns.pwinty.v2.Pwinty.Environment pwintyEnvironment;
     private final com.google.checkout.sdk.commands.Environment googleCheckoutEnvironment;
 
     private final Settings pwintyMerchantIdSetting = Settings.PWINTY_MERCHANT_ID;
@@ -37,7 +37,7 @@ public enum Environment {
     private final Settings googleCheckoutMerchantIdSetting;
 
     private Environment(
-            uk.co.mattburns.pwinty.Pwinty.Environment pwintyEnvironment,
+            uk.co.mattburns.pwinty.v2.Pwinty.Environment pwintyEnvironment,
             com.google.checkout.sdk.commands.Environment googleCheckoutEnvironment) {
         this.pwintyEnvironment = pwintyEnvironment;
         this.googleCheckoutEnvironment = googleCheckoutEnvironment;

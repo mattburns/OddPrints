@@ -162,6 +162,11 @@ public class BasketItem {
     private URL getImageUrl(ImageSize size) {
         String hostUrl = ServerUtils.getAppspotHostUrl();
 
+        if (id == null) {
+            throw new RuntimeException(
+                    "cant get url before BasketItem persisted");
+        }
+
         try {
             return new URL(hostUrl + "/image/"
                     + (size == ImageSize.thumb ? "thumb/" : "") + getSecret()

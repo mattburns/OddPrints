@@ -73,7 +73,7 @@ public class PaypalCheckoutNotificationHandler {
             postcode = " ";
         }
         address.setPostalOrZipCode(postcode);
-        address.setCountry(parameterMap.get("address_country"));
+        address.setCountryCode(parameterMap.get("address_country_code"));
         return address;
     }
 }

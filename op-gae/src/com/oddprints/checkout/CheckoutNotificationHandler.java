@@ -15,19 +15,12 @@
  ******************************************************************************/
 package com.oddprints.checkout;
 
-import java.util.List;
-
 import javax.jdo.PersistenceManager;
-
-import uk.co.mattburns.pwinty.Order;
-import uk.co.mattburns.pwinty.Photo.Sizing;
-import uk.co.mattburns.pwinty.Pwinty;
 
 import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.CheckoutSystem;
 import com.oddprints.dao.Basket.State;
-import com.oddprints.dao.BasketItem;
 import com.oddprints.util.EmailSender;
 import com.oddprints.util.EmailTemplates;
 
@@ -47,7 +40,7 @@ public class CheckoutNotificationHandler {
             basket.setBuyerEmail(buyerEmail);
 
             // create order on lab
-            createOrderOnPwinty(basket, address, pm);
+            basket.createOrderOnPwinty(address);
 
             String msg = EmailTemplates.orderReadyToSubmit(basket.getUrl(),
                     basket.getCheckoutSystem());
@@ -82,28 +75,4 @@ public class CheckoutNotificationHandler {
         pm.makePersistent(basket);
         pm.close();
     };
-
-    private void createOrderOnPwinty(Basket basket, Address address,
-            PersistenceManager pm) {
-
-        Pwinty pwinty = basket.getEnvironment().getPwinty();
-
-        Order newOrder = new Order(pwinty);
-        newOrder.setRecipientName(address.getRecipientName());
-        newOrder.setAddress1(address.getAddress1());
-        newOrder.setAddress2(address.getAddress2());
-        newOrder.setAddressTownOrCity(address.getTownOrCity());
-        newOrder.setStateOrCounty(address.getStateOrCounty());
-        newOrder.setPostalOrZipCode(address.getPostalOrZipCode());
-        newOrder.setCountry(address.getCountry());
-
-        List<BasketItem> basketItems = basket.getItems();
-
-        for (BasketItem item : basketItems) {
-            newOrder.addPhoto(item.getFullImageUrl(), item.getPrintSize()
-                    .toPwintyType(), item.getQuantity(), Sizing.Crop);
-        }
-
-        basket.setPwintyOrderNumber(newOrder.getId());
-    }
 }

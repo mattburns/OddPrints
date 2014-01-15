@@ -57,6 +57,7 @@ public class PaypalCheckoutNotificationHandlerTest {
         params.put("custom", idString);
         params.put("payer_email", "brian@asd.com");
         params.put("address_name", "junit paypal");
+        params.put("address_country_code", "GB");
 
         pp.onAuthorizationAmountNotification(params);
 

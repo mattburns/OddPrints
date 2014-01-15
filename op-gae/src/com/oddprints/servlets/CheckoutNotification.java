@@ -78,7 +78,7 @@ public class CheckoutNotification {
             @QueryParam("addressCity") String addressCity,
             @QueryParam("addressState") String addressState,
             @QueryParam("addressZip") String addressZip,
-            @QueryParam("addressCountry") String addressCountry,
+            @QueryParam("addressCountryCode") String addressCountryCode,
 
             @Context HttpServletRequest request,
             @Context HttpServletResponse response) throws IOException {
@@ -109,7 +109,7 @@ public class CheckoutNotification {
         address.setTownOrCity(addressCity);
         address.setStateOrCounty(addressState);
         address.setPostalOrZipCode(addressZip);
-        address.setCountry(addressCountry);
+        address.setCountryCode(addressCountryCode);
 
         manualHandler
                 .manuallyAuthorizeOrder(checkoutSystem,
