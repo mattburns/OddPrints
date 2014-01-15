@@ -71,7 +71,8 @@ ga('ecommerce:send');
        
         <h2>Thanks!</h2>
         <p>Massive thanks from us at OddPrints.
-        You will receive a confirmation email which includes a link to the current status of your order.</p>
+        You will receive a confirmation email which includes a link to the current status of your order.
+        Generally prints arrive within three working days.</p>
         
         <p>We're only a <em>teeny-tiny</em> company so if you'd like to help support the site,
         please share your experience:<p>
