@@ -24,7 +24,7 @@ public class EmailTemplates {
     public static String newOrder(String checkoutSystemOrderNumber, URL url) {
         return "<font face=\"arial, helvetica, sans-serif\"><h2>Thank You</h2> "
                 + "<p>We have received your order and are rushing around to get it to you as soon as possible."
-                + " You can see how we're getting on by checking the <a href=\""
+                + " Generally prints arrive within 3 working days. You can see how we're getting on by checking the <a href=\""
                 + url.toExternalForm()
                 + "\">Order Status (#"
                 + checkoutSystemOrderNumber
