@@ -272,13 +272,7 @@ public class Orders {
                             basket.setState(State.cancelled);
                             break;
                         case Complete:
-                            if (basket.getEnvironment() == Environment.LIVE) {
-                                String msg1 = "Would complete now (new status?) : "
-                                        + basket.getUrl();
-                                EmailSender.INSTANCE.sendToAdmin(msg1, msg1);
-                            } else {
-                                basket.setState(State.submitted_to_lab);
-                            }
+                            basket.setState(State.dispatched_from_lab);
                             break;
                         case Submitted:
                             if (basket.getEnvironment() == Environment.LIVE) {
