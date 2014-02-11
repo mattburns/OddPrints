@@ -5,4 +5,9 @@
     <description>Check if any submitted orders are ready for charging.</description>
     <schedule>every 1 hours</schedule>
   </cron>
+  <cron>
+    <url>/orders/autosubmit</url>
+    <description>Check if any orders are ready for submitting.</description>
+    <schedule>every 1 hours</schedule>
+  </cron>
 </cronentries>

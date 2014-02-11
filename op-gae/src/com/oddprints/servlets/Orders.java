@@ -33,12 +33,14 @@ import javax.ws.rs.core.Response;
 
 import uk.co.mattburns.pwinty.v2.Order;
 import uk.co.mattburns.pwinty.v2.Order.Status;
+import uk.co.mattburns.pwinty.v2.PwintyError;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.checkout.sdk.commands.ApiContext;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.oddprints.Environment;
 import com.oddprints.PMF;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.CheckoutSystem;
@@ -256,31 +258,73 @@ public class Orders {
 
         List<Basket> baskets = Basket.getBasketsByState(State.payment_received,
                 pm, basketsToProcess);
+        String basketsProcessed = "Baskets processed : ";
+
         for (Basket basket : baskets) {
             if (basket.isAddressConfirmed()) {
-                Order pwintyOrder = basket.getPwintyOrder();
-                if (pwintyOrder.getStatus() == Status.Cancelled) {
-                    basket.setState(State.submitted_to_lab); // TODO: should
-                                                             // there be a
-                                                             // cancelled state?
-                } else if (pwintyOrder.getSubmissionStatus().isValid()) {
-                    pwintyOrder.submit();
-                    basket.setState(State.submitted_to_lab);
-                } else {
-                    // TODO: Ultimately, I want to handle this better, but for
-                    // now,
-                    // lets just see what the common problems are (if any).
-                    // Don't bother changing order state, as it prevents us
-                    // retrying
-                    String msg = "**** Error submitting to pwinty: "
-                            + basket.getCheckoutSystemOrderNumber();
-                    EmailSender.INSTANCE.sendToAdmin(msg, msg);
+                try {
+                    basketsProcessed += " " + basket.getPwintyOrderNumber()
+                            + " ";
+                    Order pwintyOrder = basket.getPwintyOrder();
+                    Status pwintyStatus = pwintyOrder.getStatus();
+                    switch (pwintyStatus) {
+                        case Cancelled:
+                            basket.setState(State.cancelled);
+                            break;
+                        case Complete:
+                            basket.setState(State.submitted_to_lab);
+                            break;
+                        case Submitted:
+                            basket.setState(State.submitted_to_lab);
+                            break;
+                        case AwaitingPayment:
+                            break;
+                        case NotYetSubmitted:
+                            if (pwintyOrder.getSubmissionStatus().isValid()) {
+                                String msg = "Would submit now : "
+                                        + basket.getUrl();
+                                EmailSender.INSTANCE.sendToAdmin(msg, msg);
+                                // pwintyOrder.submit();
+                                // basket.setState(State.submitted_to_lab);
+                            } else {
+                                // TODO: Ultimately, I want to handle this
+                                // better,
+                                // but for
+                                // now,
+                                // lets just see what the common problems are
+                                // (if
+                                // any).
+                                // Don't bother changing order state, as it
+                                // prevents
+                                // us
+                                // retrying
+                                String msg = "**** Error submitting to pwinty: "
+                                        + basket.getCheckoutSystemOrderNumber()
+                                        + " " + basket.getUrl();
+                                EmailSender.INSTANCE.sendToAdmin(msg, msg);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (PwintyError pe) {
+                    if (basket.getEnvironment() == Environment.SANDBOX
+                            && pe.getCode() == 404) {
+                        basket.setState(State.cancelled);
+                        basketsProcessed += " cancelled ";
+                    }
                 }
+
             }
             pm.makePersistent(basket);
+            basketsProcessed += " " + basket.getUrl() + " <br/> ";
+        }
+        if (baskets.size() > 0) {
+            EmailSender.INSTANCE.sendToAdmin(basketsProcessed,
+                    "Auto-submit completed");
         }
         pm.close();
-        return Response.ok().build();
+        return Response.ok(basketsProcessed).build();
     }
 
     @GET

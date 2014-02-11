@@ -113,7 +113,7 @@ public class Basket {
     public static int FLAT_RATE_SHIPPING = 299;
 
     public enum State {
-        draft, awaiting_payment, payment_received, problem_submitting_to_lab, submitted_to_lab, dispatched_from_lab;
+        draft, awaiting_payment, payment_received, problem_submitting_to_lab, submitted_to_lab, dispatched_from_lab, cancelled;
 
         public String getUserFriendlyStatus() {
             if (this == awaiting_payment) {
@@ -435,7 +435,7 @@ public class Basket {
      */
     public boolean isAddressConfirmed() {
         Date now = new Date();
-        return submitAfter != null && submitAfter.before(now);
+        return version < 3 || submitAfter != null && submitAfter.before(now);
     }
 
     public boolean isAddressEditable() {
