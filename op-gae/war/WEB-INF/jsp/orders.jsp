@@ -83,9 +83,14 @@ limitations under the License.
                                 <dt>City:</dt> <dd>${pwintyOrder.addressTownOrCity}&nbsp;</dd>
                                 <dt>Region:</dt> <dd>${pwintyOrder.stateOrCounty}&nbsp;</dd>
                                 <dt>Postal Code:</dt> <dd>${pwintyOrder.postalOrZipCode}&nbsp;</dd>
-                                <dt>CountryCode:</dt> <dd>${pwintyOrder.countryCode}&nbsp;</dd>
+                                <dt>Country:</dt> <dd>${pwintyOrder.destinationCountryCode}&nbsp;</dd>
+                                <c:if test="${it.userIsAdmin and order.addressEditable}">
+                                    <dt>&nbsp;</dt>                                
+                                    <dd><a href="#update-address" id="update-address-link" data-ajax="false">Update Address</a></dd>
+                                </c:if>
                                 
                                 <c:if test="${it.userIsAdmin}">
+                                    <dt>Lab CountryCode:</dt> <dd>${pwintyOrder.countryCode}&nbsp;</dd>
                                     <dt>Pwinty id:</dt> <dd>${pwintyOrder.id}&nbsp;</dd>
                                     <dt>Pwinty status:</dt> <dd>${pwintyOrder.status}&nbsp;</dd>
                                 </c:if>
@@ -170,6 +175,24 @@ limitations under the License.
                     <p class="checkout-total">Total: ${order.totalPriceString}</p>
                 </div>
             </div>
+            
+            <c:if test="${it.userIsAdmin and order.addressEditable}">
+                <div id="update-address">
+                    <h3>Update Address</h3>
+                    <p>Note that this is only possible for the next <span id="update-address-mins">${order.addressEditableRemaining}</span> minutes.
+                    </p>
+                    <form action="/orders/update/${order.secret}/${order.idString}/" method="POST" id="update-address-form">
+                    <label>Contact Name: <input type="text" value="${pwintyOrder.recipientName}" name="addressName"/></label>
+                    <label>Address 1: <input type="text" value="${pwintyOrder.address1}" name="addressStreet1" /></label>
+                    <label>Address 2: <input type="text" value="${pwintyOrder.address2}" name="addressStreet2" /></label>
+                    <label>City: <input type="text" value="${pwintyOrder.addressTownOrCity}" name="addressCity" /></label>
+                    <label>Region: <input type="text" value="${pwintyOrder.stateOrCounty}" name="addressState" /></label>
+                    <label>Postal Code: <input type="text" value="${pwintyOrder.postalOrZipCode}" name="addressZip" /></label>
+                    <label>CountryCode (this cannot be changed): <input type="text" value="${pwintyOrder.countryCode}" disabled="disabled"/></label>
+                    <button type="submit" data-theme="b" name="submit" value="submit-value" class="ui-btn-hidden" aria-disabled="false">Update Address</button>
+                    </form>
+                </div>
+            </c:if>
         </c:forEach>
         
         <c:if test="${not empty it.loginUrl}">
@@ -188,6 +211,20 @@ limitations under the License.
     $(document).ready(function() {    
         $( "#order-state-choice-id" ).bind( "change", function(event, ui) {
             window.location.href = "/orders/" + $("#order-state-choice-id").val() + "?hidePwinty=true";
+        });
+        $("#update-address").hide();
+        
+        $("#update-address-link").click(function(){$("#update-address").show();});
+        setInterval(function(){
+            var remaining = $("#update-address-mins").text() - 1;
+            if (remaining < 0) {
+                location.reload();
+            }
+            $("#update-address-mins").text(remaining);
+        }, 60000);
+        
+        $("#update-address-form").submit(function(){
+            $.mobile.showPageLoadingMsg();            
         });
     });
 </script>

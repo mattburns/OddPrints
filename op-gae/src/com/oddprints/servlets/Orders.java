@@ -15,11 +15,15 @@
  ******************************************************************************/
 package com.oddprints.servlets;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -94,6 +98,15 @@ public class Orders {
 
     }
 
+    @POST
+    @Path("/{secret}/{key}")
+    @Produces(MediaType.TEXT_HTML)
+    public Viewable getOrderViaPost(@PathParam("secret") String secret,
+            @PathParam("key") String key,
+            @QueryParam("hidePwinty") boolean hidePwinty) {
+        return getOrder(secret, key, hidePwinty);
+    }
+
     @GET
     @Path("/{secret}/{key}")
     @Produces(MediaType.TEXT_HTML)
@@ -161,13 +174,122 @@ public class Orders {
         return Response.ok().build();
     }
 
+    @POST
+    @Path("/update/{secret}/{key}")
+    @Produces(MediaType.TEXT_HTML)
+    public Response updateOrder(@PathParam("secret") String secret,
+            @PathParam("key") String key,
+            @FormParam("addressName") String addressName,
+            @FormParam("addressStreet1") String addressStreet1,
+            @FormParam("addressStreet2") String addressStreet2,
+            @FormParam("addressCity") String addressCity,
+            @FormParam("addressState") String addressState,
+            @FormParam("addressZip") String addressZip)
+            throws URISyntaxException {
+
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        Basket basket = Basket.getBasketByKeyString(key, pm);
+
+        if (basket.getState() != State.payment_received) {
+            return Response
+                    .status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED)
+                    .build();
+        }
+
+        if (addressName == null || addressName.isEmpty()) {
+            addressName = " ";
+        }
+        if (addressStreet1 == null || addressStreet1.isEmpty()) {
+            addressStreet1 = " ";
+        }
+        if (addressStreet2 == null || addressStreet2.isEmpty()) {
+            addressStreet2 = " ";
+        }
+        if (addressCity == null || addressCity.isEmpty()) {
+            addressCity = " ";
+        }
+        if (addressState == null || addressState.isEmpty()) {
+            addressState = " ";
+        }
+        if (addressZip == null || addressZip.isEmpty()) {
+            addressZip = " ";
+        }
+
+        Order pwintyOrder = basket.getPwintyOrder();
+        pwintyOrder.setRecipientName(addressName);
+        pwintyOrder.setAddress1(addressStreet1);
+        pwintyOrder.setAddress2(addressStreet2);
+        pwintyOrder.setAddressTownOrCity(addressCity);
+        pwintyOrder.setStateOrCounty(addressState);
+        pwintyOrder.setPostalOrZipCode(addressZip);
+
+        String subject = "OddPrints address updated #"
+                + basket.getCheckoutSystemOrderNumber();
+        ;
+        String msg = EmailTemplates.addressUpdated(basket);
+        EmailSender.INSTANCE.send(basket.getBuyerEmail(), msg, subject);
+
+        pm.makePersistent(basket);
+        pm.close();
+
+        return Response.temporaryRedirect(
+                new URI("/orders/" + secret + "/" + key)).build();
+    }
+
+    @GET
+    @Path("/autosubmit")
+    @Produces(MediaType.TEXT_HTML)
+    public Response autoSubmitOrders() {
+        int basketsToProcess = 5; // process no more than this to prevent
+                                  // timeouts when there are lots of orders
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+
+        UserService userService = UserServiceFactory.getUserService();
+        boolean userIsAdmin = userService.isUserLoggedIn()
+                && userService.isUserAdmin();
+
+        if (!userIsAdmin) {
+            return Response
+                    .status(com.sun.jersey.api.client.ClientResponse.Status.UNAUTHORIZED)
+                    .build();
+        }
+
+        List<Basket> baskets = Basket.getBasketsByState(State.payment_received,
+                pm, basketsToProcess);
+        for (Basket basket : baskets) {
+            if (basket.isAddressConfirmed()) {
+                Order pwintyOrder = basket.getPwintyOrder();
+                if (pwintyOrder.getStatus() == Status.Cancelled) {
+                    basket.setState(State.submitted_to_lab); // TODO: should
+                                                             // there be a
+                                                             // cancelled state?
+                } else if (pwintyOrder.getSubmissionStatus().isValid()) {
+                    pwintyOrder.submit();
+                    basket.setState(State.submitted_to_lab);
+                } else {
+                    // TODO: Ultimately, I want to handle this better, but for
+                    // now,
+                    // lets just see what the common problems are (if any).
+                    // Don't bother changing order state, as it prevents us
+                    // retrying
+                    String msg = "**** Error submitting to pwinty: "
+                            + basket.getCheckoutSystemOrderNumber();
+                    EmailSender.INSTANCE.sendToAdmin(msg, msg);
+                }
+            }
+            pm.makePersistent(basket);
+        }
+        pm.close();
+        return Response.ok().build();
+    }
+
     @GET
     @Path("/charge")
     @Produces(MediaType.TEXT_HTML)
     public Response chargeAndShipOrders() {
 
         int basketsToProcess = 5; // process no more than this to prevent
-                                  // timeouts when there are lots of orders
+        // timeouts when there are lots of orders
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
         List<Basket> baskets = Basket.getBasketsByState(State.submitted_to_lab,

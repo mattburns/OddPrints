@@ -35,6 +35,7 @@ public class CheckoutNotificationHandler {
 
         if (basket.getState() == State.awaiting_payment) {
             basket.setState(State.payment_received);
+
             basket.setCheckoutSystem(checkoutSystem);
             basket.setCheckoutSystemOrderNumber(checkoutSystemOrderNumber);
             basket.setBuyerEmail(buyerEmail);
@@ -42,9 +43,15 @@ public class CheckoutNotificationHandler {
             // create order on lab
             basket.createOrderOnPwinty(address);
 
-            String msg = EmailTemplates.orderReadyToSubmit(basket.getUrl(),
-                    basket.getCheckoutSystem());
-            EmailSender.INSTANCE.sendToAdmin(msg,
+            String subject = "OddPrints Confirmation for Order #"
+                    + checkoutSystemOrderNumber;
+            String msg = EmailTemplates.paymentRecieved(
+                    checkoutSystemOrderNumber, basket.getUrl());
+            EmailSender.INSTANCE.send(buyerEmail, msg, subject);
+
+            String adminMsg = EmailTemplates.orderReadyToSubmit(
+                    basket.getUrl(), basket.getCheckoutSystem());
+            EmailSender.INSTANCE.sendToAdmin(adminMsg,
                     "Order ready to submit to pwinty!");
         } else {
             String msg = "Auth notice received but not doing anything because basket state is "
@@ -66,12 +73,6 @@ public class CheckoutNotificationHandler {
         basket.setCheckoutSystem(checkoutSystem);
         basket.setCheckoutSystemOrderNumber(checkoutSystemOrderNumber);
         basket.setBuyerEmail(buyerEmail);
-
-        String subject = "OddPrints Confirmation for Order #"
-                + checkoutSystemOrderNumber;
-        String msg = EmailTemplates.newOrder(checkoutSystemOrderNumber,
-                basket.getUrl());
-        EmailSender.INSTANCE.send(buyerEmail, msg, subject);
         pm.makePersistent(basket);
         pm.close();
     };

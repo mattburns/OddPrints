@@ -204,7 +204,7 @@ dt {
     font-weight: bold;
 }
 
-.order-details dt {
+.order-details dt, order-details form label {
     width: 150px;
     font-weight: bold;
     float: left;

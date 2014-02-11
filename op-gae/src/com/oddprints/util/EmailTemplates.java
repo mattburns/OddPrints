@@ -17,13 +17,15 @@ package com.oddprints.util;
 
 import java.net.URL;
 
+import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.CheckoutSystem;
 
 public class EmailTemplates {
 
-    public static String newOrder(String checkoutSystemOrderNumber, URL url) {
+    public static String paymentRecieved(String checkoutSystemOrderNumber,
+            URL url) {
         return "<font face=\"arial, helvetica, sans-serif\"><h2>Thank You</h2> "
-                + "<p>We have received your order and are rushing around to get it to you as soon as possible."
+                + "<p>We have received the payment for your order and are rushing around to get it to you as soon as possible."
                 + " Generally prints arrive within 3 working days. You can see how we're getting on by checking the <a href=\""
                 + url.toExternalForm()
                 + "\">Order Status (#"
@@ -62,6 +64,15 @@ public class EmailTemplates {
                 + url.toExternalForm()
                 + "\">your order</a> has shipped. You will be enjoying your OddPrints in no time.</p>"
                 + "<p>Big thanks from us and if you have any questions, just reply to this email.<p>"
+                + "<p>-Matt</p>" + "</font>";
+    }
+
+    public static String addressUpdated(Basket basket) {
+        return "<font face=\"arial, helvetica, sans-serif\"><h2>Address Updated</h2> "
+                + "<p>You have entered a new address for <a href=\""
+                + basket.getUrl().toExternalForm()
+                + "\">your order</a>.</p>"
+                + "<p>Thanks again, and if you have any questions, just reply to this email.<p>"
                 + "<p>-Matt</p>" + "</font>";
     }
 

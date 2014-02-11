@@ -102,7 +102,13 @@ public class Basket {
 
     private Coupon coupon;
 
-    public static final int LATEST_VERSION = 2;
+    /** allow this order to be auto-submitted after this time */
+    @Persistent
+    private Date submitAfter;
+
+    public static final int LATEST_VERSION = 3;
+
+    private static final int SUBMIT_DELAY = 30;
     public static int FLAT_RATE_SHIPPING = 299;
 
     public enum State {
@@ -177,6 +183,12 @@ public class Basket {
 
     public void setState(State state) {
         this.state = state;
+        if (state == State.payment_received) {
+            Date now = new Date();
+            Date submitAfter = new Date(now.getTime()
+                    + (SUBMIT_DELAY * 60 * 1000));
+            setSubmitAfter(submitAfter);
+        }
     }
 
     public Integer getShipping() {
@@ -397,6 +409,41 @@ public class Basket {
         } catch (ClientHandlerException e) {
             // do nothing, leave it as null
         }
+    }
+
+    public Date getSubmitAfter() {
+        return submitAfter;
+    }
+
+    public void setSubmitAfter(Date submitAfter) {
+        this.submitAfter = submitAfter;
+    }
+
+    /**
+     * Short delay window between payment received and being ready to submit has
+     * finished. No changing address after this point.
+     * 
+     * @return true if we can no longer change the address
+     */
+    public boolean isAddressConfirmed() {
+        Date now = new Date();
+        return submitAfter != null && submitAfter.before(now);
+    }
+
+    public boolean isAddressEditable() {
+        Date now = new Date();
+        return submitAfter != null && submitAfter.after(now)
+                && getState() == State.payment_received;
+    }
+
+    public int getAddressEditableRemaining() {
+        if (!isAddressEditable()) {
+            return 0;
+        }
+        Date now = new Date();
+        long result = (submitAfter.getTime() - now.getTime()) / 60000;
+        // result -= 2; // reduce remaining time by 2 minutes just to
+        return Math.max(0, (int) result);
     }
 
     public URL getUrl() {
