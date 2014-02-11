@@ -272,18 +272,30 @@ public class Orders {
                             basket.setState(State.cancelled);
                             break;
                         case Complete:
-                            basket.setState(State.submitted_to_lab);
+                            if (basket.getEnvironment() == Environment.LIVE) {
+                                String msg1 = "Would complete now (new status?) : "
+                                        + basket.getUrl();
+                                EmailSender.INSTANCE.sendToAdmin(msg1, msg1);
+                            } else {
+                                basket.setState(State.submitted_to_lab);
+                            }
                             break;
                         case Submitted:
-                            basket.setState(State.submitted_to_lab);
+                            if (basket.getEnvironment() == Environment.LIVE) {
+                                String msg2 = "Would marked as submitted now : "
+                                        + basket.getUrl();
+                                EmailSender.INSTANCE.sendToAdmin(msg2, msg2);
+                            } else {
+                                basket.setState(State.submitted_to_lab);
+                            }
                             break;
                         case AwaitingPayment:
                             break;
                         case NotYetSubmitted:
                             if (pwintyOrder.getSubmissionStatus().isValid()) {
-                                String msg = "Would submit now : "
+                                String msg3 = "Would submit now : "
                                         + basket.getUrl();
-                                EmailSender.INSTANCE.sendToAdmin(msg, msg);
+                                EmailSender.INSTANCE.sendToAdmin(msg3, msg3);
                                 // pwintyOrder.submit();
                                 // basket.setState(State.submitted_to_lab);
                             } else {
