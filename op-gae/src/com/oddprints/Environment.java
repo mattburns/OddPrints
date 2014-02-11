@@ -30,8 +30,8 @@ public enum Environment {
     private final uk.co.mattburns.pwinty.v2.Pwinty.Environment pwintyEnvironment;
     private final com.google.checkout.sdk.commands.Environment googleCheckoutEnvironment;
 
-    private final Settings pwintyMerchantIdSetting = Settings.PWINTY_MERCHANT_ID;
-    private final Settings pwintyMerchantKeySetting = Settings.PWINTY_MERCHANT_KEY;
+    private final Settings pwintyMerchantIdSetting;
+    private final Settings pwintyMerchantKeySetting;
 
     private final Settings googleCheckoutMerchantKeySetting;
     private final Settings googleCheckoutMerchantIdSetting;
@@ -49,6 +49,14 @@ public enum Environment {
         } else {
             googleCheckoutMerchantKeySetting = Settings.GOOGLE_CHECKOUT_MERCHANT_KEY_LIVE;
             googleCheckoutMerchantIdSetting = Settings.GOOGLE_CHECKOUT_MERCHANT_ID_LIVE;
+        }
+
+        if (pwintyEnvironment == uk.co.mattburns.pwinty.v2.Pwinty.Environment.SANDBOX) {
+            pwintyMerchantKeySetting = Settings.PWINTY_MERCHANT_KEY_SANDBOX;
+            pwintyMerchantIdSetting = Settings.PWINTY_MERCHANT_ID_SANDBOX;
+        } else {
+            pwintyMerchantKeySetting = Settings.PWINTY_MERCHANT_KEY_LIVE;
+            pwintyMerchantIdSetting = Settings.PWINTY_MERCHANT_ID_LIVE;
         }
     }
 

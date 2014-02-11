@@ -35,9 +35,10 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
-        <h2>v.43 - 2014/01/15</h2>
+        <h2>v.43 - 2014/02/11</h2>
         <ul>
             <li>Allow users to update addresses.</li>
+            <li>Separate settings for sandbox and live pwinty api keys.</li>
         </ul>
         <h2>v.42 - 2014/01/15</h2>
         <ul>

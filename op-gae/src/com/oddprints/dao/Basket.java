@@ -40,6 +40,7 @@ import uk.co.mattburns.pwinty.v2.Order;
 import uk.co.mattburns.pwinty.v2.Order.QualityLevel;
 import uk.co.mattburns.pwinty.v2.Photo.Sizing;
 import uk.co.mattburns.pwinty.v2.Pwinty;
+import uk.co.mattburns.pwinty.v2.PwintyError;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.Key;
@@ -408,6 +409,13 @@ public class Basket {
                     pwintyOrderNumber);
         } catch (ClientHandlerException e) {
             // do nothing, leave it as null
+        } catch (PwintyError pe) {
+            if (getEnvironment() == Environment.SANDBOX && pe.getCode() == 404) {
+                // ignore because they are from old api keys.
+                // TODO: clear my dev db, then can just remove this.
+            } else {
+                throw pe;
+            }
         }
     }
 

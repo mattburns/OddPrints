@@ -215,13 +215,16 @@ limitations under the License.
         $("#update-address").hide();
         
         $("#update-address-link").click(function(){$("#update-address").show();});
-        setInterval(function(){
-            var remaining = $("#update-address-mins").text() - 1;
-            if (remaining < 0) {
-                location.reload();
-            }
-            $("#update-address-mins").text(remaining);
-        }, 60000);
+        
+        if ($("#update-address-link").length !== 0) {
+            setInterval(function(){
+                var remaining = $("#update-address-mins").text() - 1;
+                if (remaining < 0) {
+                    location.reload();
+                }
+                $("#update-address-mins").text(remaining);
+            }, 60000);
+        }
         
         $("#update-address-form").submit(function(){
             $.mobile.showPageLoadingMsg();            
