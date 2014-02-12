@@ -246,16 +246,6 @@ public class Orders {
                                   // timeouts when there are lots of orders
         PersistenceManager pm = PMF.get().getPersistenceManager();
 
-        UserService userService = UserServiceFactory.getUserService();
-        boolean userIsAdmin = userService.isUserLoggedIn()
-                && userService.isUserAdmin();
-
-        if (!userIsAdmin) {
-            return Response
-                    .status(com.sun.jersey.api.client.ClientResponse.Status.UNAUTHORIZED)
-                    .build();
-        }
-
         List<Basket> baskets = Basket.getBasketsByState(State.payment_received,
                 pm, basketsToProcess);
         String basketsProcessed = "Baskets processed : ";
