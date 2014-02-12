@@ -16,21 +16,43 @@
 package com.oddprints.util;
 
 import java.net.URL;
+import java.util.Date;
 
+import uk.co.mattburns.pwinty.v2.CountryCode;
+
+import com.oddprints.checkout.Address;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.CheckoutSystem;
 
 public class EmailTemplates {
 
     public static String paymentRecieved(String checkoutSystemOrderNumber,
-            URL url) {
+            URL url, Address address) {
         return "<font face=\"arial, helvetica, sans-serif\"><h2>Thank You</h2> "
                 + "<p>We have received the payment for your order and are rushing around to get it to you as soon as possible."
-                + " Generally prints arrive within 3 working days. You can see how we're getting on by checking the <a href=\""
+                + " You can see how we're getting on by checking the "
+                + "<a href=\""
                 + url.toExternalForm()
                 + "\">Order Status (#"
                 + checkoutSystemOrderNumber
                 + ")</a></p>"
+
+                + "<p>Estimated delivery date:</p>"
+                + "<blockquote>"
+                + StringUtils.estimatedDeliveryDate(new Date(),
+                        CountryCode.valueOf(address.getCountryCode()))
+                + "</blockquote>"
+
+                + "<p>Your order will be shipped to:</p>"
+                + "<blockquote>"
+                + address.toEmailHtml()
+                + "</blockquote>"
+                + "<p>If this is not correct, you have "
+                + Basket.SUBMIT_DELAY
+                + " minutes to <a href=\""
+                + url.toExternalForm()
+                + "\">change you address</a>.</p>"
+
                 + "<p>Big thanks from us and if you have any questions, just reply to this email.<p>"
 
                 + "<p>-Matt</p>" + "</font>";
@@ -67,11 +89,14 @@ public class EmailTemplates {
                 + "<p>-Matt</p>" + "</font>";
     }
 
-    public static String addressUpdated(Basket basket) {
+    public static String addressUpdated(Basket basket, Address address) {
         return "<font face=\"arial, helvetica, sans-serif\"><h2>Address Updated</h2> "
                 + "<p>You have entered a new address for <a href=\""
                 + basket.getUrl().toExternalForm()
                 + "\">your order</a>.</p>"
+                + "<blockquote>"
+                + address.toEmailHtml()
+                + "</blockquote>"
                 + "<p>Thanks again, and if you have any questions, just reply to this email.<p>"
                 + "<p>-Matt</p>" + "</font>";
     }

@@ -15,6 +15,12 @@
  ******************************************************************************/
 package com.oddprints.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import uk.co.mattburns.pwinty.v2.CountryCode;
+
 public class StringUtils {
 
     public static String formatMoney(int pennies) {
@@ -32,6 +38,53 @@ public class StringUtils {
         } else {
             // revert to normal way
             return formatMoney(pennies);
+        }
+    }
+
+    public static String replaceNull(String input) {
+        return ((input == null) ? "" : input);
+    }
+
+    public static String estimatedDeliveryDate(Date orderDate,
+            CountryCode countryCode) {
+        int minDays = 3;
+        int maxDays = 9;
+        switch (countryCode) {
+            case GB:
+            case US:
+                minDays = 2;
+                maxDays = 5;
+                break;
+            default:
+
+        }
+        Calendar earliest = Calendar.getInstance();
+        earliest.setTime(orderDate);
+        addWeekdays(earliest, minDays);
+
+        Calendar latest = Calendar.getInstance();
+        latest.setTime(orderDate);
+        addWeekdays(latest, maxDays);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        return sdf.format(earliest.getTime()) + "-"
+                + sdf.format(latest.getTime());
+    }
+
+    private static void addWeekdays(Calendar cal, int days) {
+        // This looks crazy to me but I can't seem to describe the same
+        // functionality in a clear way...
+        while (days > 0) {
+            while (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+                    || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                cal.add(Calendar.DATE, 1);
+            }
+            cal.add(Calendar.DATE, 1);
+            days--;
+            while (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY
+                    || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                cal.add(Calendar.DATE, 1);
+            }
         }
     }
 }

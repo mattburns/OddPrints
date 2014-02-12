@@ -46,7 +46,7 @@ public class CheckoutNotificationHandler {
             String subject = "OddPrints Confirmation for Order #"
                     + checkoutSystemOrderNumber;
             String msg = EmailTemplates.paymentRecieved(
-                    checkoutSystemOrderNumber, basket.getUrl());
+                    checkoutSystemOrderNumber, basket.getUrl(), address);
             EmailSender.INSTANCE.send(buyerEmail, msg, subject);
 
             String adminMsg = EmailTemplates.orderReadyToSubmit(

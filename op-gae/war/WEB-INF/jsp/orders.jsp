@@ -84,7 +84,7 @@ limitations under the License.
                                 <dt>Region:</dt> <dd>${pwintyOrder.stateOrCounty}&nbsp;</dd>
                                 <dt>Postal Code:</dt> <dd>${pwintyOrder.postalOrZipCode}&nbsp;</dd>
                                 <dt>Country:</dt> <dd>${pwintyOrder.destinationCountryCode}&nbsp;</dd>
-                                <c:if test="${it.userIsAdmin and order.addressEditable}">
+                                <c:if test="${order.addressEditable}">
                                     <dt>&nbsp;</dt>                                
                                     <dd><a href="#update-address" id="update-address-link" data-ajax="false">Update Address</a></dd>
                                 </c:if>
@@ -176,7 +176,7 @@ limitations under the License.
                 </div>
             </div>
             
-            <c:if test="${it.userIsAdmin and order.addressEditable}">
+            <c:if test="${order.addressEditable}">
                 <div id="update-address">
                     <h3>Update Address</h3>
                     <p>Note that this is only possible for the next <span id="update-address-mins">${order.addressEditableRemaining}</span> minutes.

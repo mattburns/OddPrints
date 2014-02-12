@@ -109,7 +109,7 @@ public class Basket {
 
     public static final int LATEST_VERSION = 3;
 
-    private static final int SUBMIT_DELAY = 30;
+    public static final int SUBMIT_DELAY = 30;
     public static int FLAT_RATE_SHIPPING = 299;
 
     public enum State {

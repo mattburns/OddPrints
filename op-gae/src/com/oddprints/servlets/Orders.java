@@ -42,6 +42,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.oddprints.Environment;
 import com.oddprints.PMF;
+import com.oddprints.checkout.Address;
 import com.oddprints.dao.Basket;
 import com.oddprints.dao.Basket.CheckoutSystem;
 import com.oddprints.dao.Basket.State;
@@ -227,8 +228,16 @@ public class Orders {
 
         String subject = "OddPrints address updated #"
                 + basket.getCheckoutSystemOrderNumber();
-        ;
-        String msg = EmailTemplates.addressUpdated(basket);
+
+        Address address = new Address();
+        address.setRecipientName(addressName);
+        address.setAddress1(addressStreet1);
+        address.setAddress2(addressStreet2);
+        address.setTownOrCity(addressCity);
+        address.setStateOrCounty(addressState);
+        address.setPostalOrZipCode(addressZip);
+
+        String msg = EmailTemplates.addressUpdated(basket, address);
         EmailSender.INSTANCE.send(basket.getBuyerEmail(), msg, subject);
 
         pm.makePersistent(basket);
@@ -266,9 +275,9 @@ public class Orders {
                             break;
                         case Submitted:
                             if (basket.getEnvironment() == Environment.LIVE) {
-                                String msg2 = "Would marked as submitted now : "
+                                String msg = "Would marked as submitted now : "
                                         + basket.getUrl();
-                                EmailSender.INSTANCE.sendToAdmin(msg2, msg2);
+                                EmailSender.INSTANCE.sendToAdmin(msg, msg);
                             } else {
                                 basket.setState(State.submitted_to_lab);
                             }
@@ -277,23 +286,18 @@ public class Orders {
                             break;
                         case NotYetSubmitted:
                             if (pwintyOrder.getSubmissionStatus().isValid()) {
-                                String msg3 = "Would submit now : "
+                                String msg = "Auto submitting now...! : "
                                         + basket.getUrl();
-                                EmailSender.INSTANCE.sendToAdmin(msg3, msg3);
-                                // pwintyOrder.submit();
-                                // basket.setState(State.submitted_to_lab);
+                                EmailSender.INSTANCE.sendToAdmin(msg, msg);
+                                pwintyOrder.submit();
+                                basket.setState(State.submitted_to_lab);
                             } else {
                                 // TODO: Ultimately, I want to handle this
-                                // better,
-                                // but for
-                                // now,
-                                // lets just see what the common problems are
-                                // (if
-                                // any).
+                                // better,but for
+                                // now, lets just see what the common problems
+                                // are (if any).
                                 // Don't bother changing order state, as it
-                                // prevents
-                                // us
-                                // retrying
+                                // prevents us retrying
                                 String msg = "**** Error submitting to pwinty: "
                                         + basket.getCheckoutSystemOrderNumber()
                                         + " " + basket.getUrl();
@@ -308,6 +312,8 @@ public class Orders {
                             && pe.getCode() == 404) {
                         basket.setState(State.cancelled);
                         basketsProcessed += " cancelled ";
+                    } else {
+                        throw pe;
                     }
                 }
 
@@ -315,10 +321,7 @@ public class Orders {
             pm.makePersistent(basket);
             basketsProcessed += " " + basket.getUrl() + " <br/> ";
         }
-        if (baskets.size() > 0) {
-            EmailSender.INSTANCE.sendToAdmin(basketsProcessed,
-                    "Auto-submit completed");
-        }
+
         pm.close();
         return Response.ok(basketsProcessed).build();
     }

@@ -45,6 +45,7 @@
          ga('create', 'UA-32205253-1', 'oddprints.com');
          ga('send', 'pageview');
     </script>
+    <meta name="p:domain_verify" content="2d52ecbc5247658b783bb8db091edfbf"/>
 </head>
 
 <c:set var="html_year" scope="application" value='<%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %>'/>

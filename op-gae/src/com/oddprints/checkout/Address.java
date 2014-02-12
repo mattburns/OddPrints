@@ -1,5 +1,7 @@
 package com.oddprints.checkout;
 
+import static com.oddprints.util.StringUtils.replaceNull;
+
 public class Address {
     private String recipientName;
     private String address1;
@@ -63,6 +65,15 @@ public class Address {
 
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
+    }
+
+    public String toEmailHtml() {
+        return replaceNull(recipientName) + "<br/>" + replaceNull(address1)
+                + "<br/>" + replaceNull(address2) + "<br/>"
+                + replaceNull(townOrCity) + "<br/>"
+                + replaceNull(stateOrCounty) + "<br/>"
+                + replaceNull(postalOrZipCode) + "<br/>"
+                + replaceNull(countryCode);
     }
 
 }
