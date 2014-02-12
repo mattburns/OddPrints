@@ -51,7 +51,7 @@ public class EmailTemplates {
                 + Basket.SUBMIT_DELAY
                 + " minutes to <a href=\""
                 + url.toExternalForm()
-                + "\">change you address</a>.</p>"
+                + "\">change your address</a>.</p>"
 
                 + "<p>Big thanks from us and if you have any questions, just reply to this email.<p>"
 
