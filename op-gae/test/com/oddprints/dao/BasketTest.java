@@ -111,11 +111,11 @@ public class BasketTest {
 
         Basket b = new Basket(Environment.SANDBOX);
         b.addItem(null, 1, "4x18", PrintSize._4x18, 10);
-        assertEquals(499 * 10, b.getPriceOfPrintsInPennies());
+        assertEquals(599 * 10, b.getPriceOfPrintsInPennies());
 
         b.setCoupon(c2000);
         assertEquals(2000, (int) b.getDiscountAmount());
-        assertEquals(299 + (499 * 10) - 2000, b.getTotalPrice());
+        assertEquals(299 + (599 * 10) - 2000, b.getTotalPrice());
     }
 
     @Test

@@ -30,31 +30,23 @@ public class StringUtilsTest {
         eom.set(2014, Calendar.FEBRUARY, 27);
 
         // GB, US - min 2, max 5
-        assertEquals(
-                "2014/02/12-2014/02/17",
-                StringUtils.estimatedDeliveryDate(mon.getTime(), CountryCode.GB));
-        assertEquals(
-                "2014/02/18-2014/02/21",
-                StringUtils.estimatedDeliveryDate(fri.getTime(), CountryCode.GB));
-        assertEquals(
-                "2014/02/12-2014/02/17",
-                StringUtils.estimatedDeliveryDate(sat.getTime(), CountryCode.GB));
-        assertEquals(
-                "2014/03/03-2014/03/06",
-                StringUtils.estimatedDeliveryDate(eom.getTime(), CountryCode.GB));
+        assertEquals("Feb 12th - Feb 17th", StringUtils.estimatedDeliveryDate(
+                mon.getTime(), CountryCode.GB));
+        assertEquals("Feb 18th - Feb 21st", StringUtils.estimatedDeliveryDate(
+                fri.getTime(), CountryCode.GB));
+        assertEquals("Feb 12th - Feb 17th", StringUtils.estimatedDeliveryDate(
+                sat.getTime(), CountryCode.GB));
+        assertEquals("Mar 3rd - Mar 6th", StringUtils.estimatedDeliveryDate(
+                eom.getTime(), CountryCode.GB));
 
         // Other - min 3, max 9
-        assertEquals(
-                "2014/02/13-2014/02/21",
-                StringUtils.estimatedDeliveryDate(mon.getTime(), CountryCode.AD));
-        assertEquals(
-                "2014/02/19-2014/02/27",
-                StringUtils.estimatedDeliveryDate(fri.getTime(), CountryCode.AD));
-        assertEquals(
-                "2014/02/13-2014/02/21",
-                StringUtils.estimatedDeliveryDate(sat.getTime(), CountryCode.AD));
-        assertEquals(
-                "2014/03/04-2014/03/12",
-                StringUtils.estimatedDeliveryDate(eom.getTime(), CountryCode.AD));
+        assertEquals("Feb 13th - Feb 21st", StringUtils.estimatedDeliveryDate(
+                mon.getTime(), CountryCode.AD));
+        assertEquals("Feb 19th - Feb 27th", StringUtils.estimatedDeliveryDate(
+                fri.getTime(), CountryCode.AD));
+        assertEquals("Feb 13th - Feb 21st", StringUtils.estimatedDeliveryDate(
+                sat.getTime(), CountryCode.AD));
+        assertEquals("Mar 4th - Mar 12th", StringUtils.estimatedDeliveryDate(
+                eom.getTime(), CountryCode.AD));
     }
 }

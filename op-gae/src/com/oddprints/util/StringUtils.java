@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.oddprints.util;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,9 +68,7 @@ public class StringUtils {
         latest.setTime(orderDate);
         addWeekdays(latest, maxDays);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        return sdf.format(earliest.getTime()) + "-"
-                + sdf.format(latest.getTime());
+        return formatDate(earliest) + " - " + formatDate(latest);
     }
 
     private static void addWeekdays(Calendar cal, int days) {
@@ -85,6 +85,29 @@ public class StringUtils {
                     || cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
                 cal.add(Calendar.DATE, 1);
             }
+        }
+    }
+
+    private static String formatDate(Calendar cal) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d");
+        return sdf.format(cal.getTime())
+                + getDayOfMonthSuffix(cal.get(Calendar.DAY_OF_MONTH));
+    }
+
+    private static String getDayOfMonthSuffix(final int n) {
+        checkArgument(n >= 1 && n <= 31, "illegal day of month: " + n);
+        if (n >= 11 && n <= 13) {
+            return "th";
+        }
+        switch (n % 10) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
         }
     }
 }
