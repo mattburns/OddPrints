@@ -37,7 +37,8 @@ limitations under the License.
     <div data-role="content">
         <h2>v.44 - 2014/02/12</h2>
         <ul>
-            <li>Show delivery address and time estime in confirmation email.</li>
+            <li>Show delivery address and delivery time estimate in confirmation email.</li>
+            <li>Save settings between photo upload.</li>
         </ul>
         <h2>v.43 - 2014/02/11</h2>
         <ul>

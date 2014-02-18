@@ -18,6 +18,8 @@ function init() {
         }
     });
     
+    restoreSettings();
+    
     if (panoMode()) {
         $("#select-preset").val('18x4').change();
     }
@@ -345,6 +347,7 @@ function queueRenderPreview() {
     
     renderTimeoutId = window.setTimeout(
         function() {
+            saveSettings();
             renderPreview();
         },
         renderDelay
@@ -440,6 +443,44 @@ function standardPrintDefaults() {
     $('#radio-guides-off').attr('checked', true);
     $("input[type='radio']").checkboxradio("refresh");
     $('#tile-margin').val("0");
+}
+
+function saveSettings() {
+    if (typeof (window.localStorage) != "undefined") {
+        var form = $("#settings-form");
+        var settings = {};
+        $(":input", form).each(function(index, value){
+            if ($(value).attr("type") == "radio" && !$(value).prop("checked")) {
+                // Radio not checked? Don't save
+            } else {
+                settings[value.id] = value.value;
+            }
+        });
+        var data = JSON.stringify(settings);
+        localStorage.setItem("settings", data);
+    }
+}
+
+function restoreSettings() {
+    if (typeof (window.localStorage) != "undefined") {
+        var settings = localStorage.getItem("settings");
+        if (settings) {
+            settings = JSON.parse(settings);
+            
+            var form = $("#settings-form");
+            $(":input", form).each(function(index, value){
+                if ($(value).attr("type") == "radio") {
+                    if (settings[value.id]) {
+                        $(value).prop('checked', true);
+                    }
+                } else {
+                    $(value).val(settings[value.id]);
+                }
+            });
+            $('select').selectmenu('refresh');
+            $('input[type=radio]').checkboxradio("refresh");
+        }
+    }
 }
 
 /**

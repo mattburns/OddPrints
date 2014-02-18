@@ -41,7 +41,7 @@ limitations under the License.
             </div>
         </c:if>
         
-        <form action="#" method="get">
+        <form id="settings-form" action="#" method="get">
             <div>
                 <h1 id="frame-size-text"></h1>
                 <div data-role="fieldcontain" title="Width of picture frame">
