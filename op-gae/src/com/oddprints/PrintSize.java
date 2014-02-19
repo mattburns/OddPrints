@@ -18,7 +18,7 @@ package com.oddprints;
 import uk.co.mattburns.pwinty.v2.Photo;
 
 public enum PrintSize {
-    _4x6(50), _5x7(140), _8x10(300), _8x12(300), _4x18(599);
+    _4x6(50), _5x7(150), _8x10(300), _8x12(350), _4x18(599);
 
     private final int height;
     private final int width;
