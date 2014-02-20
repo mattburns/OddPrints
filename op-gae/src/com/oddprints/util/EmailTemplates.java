@@ -103,7 +103,7 @@ public class EmailTemplates {
 
     public static String referral() {
         return "<font face=\"arial, helvetica, sans-serif\"><h3>Get money back!</h3> "
-                + "<p>We're only a tiny company and working really hard to give the best customer service"
+                + "<p>We're only a tiny company and working really hard to give the best customer service "
                 + "<i>on the planet</i>. However, because we're so young, no-one's heard of us :(</p>"
                 + "<p>We'd love you to share your experience about OddPrints online through Twitter or Facebook (or something else)."
                 + " It doesn't have to be positive, we just want it to be honest. Once you've done that, just reply "
