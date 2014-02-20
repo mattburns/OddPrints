@@ -1,6 +1,6 @@
 package com.oddprints.checkout;
 
-import static com.oddprints.util.StringUtils.replaceNull;
+import static com.oddprints.util.StringUtils.toHtmlLine;
 
 public class Address {
     private String recipientName;
@@ -68,12 +68,10 @@ public class Address {
     }
 
     public String toEmailHtml() {
-        return replaceNull(recipientName) + "<br/>" + replaceNull(address1)
-                + "<br/>" + replaceNull(address2) + "<br/>"
-                + replaceNull(townOrCity) + "<br/>"
-                + replaceNull(stateOrCounty) + "<br/>"
-                + replaceNull(postalOrZipCode) + "<br/>"
-                + replaceNull(countryCode);
+        return toHtmlLine(recipientName) + toHtmlLine(address1)
+                + toHtmlLine(address2) + toHtmlLine(townOrCity)
+                + toHtmlLine(stateOrCounty) + toHtmlLine(postalOrZipCode)
+                + toHtmlLine(countryCode);
     }
 
 }

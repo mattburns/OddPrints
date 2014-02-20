@@ -35,6 +35,11 @@ limitations under the License.
     <jsp:include page="/WEB-INF/jsp/parts/page-header.jsp" />
 
     <div data-role="content">
+        <h2>v.45 - 2014/02/19</h2>
+        <ul>
+            <li>Trim blank lines from delivery address.</li>
+            <li>Ask for referrals in email.</li>
+        </ul>
         <h2>v.44 - 2014/02/12</h2>
         <ul>
             <li>Show delivery address and delivery time estimate in confirmation email.</li>

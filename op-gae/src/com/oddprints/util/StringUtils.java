@@ -47,6 +47,10 @@ public class StringUtils {
         return ((input == null) ? "" : input);
     }
 
+    public static String toHtmlLine(String input) {
+        return ((input == null) ? "" : input + "<br/>");
+    }
+
     public static String estimatedDeliveryDate(Date orderDate,
             CountryCode countryCode) {
         int minDays = 3;
