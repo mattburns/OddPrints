@@ -10,7 +10,7 @@
     <meta property="og:title" content="OddPrints"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="http://www.oddprints.com"/>
-    <meta property="og:image" content="http://www.oddprints.com/images/icon128.png"/>
+    <meta property="og:image" content="http://www.oddprints.com/images/sticker.png"/>
     <meta property="og:site_name" content="OddPrints"/>
     <meta property="fb:admins" content="565140267, 565740296"/>
     <meta property="og:description" content="${param.descriptionText}"/>
