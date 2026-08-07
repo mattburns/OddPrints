@@ -28,6 +28,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -53,6 +54,32 @@ import com.sun.jersey.api.view.Viewable;
 @Path("/orders")
 public class Orders {
 
+    /**
+     * The state comes straight off the URL, so it's whatever anyone cares to
+     * send us. Vulnerability scanners walk wordlists of filenames against
+     * every path they find, which used to leave State.valueOf throwing
+     * IllegalArgumentException and the site returning a 500 per probe.
+     * An unknown state is simply a page that doesn't exist.
+     */
+    private static State parseState(String state) {
+        if (state != null) {
+            for (State candidate : State.values()) {
+                if (candidate.toString().equals(state)) {
+                    return candidate;
+                }
+            }
+        }
+        throw new WebApplicationException(Response.Status.NOT_FOUND);
+    }
+
+    private static Basket getBasketOr404(String key, PersistenceManager pm) {
+        Basket basket = Basket.getBasketByKeyString(key, pm);
+        if (basket == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return basket;
+    }
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Viewable getAllOrders(@PathParam("state") String state,
@@ -65,6 +92,8 @@ public class Orders {
     @Produces(MediaType.TEXT_HTML)
     public Viewable getOrdersByState(@PathParam("state") String state,
             @QueryParam("hidePwinty") boolean hidePwinty) {
+
+        State requestedState = parseState(state);
 
         String thisURL = "/orders";
 
@@ -85,8 +114,7 @@ public class Orders {
 
         int maxOrders = 10;
         if (userIsAdmin) {
-            baskets = Basket.getBasketsByState(State.valueOf(state), pm,
-                    maxOrders);
+            baskets = Basket.getBasketsByState(requestedState, pm, maxOrders);
         }
 
         it.put("states", State.values());
@@ -118,14 +146,14 @@ public class Orders {
             @QueryParam("hidePwinty") boolean hidePwinty) {
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
-        Basket basket = Basket.getBasketByKeyString(key, pm);
+        Basket basket = getBasketOr404(key, pm);
 
         Map<String, Object> it = Maps.newHashMap();
         UserService userService = UserServiceFactory.getUserService();
         it.put("userIsAdmin",
                 userService.isUserLoggedIn() && userService.isUserAdmin());
 
-        if (basket.getSecret().equals(secret)) {
+        if (secret != null && secret.equals(basket.getSecret())) {
             List<Basket> baskets = Lists.newArrayList(basket);
             it.put("orders", baskets);
         }
@@ -141,7 +169,7 @@ public class Orders {
             @PathParam("key") String key) {
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
-        Basket basket = Basket.getBasketByKeyString(key, pm);
+        Basket basket = getBasketOr404(key, pm);
 
         if (basket.getState() != State.payment_received) {
             return Response
@@ -191,7 +219,15 @@ public class Orders {
             throws URISyntaxException {
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
-        Basket basket = Basket.getBasketByKeyString(key, pm);
+        Basket basket = getBasketOr404(key, pm);
+
+        // the secret is what proves the caller owns this order, so an
+        // address change can't be driven off the key alone
+        if (secret == null || !secret.equals(basket.getSecret())) {
+            return Response
+                    .status(com.sun.jersey.api.client.ClientResponse.Status.UNAUTHORIZED)
+                    .build();
+        }
 
         if (basket.getState() != State.payment_received) {
             return Response

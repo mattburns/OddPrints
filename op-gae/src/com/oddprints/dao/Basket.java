@@ -317,6 +317,10 @@ public class Basket {
                     KeyFactory.stringToKey(basketKeyString));
         } catch (JDOObjectNotFoundException e) {
             return null;
+        } catch (IllegalArgumentException e) {
+            // key string wasn't a datastore key at all, so there's no
+            // such basket. Bots probing for /orders/foo/bar.php hit this.
+            return null;
         }
 
     }
